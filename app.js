@@ -1,8 +1,10 @@
 const express = require('express');
 const dotenv = require('dotenv');
-require('./db/connection'); // Conexion a DB MariaDB
 
+
+// Deben ir en este orden para que cargue antes las variables de la DB
 dotenv.config(); // Carga variables de .env en process.env
+require('./db/connection'); // Conexion a DB MariaDB
 
 const app = express();
 const PORT = process.env.PORT || 3000;
