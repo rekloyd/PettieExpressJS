@@ -34,3 +34,7 @@ build/
 # Otros archivos ocultos no necesarios
 .env.local
 .env.*.local
+
+# Archivos de configuración de IDEs
+/package*.json
+package-lock.json
