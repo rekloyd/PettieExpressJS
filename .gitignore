@@ -2,7 +2,11 @@
 node_modules/
 
 # Variables de entorno
-.env
+#.env
+
+#Archivos de configuración de IDEs
+/package*.json
+package-lock.json
 
 # Archivos de logs
 *.log
