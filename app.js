@@ -1,6 +1,5 @@
-import express from 'express';
-
-import dotenv from 'dotenv';
+const express = require('express');
+const dotenv = require('dotenv');
 
 dotenv.config(); // Carga variables de .env en process.env
 
@@ -12,13 +11,16 @@ app.use(express.json());
 
 
 app.get('/', (req, res) => {
-  res.send('Bienvenido a mi API!');
+  //res.send('Bienvenido a mi API!');
+  res.json({
+    text:"conectado a la API"
+  })
 });
 
-
-app.get('/api/saludo', (req, res) => {
-  res.json({ mensaje: '¡Hola desde la API!' });
-});
+app.get('/api/saludo/:q', (req, res) => {
+    const nombre = req.params.q;
+    res.json({ mensaje: `Hola, ${nombre}` });
+  });
 
 
 app.post('/api/saludo', (req, res) => {
