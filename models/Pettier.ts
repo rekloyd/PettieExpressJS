@@ -34,7 +34,7 @@ export class Petter extends Usuario {
     usuariosRepetidores: number,
     fechaAltaPlataforma: Date,
     mascotaEspecialista: Mascota[],
-    role : string = 'petter' // Asignar el rol por defecto
+    role : string = 'pettier' // Asignar el rol por defecto
   ) {
     super(id, nombre, nombreUsuario, contrasenaUsuario, emailUsuario, cantidadPetttieCoins, [], role);
     this.numeroCuenta = numeroCuenta;
@@ -47,7 +47,7 @@ export class Petter extends Usuario {
     this.fechaAltaPlataforma = fechaAltaPlataforma;
     this.mascotaEspecialista = mascotaEspecialista;
     this.listadoChats = [];
-    this.role = 'petter'; // Asignar el rol por defecto
+    this.role = 'pettier'; // Asignar el rol por defecto
   }
 
   // Métodos adicionales
