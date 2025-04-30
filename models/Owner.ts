@@ -2,6 +2,7 @@ import { Usuario } from './Usuario';
 import { Mascota } from './Mascota';
 import { Chat } from './msg/Chat';
 import { Servicio } from '../models/services/Servicio';
+import { TipoUsuario } from './enum/TipoUsuario';
 
 class Owner extends Usuario {
   mascotasUsuario: Mascota[]; // Lista de mascotas asociadas al dueño (composición)
@@ -15,9 +16,9 @@ class Owner extends Usuario {
     emailUsuario: string,
     cantidadPetttieCoins: number,
     listadoChats: Chat[] = [],
-    role : string = 'owner' 
+    role : TipoUsuario = TipoUsuario.OWNER
   ) {
-    super(id, nombre, nombreUsuario, contrasenaUsuario, emailUsuario, cantidadPetttieCoins, listadoChats, role);
+    super(id, nombre, nombreUsuario, contrasenaUsuario, emailUsuario, cantidadPetttieCoins, listadoChats,role);
     this.mascotasUsuario = []; // Inicializamos vacío, solo dentro del Owner
     this.serviciosReservados = []; // Lista de servicios reservados
   }

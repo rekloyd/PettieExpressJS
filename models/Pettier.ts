@@ -1,6 +1,8 @@
 // models/Petter.ts
 import { Usuario } from './Usuario';
 import { Mascota } from './Mascota';
+import { TipoUsuario } from './enum/TipoUsuario';
+import { Owner } from './Owner';
 
 interface Servicios {
   nombre: string;
@@ -26,15 +28,15 @@ export class Petter extends Usuario {
     emailUsuario: string,
     cantidadPetttieCoins: number,
     numeroCuenta: string,
-    serviciosOfrecidos: Servicios[],
-    serviciosPendientes: Servicios[],
-    serviciosCompletados: Servicios[],
-    numeroReviews: number,
-    mediaReviews: number,
-    usuariosRepetidores: number,
+    serviciosOfrecidos: Servicios[] = [],
+    serviciosPendientes: Servicios[] = [],
+    serviciosCompletados: Servicios[] = [],
+    numeroReviews: number = 0,
+    mediaReviews: number = 0,
+    usuariosRepetidores: number = 0,
     fechaAltaPlataforma: Date,
-    mascotaEspecialista: Mascota[],
-    role : string = 'pettier' // Asignar el rol por defecto
+    mascotaEspecialista: Mascota[] = [],
+    role: TipoUsuario = TipoUsuario.PETTIER
   ) {
     super(id, nombre, nombreUsuario, contrasenaUsuario, emailUsuario, cantidadPetttieCoins, [], role);
     this.numeroCuenta = numeroCuenta;
@@ -46,9 +48,8 @@ export class Petter extends Usuario {
     this.usuariosRepetidores = usuariosRepetidores;
     this.fechaAltaPlataforma = fechaAltaPlataforma;
     this.mascotaEspecialista = mascotaEspecialista;
-    this.listadoChats = [];
-    this.role = 'pettier'; // Asignar el rol por defecto
   }
+  
 
   // Métodos adicionales
 

@@ -1,10 +1,8 @@
 import { Usuario } from './Usuario';
 import { Chat } from './msg/Chat';
-import { TipoServicio } from './enum/TipoServicio';
+import { TipoUsuario } from './enum/TipoUsuario';
 
 class Admin extends Usuario {
-  nivelUsuario: TipoServicio;
-
   constructor(
     id: string,
     nombre: string,
@@ -13,10 +11,10 @@ class Admin extends Usuario {
     emailUsuario: string,
     cantidadPetttieCoins: number,
     listadoChats: Chat[] = [],
-    nivelUsuario: TipoServicio,
+    role:TipoUsuario,
   ) {
-    super(id, nombre, nombreUsuario, contrasenaUsuario, emailUsuario, cantidadPetttieCoins, listadoChats);
-    this.nivelUsuario = nivelUsuario;
+    super(id, nombre, nombreUsuario, contrasenaUsuario, emailUsuario, cantidadPetttieCoins, listadoChats,role);
+    
   }
 
   obtenerInfo(): string {
