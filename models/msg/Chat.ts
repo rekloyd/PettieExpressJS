@@ -1,4 +1,4 @@
-import { Petter } from "../Petter";
+import { Petter } from "../Pettier";
 import { Mensaje } from "./Mensaje";
 import { Owner } from "../Owner";
 
