@@ -9,7 +9,7 @@ interface Servicios {
   descripcion: string;
 }
 
-export class Petter extends Usuario {
+export class Pettier extends Usuario {
   numeroCuenta: string;
   serviciosOfrecidos: Servicios[];
   serviciosPendientes: Servicios[];
