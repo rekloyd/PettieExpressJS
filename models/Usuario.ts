@@ -1,4 +1,5 @@
 import { Chat } from './msg/Chat';
+import {TipoUsuario} from './enum/TipoUsuario';
 
 export abstract class Usuario {
   static create(arg0: { id: string; nombre: string; nombreUsuario: string; contrasenaUsuario: string; emailUsuario: string; cantidadPetttieCoins: number; role: string; }): void | PromiseLike<void> {
@@ -14,7 +15,7 @@ export abstract class Usuario {
   emailUsuario: string;
   cantidadPetttieCoins: number;
   listadoChats: Chat[];
-  role: string; // 'owner'  'petter' 'admin'
+  role: TipoUsuario;
 
   constructor(
     id: string,
@@ -24,7 +25,7 @@ export abstract class Usuario {
     emailUsuario: string,
     cantidadPetttieCoins: number,
     listadoChats: Chat[] = [],
-    role: string = ''
+    role: TipoUsuario
   ) {
     this.id = id;
     this.nombre = nombre;
