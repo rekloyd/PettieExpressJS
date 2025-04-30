@@ -1,5 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
+require('./db/connection'); // Conexion a DB MariaDB
 
 dotenv.config(); // Carga variables de .env en process.env
 
