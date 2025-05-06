@@ -21,16 +21,6 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   res.status(500).json({ error: 'Algo salió mal' });
 });
 
-app.get('/api/usuarios', async (req: Request, res: Response) => {
-  try {
-    const db = await connectDB();
-    const [rows] = await db.query('SELECT * FROM Usuario');
-    res.json(rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Algo salió mal al obtener los usuarios' });
-  }
-});
 
 app.listen(PORT, async () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);

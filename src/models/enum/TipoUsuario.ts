@@ -3,4 +3,7 @@ export enum TipoUsuario {
   OWNER = 'owner',
   PETTIER = 'pettier'
   }
+
+
+
   
