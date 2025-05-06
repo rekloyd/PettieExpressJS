@@ -1,6 +1,10 @@
 // app.ts
 import express, { Request, Response, NextFunction } from 'express';
-import './db/connection'; 
+import dotenv from 'dotenv';
+import connectDB from './db/connection';
+import { crearUsuariosPorDefecto } from './utils/crearUsuariosPorDefecto';
+
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -26,6 +30,8 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   res.status(500).json({ error: 'Algo salió mal' });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  const db = await connectDB();
+  await crearUsuariosPorDefecto(db);
 });
