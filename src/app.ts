@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../public')));
 
 // Rutas
-app.use('/', loginController);
+app.use('/api', loginController);
 app.use('/api', usuarioRoutes);
 
 // 404

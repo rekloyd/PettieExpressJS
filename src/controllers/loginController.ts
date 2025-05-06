@@ -5,7 +5,7 @@ import login from '../services/loginService';
 const router: Router = Router();
 
 // Vista de login (HTML)
-router.get('/', (_req: Request, res: Response) => {
+router.get('/login', (_req: Request, res: Response) => {
   res.sendFile('login.html', { root: path.join(__dirname, '../../public') });
 });
 
