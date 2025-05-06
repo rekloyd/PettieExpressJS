@@ -1,6 +1,6 @@
 // app.ts
 import express, { Request, Response, NextFunction } from 'express';
-import '../db/connection'; // La conexión se configura correctamente con dotenv adentro
+import './db/connection'; 
 
 const app = express();
 const PORT = process.env.PORT || 3000;
