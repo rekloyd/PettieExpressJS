@@ -1,4 +1,3 @@
-import { Chat } from './msg/Chat';
 import {TipoUsuario} from './enum/TipoUsuario';
 
 export abstract class Usuario {
