@@ -1,61 +1,152 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar Sesión</title>
+  <style>
+    /* Estilos globales */
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #c3ecfa 0%, #fee140 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Contenedor del formulario */
+    .login-container {
+      background: #ffffff;
+      border-radius: 1rem;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 400px;
+      padding: 2rem;
+    }
+
+    .login-container h2 {
+      margin-top: 0;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      color: #333333;
+    }
+
+    /* Grupos de campos */
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #555555;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #cccccc;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #007bfd;
+      box-shadow: 0 0 0 3px rgba(0,123,253,0.2);
+    }
+
+    /* Botón */
+    .btn-submit {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: #007bfd;
+      color: #ffffff;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .btn-submit:hover {
+      background-color: #0056b3;
+      transform: translateY(-2px);
+    }
+
+    /* Mensaje de error */
+    #error-message {
+      display: none;
+      margin-top: 1rem;
+      color: #d9534f;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-    <div class="login-container">
-        <h2>Iniciar sesión</h2>
-        <form id="loginForm">
-            <div>
-                <label for="nombreUsuario">Nombre de usuario</label>
-                <input type="text" id="nombreUsuario" name="nombreUsuario" required>
-            </div>
-            <div>
-                <label for="contrasenaUsuario">Contraseña</label>
-                <input type="password" id="contrasenaUsuario" name="contrasenaUsuario" required>
-            </div>
-            <button type="submit">Iniciar sesión</button>
-        </form>
-        <p id="error-message" style="color: red; display: none;"></p>
-    </div>
+  <div class="login-container">
+    <h2>Iniciar sesión</h2>
+    <form id="loginForm">
+      <!-- Grupo Nombre de usuario -->
+      <div class="form-group">
+        <label for="nombreUsuario">Nombre de usuario</label>
+        <input type="text" id="nombreUsuario" name="nombreUsuario" required>
+      </div>
+      <!-- Grupo Contraseña -->
+      <div class="form-group">
+        <label for="contrasenaUsuario">Contraseña</label>
+        <input type="password" id="contrasenaUsuario" name="contrasenaUsuario" required>
+      </div>
+      <!-- Botón de envío -->
+      <button type="submit" class="btn-submit">Iniciar sesión</button>
+      <!-- Mensaje de error -->
+      <p id="error-message"></p>
+    </form>
+  </div>
 
-    <script>
-        const form = document.getElementById('loginForm');
-        const errorMessage = document.getElementById('error-message');
+  <script>
+    // Obtener elementos del DOM
+    const form = document.getElementById('loginForm');
+    const errorMessage = document.getElementById('error-message');
 
-        form.addEventListener('submit', async (event) => {
-            event.preventDefault();
+    // Escuchar evento submit y prevenir recarga de página
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      errorMessage.style.display = 'none'; // Oculta mensaje previo
 
-            const nombreUsuario = document.getElementById('nombreUsuario').value;
-            const contrasenaUsuario = document.getElementById('contrasenaUsuario').value;
+      const nombreUsuario = document.getElementById('nombreUsuario').value;
+      const contrasenaUsuario = document.getElementById('contrasenaUsuario').value;
 
-            try {
-                const response = await fetch('/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ nombreUsuario, contrasenaUsuario }),
-                });
-
-                const result = await response.json();
-
-                if (response.status === 200) {
-                    alert('Login exitoso');
-                    window.location.href = '/';  // Redirigir a la página principal
-                } else {
-                    errorMessage.textContent = result.message;
-                    errorMessage.style.display = 'block';
-                }
-            } catch (error) {
-                errorMessage.textContent = 'Hubo un error al procesar la solicitud.';
-                errorMessage.style.display = 'block';
-            }
+      try {
+        // Consumir API de login
+        const response = await fetch('/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nombreUsuario, contrasenaUsuario }),
         });
-    </script>
+
+        const result = await response.json();
+
+        if (response.ok) {
+          // Login exitoso: redirigir o ejecutar callback
+          alert('Login exitoso');
+          window.location.href = '/';
+        } else {
+          // Mostrar error devuelto por el servidor
+          errorMessage.textContent = result.message;
+          errorMessage.style.display = 'block';
+        }
+      } catch (error) {
+        // Error de red u otro
+        errorMessage.textContent = 'Hubo un error al procesar la solicitud.';
+        errorMessage.style.display = 'block';
+      }
+    });
+  </script>
 </body>
 </html>
