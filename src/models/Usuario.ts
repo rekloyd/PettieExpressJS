@@ -2,7 +2,7 @@ import { Chat } from './msg/Chat';
 import {TipoUsuario} from './enum/TipoUsuario';
 
 export abstract class Usuario {
-  static create(arg0: { id: string; nombre: string; nombreUsuario: string; contrasenaUsuario: string; emailUsuario: string; cantidadPetttieCoins: number; role: string; }): void | PromiseLike<void> {
+  static create(arg0: { id: string; nombre: string; nombreUsuario: string; contrasenaUsuario: string; emailUsuario: string; cantidadPetttieCoins: number;fechaAltaPlataforma:Date; role: string; }): void | PromiseLike<void> {
     throw new Error('Method not implemented.');
   }
   static findOne(arg0: { where: { nombreUsuario: string; }; }) {
@@ -14,7 +14,7 @@ export abstract class Usuario {
   contrasenaUsuario: string;
   emailUsuario: string;
   cantidadPetttieCoins: number;
-  listadoChats: Chat[];
+  fechaAltaPlataforma:Date;
   role: TipoUsuario;
 
   constructor(
@@ -24,7 +24,7 @@ export abstract class Usuario {
     contrasenaUsuario: string,
     emailUsuario: string,
     cantidadPetttieCoins: number,
-    listadoChats: Chat[] = [],
+    fechaAltaPlataforma:Date,
     role: TipoUsuario
   ) {
     this.id = id;
@@ -33,7 +33,7 @@ export abstract class Usuario {
     this.contrasenaUsuario = contrasenaUsuario;
     this.emailUsuario = emailUsuario;
     this.cantidadPetttieCoins = cantidadPetttieCoins;
-    this.listadoChats = listadoChats;
+    this.fechaAltaPlataforma = fechaAltaPlataforma;
     this.role = role;
   }
 

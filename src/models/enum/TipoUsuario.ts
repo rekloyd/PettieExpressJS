@@ -1,7 +1,6 @@
 export enum TipoUsuario {
-  ADMIN = 'Administrador',
-  GESTOR = 'Gestor',
-  OWNER = 'Owner',
-  PETTIER = 'Pettier'
+  ADMIN = 'admin',
+  OWNER = 'owner',
+  PETTIER = 'pettier'
   }
   
