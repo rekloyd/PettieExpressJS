@@ -14,13 +14,19 @@ app.use(express.json());
 // Archivos estáticos (imágenes)
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
-// Rutas de usuario
+// Rutas de usuario por ID, listado y manejo de 404
 app.use('/api', usuarioRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.json({ text: "conectado a la API" });
 });
 
+// Middleware para manejar rutas no encontradas (404)
+app.use((req: Request, res: Response) => {
+  res.status(404).json({ error: 'Ruta de API no encontrada' });
+});
+
+// Middleware para manejar errores internos (500)
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Algo salió mal' });
