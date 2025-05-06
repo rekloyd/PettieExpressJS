@@ -1,40 +1,41 @@
 import express, { Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
+import { loginController } from './controllers/loginController';
 import connectDB from './db/connection';
 import { crearUsuariosPorDefecto } from './utils/crearUsuariosPorDefecto';
-import  usuarioRoutes from './routes/usuarioRoutes';
+import usuarioRoutes from './routes/usuarioRoutes';
+
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Archivos estáticos (imágenes)
-app.use('/public', express.static(path.join(__dirname, 'public')));
+// Archivos estáticos
+app.use(express.static(path.join(__dirname, '../public')));
 
-// Rutas de usuario por ID, listado y manejo de 404
+// Rutas
+app.use('/', loginController);
 app.use('/api', usuarioRoutes);
 
-app.get('/', (req: Request, res: Response) => {
-  res.json({ text: "conectado a la API" });
-});
-
-// Middleware para manejar rutas no encontradas (404)
+// 404
 app.use((req: Request, res: Response) => {
-  res.status(404).json({ error: 'Ruta de API no encontrada' });
+  res.status(404).json({ error: 'Ruta no encontrada' });
 });
 
-// Middleware para manejar errores internos (500)
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+// 500
+app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
   console.error(err.stack);
-  res.status(500).json({ error: 'Algo salió mal' });
+  res.status(500).json({ error: 'Error interno del servidor' });
 });
 
-
+// Arranque
 app.listen(PORT, async () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
   const db = await connectDB();
   await crearUsuariosPorDefecto(db);
 });

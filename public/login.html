@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="login-container">
+        <h2>Iniciar sesión</h2>
+        <form id="loginForm">
+            <div>
+                <label for="nombreUsuario">Nombre de usuario</label>
+                <input type="text" id="nombreUsuario" name="nombreUsuario" required>
+            </div>
+            <div>
+                <label for="contrasenaUsuario">Contraseña</label>
+                <input type="password" id="contrasenaUsuario" name="contrasenaUsuario" required>
+            </div>
+            <button type="submit">Iniciar sesión</button>
+        </form>
+        <p id="error-message" style="color: red; display: none;"></p>
+    </div>
+
+    <script>
+        const form = document.getElementById('loginForm');
+        const errorMessage = document.getElementById('error-message');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const nombreUsuario = document.getElementById('nombreUsuario').value;
+            const contrasenaUsuario = document.getElementById('contrasenaUsuario').value;
+
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ nombreUsuario, contrasenaUsuario }),
+                });
+
+                const result = await response.json();
+
+                if (response.status === 200) {
+                    alert('Login exitoso');
+                    window.location.href = '/';  // Redirigir a la página principal
+                } else {
+                    errorMessage.textContent = result.message;
+                    errorMessage.style.display = 'block';
+                }
+            } catch (error) {
+                errorMessage.textContent = 'Hubo un error al procesar la solicitud.';
+                errorMessage.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
