@@ -1,4 +1,3 @@
-// utils/crearUsuariosPorDefecto.ts
 import { Connection } from 'mysql2/promise';
 
 export async function crearUsuariosPorDefecto(db: Connection) {
