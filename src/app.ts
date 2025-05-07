@@ -6,7 +6,7 @@ import connectDB from './db/connection';
 import { crearUsuariosPorDefecto } from './utils/crearUsuariosPorDefecto';
 import usuarioRoutes from './routes/usuarioRoutes';
 import mascotaRoutes from './routes/mascotaRoutes';
-import servicioRoutes from './routes/servicioRoutes';  // ← Importamos el router de servicios
+import servicioRoutes from './routes/servicioRoutes'; 
 
 dotenv.config();
 
@@ -24,7 +24,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use('/api', loginController);
 app.use('/api', usuarioRoutes);
 app.use('/api', mascotaRoutes);
-app.use('/api', servicioRoutes);  // ← Montamos las rutas de servicios
+app.use('/api', servicioRoutes); 
 
 // Ruta raíz
 app.use('/', (req: Request, res: Response) => {
