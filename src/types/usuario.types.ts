@@ -6,6 +6,8 @@ export type MascotaUsuario = {
     paseoManana:Date | null;
     paseoMedioDia:Date| null;
     paseoTarde:Date| null;
+    razaPerro:String | null;
+    razaGato:String |null;
 
   };
   

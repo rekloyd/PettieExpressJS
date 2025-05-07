@@ -103,7 +103,9 @@ export const getUsuarioCompletoID = async (req: Request, res: Response): Promise
         Mascota.cuidadosEspeciales  as cuidados,
         Mascota.paseoManana as paseoManana,
         Mascota.paseoMedioDia as paseoMedioDia,
-        Mascota.paseoTarde as paseoTarde
+        Mascota.paseoTarde as paseoTarde,
+        Mascota.razaPerro as razaPerro,
+        Mascota.razaGato as razaGato
       FROM Usuario 
       LEFT JOIN Mascota ON Mascota.idOwner = Usuario.idUsuario 
       WHERE Usuario.idUsuario = ?`,
@@ -137,7 +139,9 @@ export const getUsuarioCompletoID = async (req: Request, res: Response): Promise
           cuidadosEspeciales: row.cuidados,
           paseoManana: row.paseoManana,
           paseoMedioDia: row.paseoMedioDia,
-          paseoTarde: row.paseoTarde
+          paseoTarde: row.paseoTarde,
+          razaPerro:row.razaPerro,
+          razaGato:row.razaGato
         };
         usuario.mascotas.push(mascota);
       }
