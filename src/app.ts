@@ -5,6 +5,7 @@ import { loginController } from './controllers/loginController';
 import connectDB from './db/connection';
 import { crearUsuariosPorDefecto } from './utils/crearUsuariosPorDefecto';
 import usuarioRoutes from './routes/usuarioRoutes';
+import mascotaRoutes from './routes/mascotaRoutes';
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 // Rutas
 app.use('/api', loginController);
 app.use('/api', usuarioRoutes);
+app.use('/api',mascotaRoutes);
 
 // 404
 app.use((req: Request, res: Response) => {
