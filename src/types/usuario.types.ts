@@ -1,13 +1,19 @@
 export type MascotaUsuario = {
     id: number;
     nombre: string | null;
-    tipo: string | null;
+    tamano:String | null;
+    cuidadosEspeciales:String | null;
+    paseoManana:Date | null;
+    paseoMedioDia:Date| null;
+    paseoTarde:Date| null;
+
   };
   
   export type UsuarioConMascotasAnidadas = {
     id: number;
     nombre: string;
     email: string;
+    cantidadPettieCoins:number;
     mascotas: MascotaUsuario[];
   };
 

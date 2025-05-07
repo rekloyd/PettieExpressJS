@@ -4,6 +4,9 @@ import { UsuarioBase } from '../models/UsuarioBase';
 import { TipoUsuario } from '../models/enum/TipoUsuario';
 import path from 'path';
 import { Mascota } from '../models/Mascota';
+import { UsuarioConMascotasAnidadas, MascotaUsuario } from '../types/usuario.types';
+import { RowDataPacket } from 'mysql2';
+
 
 
 
@@ -86,20 +89,70 @@ export const getUsuarioCompletoID = async (req: Request, res: Response): Promise
 
   try {
     const db = await connectDB();
-    const [rows] = await db.query(
-      `SELECT Usuario.*, Mascota.* 
-       FROM Usuario 
-       LEFT JOIN Mascota ON Mascota.idOwner = Usuario.idUsuario 
-       WHERE Usuario.idUsuario = ?`,
+
+    // Consulta SQL: obtenemos los datos del usuario y sus mascotas
+    const [rows] = await db.query<RowDataPacket[]>(
+      `SELECT 
+        Usuario.idUsuario as idUsuario,
+        Usuario.nombreUsuario as nombre,
+        Usuario.emailUsuario as email,
+        Usuario.cantidadPettieCoins as pettieCoins,
+        Mascota.idMascota AS mascotaId,
+        Mascota.nombreMascota AS mascotaNombre,
+        Mascota.tamanoMascota as tamano,
+        Mascota.cuidadosEspeciales  as cuidados,
+        Mascota.paseoManana as paseoManana,
+        Mascota.paseoMedioDia as paseoMedioDia,
+        Mascota.paseoTarde as paseoTarde
+      FROM Usuario 
+      LEFT JOIN Mascota ON Mascota.idOwner = Usuario.idUsuario 
+      WHERE Usuario.idUsuario = ?`,
       [usuarioId]
     );
-    res.json(rows);
+    
+
+    // Si no se encuentra el usuario, devolvemos 404
+    if (rows.length === 0) {
+      res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    // Creamos el objeto del usuario
+    const usuario: UsuarioConMascotasAnidadas = {
+      id: rows[0].idUsuario,  
+      nombre: rows[0].nombre,
+      email: rows[0].email,
+      cantidadPettieCoins:rows[0].pettieCoins,
+      mascotas: []  
+    };
+
+
+    //Debug console log
+    console.log(JSON.stringify(rows, null, 2));
+    for (const row of rows) {
+      if (row.mascotaId) {
+        const mascota: MascotaUsuario = {
+          id: row.mascotaId,
+          nombre: row.mascotaNombre,
+          tamano: row.tamano,
+          cuidadosEspeciales: row.cuidados,
+          paseoManana: row.paseoManana,
+          paseoMedioDia: row.paseoMedioDia,
+          paseoTarde: row.paseoTarde
+        };
+        usuario.mascotas.push(mascota);
+      }
+    }
+
+
+
+    // Devolvemos el usuario con su lista de mascotas
+    res.json(usuario);
+
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Algo salió mal al obtener los datos del usuario' });
   }
 };
-
 
 //Actualizar un usuario de forma dinámica. Solo se actualiza lo que recibe en el body
 export const updateUsuario = async (req: Request, res: Response): Promise<void> => {
