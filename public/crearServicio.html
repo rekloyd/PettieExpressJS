@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Crear Servicio</title>
+</head>
+<body>
+  <h1>Nuevo Servicio</h1>
+  <form id="formServicio">
+    <input type="number" name="idOwner" placeholder="ID Dueño" required><br>
+    <input type="number" name="idPettier" placeholder="ID Pettier" required><br>
+    <input type="number" name="idMascota" placeholder="ID Mascota" required><br>
+    <input type="text" name="tipoActividad" placeholder="Tipo Actividad" required><br>
+    <input type="datetime-local" name="fechaInicio" required><br>
+    <input type="datetime-local" name="fechaFinal"><br>
+    <input type="number" name="precio" placeholder="Precio"><br>
+    <label>Finalizado:</label>
+    <input type="checkbox" name="finalizado"><br>
+    <button type="submit">Crear</button>
+  </form>
+
+  <script>
+    document.getElementById('formServicio').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const data = {
+        idOwner: form.idOwner.value,
+        idPettier: form.idPettier.value,
+        idMascota: form.idMascota.value,
+        tipoActividad: form.tipoActividad.value,
+        fechaInicio: form.fechaInicio.value,
+        fechaFinal: form.fechaFinal.value || null,
+        precio: form.precio.value || 0,
+        finalizado: form.finalizado.checked ? 1 : 0
+      };
+
+      const res = await fetch('/api/servicios', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const result = await res.json();
+      alert(result.mensaje || 'Creado');
+    });
+  </script>
+</body>
+</html>
