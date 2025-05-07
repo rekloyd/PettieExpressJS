@@ -4,7 +4,7 @@ import path from 'path';
 import { UsuarioBase } from '../models/UsuarioBase';
 import { TipoUsuario } from '../models/enum/TipoUsuario';
 
-import { deleteUsuario, getUsuarios, updatePettier, updateUsuario } from '../controllers/UsuarioController';
+import { deleteUsuario, getUsuarios, updatePettier, updateUsuario,getUsuarioCompletoID } from '../controllers/UsuarioController';
 import { getUsuarioPorID } from '../controllers/UsuarioController';
 
 const router = Router();
@@ -24,5 +24,7 @@ router.delete('/usuario/:id', deleteUsuario);
 
 router.put('/pettier/:id', updatePettier);
 
+
+router.get('/usuario/mascota/:idUsuario',getUsuarioCompletoID);
 
 export default router;

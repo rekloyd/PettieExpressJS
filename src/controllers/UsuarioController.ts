@@ -7,6 +7,7 @@ import { Mascota } from '../models/Mascota';
 
 
 
+
 // Obtener usuarios totales
 export const getUsuarios = async (req: Request, res: Response): Promise<void> => {
     const page = parseInt(req.query.page as string) || 1;
@@ -78,6 +79,26 @@ export const getUsuarioPorID = async (req: Request, res: Response): Promise<void
   }
 };
 
+
+
+export const getUsuarioCompletoID = async (req: Request, res: Response): Promise<void> => {
+  const usuarioId = req.params.idUsuario;
+
+  try {
+    const db = await connectDB();
+    const [rows] = await db.query(
+      `SELECT Usuario.*, Mascota.* 
+       FROM Usuario 
+       LEFT JOIN Mascota ON Mascota.idOwner = Usuario.idUsuario 
+       WHERE Usuario.idUsuario = ?`,
+      [usuarioId]
+    );
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Algo salió mal al obtener los datos del usuario' });
+  }
+};
 
 
 //Actualizar un usuario de forma dinámica. Solo se actualiza lo que recibe en el body
