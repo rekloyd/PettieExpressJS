@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista de Servicios</title>
+</head>
+<body>
+  <h1>Servicios</h1>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>ID</th><th>Dueño</th><th>Pettier</th><th>Mascota</th><th>Actividad</th><th>Inicio</th><th>Final</th><th>Precio</th><th>Finalizado</th>
+      </tr>
+    </thead>
+    <tbody id="serviciosBody"></tbody>
+  </table>
+  <script>
+    fetch('/api/servicios')
+      .then(res => res.json())
+      .then(data => {
+        const body = document.getElementById('serviciosBody');
+        data.forEach(servicio => {
+          const row = `
+            <tr>
+              <td>${servicio.idActividad}</td>
+              <td>${servicio.idOwner}</td>
+              <td>${servicio.idPettier}</td>
+              <td>${servicio.idMascota}</td>
+              <td>${servicio.tipoActividad}</td>
+              <td>${servicio.fechaInicio}</td>
+              <td>${servicio.fechaFinal}</td>
+              <td>${servicio.precio}</td>
+              <td>${servicio.finalizado}</td>
+            </tr>`;
+          body.innerHTML += row;
+        });
+      });
+  </script>
+</body>
+</html>

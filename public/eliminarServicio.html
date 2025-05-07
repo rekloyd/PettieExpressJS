@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Actualizar Servicio</title>
+</head>
+<body>
+  <h1>Actualizar Servicio</h1>
+  <form id="formEditar">
+    <input type="number" name="id" placeholder="ID Servicio" required><br>
+    <input type="number" name="precio" placeholder="Nuevo precio"><br>
+    <input type="text" name="tipoActividad" placeholder="Nuevo tipo de actividad"><br>
+    <input type="datetime-local" name="fechaFinal"><br>
+    <label>¿Finalizado?</label><input type="checkbox" name="finalizado"><br>
+    <button type="submit">Actualizar</button>
+  </form>
+
+  <script>
+    document.getElementById('formEditar').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const id = form.id.value;
+      const body = {};
+
+      if (form.precio.value) body.precio = parseFloat(form.precio.value);
+      if (form.tipoActividad.value) body.tipoActividad = form.tipoActividad.value;
+      if (form.fechaFinal.value) body.fechaFinal = form.fechaFinal.value;
+      body.finalizado = form.finalizado.checked ? 1 : 0;
+
+      const res = await fetch(`/api/servicios/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      const result = await res.json();
+      alert(result.mensaje || 'Actualizado');
+    });
+  </script>
+</body>
+</html>

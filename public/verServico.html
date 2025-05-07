@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Ver Servicio</title>
+</head>
+<body>
+  <h1>Buscar Servicio</h1>
+  <input type="number" id="idServicio" placeholder="ID del Servicio">
+  <button onclick="buscar()">Buscar</button>
+  <pre id="resultado"></pre>
+
+  <script>
+    function buscar() {
+      const id = document.getElementById('idServicio').value;
+      fetch(`/api/servicios/${id}`)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('resultado').textContent = JSON.stringify(data, null, 2);
+        });
+    }
+  </script>
+</body>
+</html>
