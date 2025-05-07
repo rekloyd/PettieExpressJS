@@ -75,3 +75,223 @@ export const getUsuarioPorID = async (req: Request, res: Response): Promise<void
     res.status(500).send('Error interno del servidor');
   }
 };
+
+//Actualizar un usuario de forma dinámica. Solo se actualiza lo que recibe en el body
+export const updateUsuario = async (req: Request, res: Response): Promise<void> => {
+  const { id } = req.params;
+  const camposActualizables = ['nombreUsuario', 'emailUsuario', 'contrasenaUsuario', 'cantidadPettieCoins', 'role'];
+  const updates: string[] = [];
+  const values: any[] = [];
+
+  //Añadimos lo que toca actualizar en los dos arrays para luego pasarlos como datos en la consulta
+  for (const campo of camposActualizables) {
+    if (req.body[campo] !== undefined) {
+      updates.push(`${campo} = ?`);
+      values.push(req.body[campo]);
+    }
+  }
+
+  if (updates.length === 0) {
+    res.status(400).json({ error: 'No se proporcionaron campos para actualizar' });
+    return;
+  }
+
+  values.push(id); // Para el WHERE
+
+  try {
+    const db = await connectDB();
+    const [result] = await db.execute(
+      `UPDATE Usuario SET ${updates.join(', ')} WHERE idUsuario = ?`,
+      values
+    );
+
+    const { affectedRows } = result as any;
+
+    if (affectedRows === 0) {
+      res.status(404).json({ mensaje: 'Usuario no encontrado' });
+    } else {
+      res.json({ mensaje: 'Usuario actualizado correctamente' });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al actualizar el usuario' });
+  }
+};
+export const insertUsuario = async (req: Request, res: Response): Promise<void> => {
+  const {
+    nombreUsuario,
+    emailUsuario,
+    contrasenaUsuario,
+    cantidadPettieCoins = 0,
+    role,
+    fechaAltaPlataforma,
+    numeroCuenta // solo necesario para pettier
+  } = req.body;
+
+  if (!nombreUsuario || !emailUsuario || !contrasenaUsuario || !role) {
+    res.status(400).json({ error: 'Faltan campos obligatorios' });
+    return;
+  }
+
+  try {
+    const conn = await connectDB(); // conexión directa
+
+    await conn.beginTransaction();
+
+    const [usuarioResult] = await conn.execute(
+      `INSERT INTO Usuario (nombreUsuario, emailUsuario, contrasenaUsuario, cantidadPettieCoins, role, fechaAltaPlataforma)
+       VALUES (?, ?, ?, ?, ?, ?)`,
+      [nombreUsuario, emailUsuario, contrasenaUsuario, cantidadPettieCoins, role, fechaAltaPlataforma || new Date()]
+    );
+
+    const idUsuario = (usuarioResult as any).insertId;
+
+    switch (role) {
+      case 'admin':
+        await conn.execute(`INSERT INTO Admin (idAdmin) VALUES (?)`, [idUsuario]);
+        break;
+
+      case 'owner':
+        await conn.execute(`INSERT INTO Owner (idOwner) VALUES (?)`, [idUsuario]);
+        break;
+
+      case 'pettier':
+        if (!numeroCuenta) {
+          await conn.rollback();
+          res.status(400).json({ error: 'numeroCuenta es obligatorio para pettier' });
+          return;
+        }
+        await conn.execute(
+          `INSERT INTO Pettier (idPettier, numeroCuenta) VALUES (?, ?)`,
+          [idUsuario, numeroCuenta]
+        );
+        break;
+
+      default:
+        await conn.rollback();
+        res.status(400).json({ error: 'Role inválido' });
+        return;
+    }
+
+    await conn.commit();
+    await conn.end(); // cerrar la conexión después de usarla
+
+    res.status(201).json({ mensaje: 'Usuario creado correctamente', idUsuario });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al insertar el usuario' });
+  }
+};
+
+
+
+//Actualizar un Pettier
+
+export const updatePettier = async (req: Request, res: Response): Promise<void> => {
+  const { id } = req.params;
+  const { numeroCuenta, serviciosOfrecidos, serviciosPendientes } = req.body;
+
+  try {
+    const conn = await connectDB();
+    const [result] = await conn.execute(
+      `UPDATE Pettier SET numeroCuenta = ?, serviciosOfrecidos = ?, serviciosPendientes = ? WHERE idPettier = ?`,
+      [numeroCuenta, serviciosOfrecidos, serviciosPendientes, id]
+    );
+
+    const { affectedRows } = result as any;
+
+    if (affectedRows === 0) {
+      res.status(404).json({ mensaje: 'Pettier no encontrado' });
+    } else {
+      res.json({ mensaje: 'Pettier actualizado correctamente' });
+    }
+
+    await conn.end();
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al actualizar el pettier' });
+  }
+};
+
+
+
+//Actualizar un Owner
+
+export const updateOwner = async (req: Request, res: Response): Promise<void> => {
+  const { id } = req.params;
+  const { numeroCuenta } = req.body; //Poner aqui los campos si añadimos más.
+
+  try {
+    const conn = await connectDB();
+    const [result] = await conn.execute(
+      `UPDATE Owner SET numeroCuenta = ? WHERE idOwner = ?`,
+      [numeroCuenta, id]
+    );
+
+    const { affectedRows } = result as any;
+
+    if (affectedRows === 0) {
+      res.status(404).json({ mensaje: 'Owner no encontrado' });
+    } else {
+      res.json({ mensaje: 'Owner actualizado correctamente' });
+    }
+
+    await conn.end();
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al actualizar el owner' });
+  }
+};
+
+
+
+//Update Admin. No tiene sentido porque el admin solo tiene id
+
+// export const updateAdmin = async (req: Request, res: Response): Promise<void> => {
+//   const { id } = req.params;
+//   const { nivelAcceso } = req.body; // ejemplo de campo extendido
+
+//   try {
+//     const conn = await connectDB();
+//     const [result] = await conn.execute(
+//       `UPDATE Admin SET nivelAcceso = ? WHERE idAdmin = ?`,
+//       [nivelAcceso, id]
+//     );
+
+//     const { affectedRows } = result as any;
+
+//     if (affectedRows === 0) {
+//       res.status(404).json({ mensaje: 'Admin no encontrado' });
+//     } else {
+//       res.json({ mensaje: 'Admin actualizado correctamente' });
+//     }
+
+//     await conn.end();
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ error: 'Error al actualizar el admin' });
+//   }
+// };
+
+
+//Eliminar un Usuario
+export const deleteUsuario = async (req: Request, res: Response): Promise<void> => {
+  const { id } = req.params;
+
+  try {
+    const db = await connectDB();
+    const [result] = await db.execute('DELETE FROM Usuario WHERE idUsuario = ?', [id]);
+
+    const { affectedRows } = result as any;
+
+    if (affectedRows === 0) {
+      res.status(404).json({ mensaje: 'Usuario no encontrado' });
+    } else {
+      res.json({ mensaje: 'Usuario eliminado correctamente' });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al eliminar el usuario' });
+  }
+};
+

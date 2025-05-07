@@ -4,7 +4,7 @@ import path from 'path';
 import { UsuarioBase } from '../models/UsuarioBase';
 import { TipoUsuario } from '../models/enum/TipoUsuario';
 
-import { getUsuarios } from '../controllers/UsuarioController';
+import { deleteUsuario, getUsuarios, updatePettier, updateUsuario } from '../controllers/UsuarioController';
 import { getUsuarioPorID } from '../controllers/UsuarioController';
 
 const router = Router();
@@ -15,5 +15,14 @@ router.get('/usuario/:id',getUsuarioPorID);
 // Ruta para devolver listado completo usuarios
 
 router.get('/usuarios', getUsuarios);
+
+// Actualiza campos parciales del usuario (email, contraseña, role, etc.)
+router.put('/usuario/:id', updateUsuario);
+
+// Elimina un usuario por su ID
+router.delete('/usuario/:id', deleteUsuario);
+
+router.put('/pettier/:id', updatePettier);
+
 
 export default router;
