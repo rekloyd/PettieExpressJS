@@ -23,7 +23,10 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use('/api', loginController);
 app.use('/api', usuarioRoutes);
 app.use('/api',mascotaRoutes);
+app.use('/',(req:Request,res:Response)=>{
+  res.send("Conectado con la api");
 
+});
 // 404
 app.use((req: Request, res: Response) => {
   res.status(404).json({ error: 'Ruta no encontrada' });

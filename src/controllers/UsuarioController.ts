@@ -3,6 +3,7 @@ import connectDB from '../db/connection';
 import { UsuarioBase } from '../models/UsuarioBase';
 import { TipoUsuario } from '../models/enum/TipoUsuario';
 import path from 'path';
+import { Mascota } from '../models/Mascota';
 
 
 // Obtener usuarios totales
@@ -75,6 +76,61 @@ export const getUsuarioPorID = async (req: Request, res: Response): Promise<void
     res.status(500).send('Error interno del servidor');
   }
 };
+
+//Traer todos los datos de un Owner incluyendo sus mascotas
+export const getUsuarioCompletoID = async (req: Request, res: Response): Promise<void> => {
+
+
+
+  
+  const usuarioId = req.params.idUsuario;
+
+  try {
+    const db = await connectDB();
+    const [rows] = await db.query<UsuarioConMascota[]>(
+      `SELECT 
+         Usuario.id as userId,
+         Usuario.nombre as userNombre,
+         Usuario.email,
+         Mascota.id as mascotaId,
+         Mascota.nombre as mascotaNombre,
+         Mascota.tipo
+       FROM Usuario 
+       LEFT JOIN Mascota ON Mascota.idOwner = Usuario.id 
+       WHERE Usuario.id = ?`,
+      [usuarioId]
+    );
+    
+    if (rows.length === 0) {
+      res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    // Tomamos los datos del usuario desde la primera fila
+    const usuario = {
+      id: rows[0].userId,
+      nombre: rows[0].userNombre,
+      email: rows[0].email,
+      mascotas: []
+    };
+
+    // Recorremos las filas para armar el array de mascotas
+    for (const row of rows) {
+      if (row.mascotaId) { // Si tiene mascota
+        usuario.mascotas.push({
+          id: row.mascotaId,
+          nombre: row.mascotaNombre,
+          tipo: row.tipo
+        });
+      }
+    }
+
+    res.json(usuario);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Algo salió mal al obtener los datos del usuario' });
+  }
+};
+
 
 //Actualizar un usuario de forma dinámica. Solo se actualiza lo que recibe en el body
 export const updateUsuario = async (req: Request, res: Response): Promise<void> => {

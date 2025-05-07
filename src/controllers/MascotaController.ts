@@ -20,6 +20,23 @@ export const getMascotas = async (req: Request, res: Response): Promise<void> =>
       res.status(500).json({ error: 'Algo salió mal al obtener las mascotas' });
     }
   };
+
+  //GET de una mascota en específico
+
+  export const getMascotasPorId = async (req: Request, res: Response): Promise<void> => {
+    const idOwner = req.params.idOwner;
+  
+    try {
+      const db = await connectDB();
+      const [rows] = await db.query('SELECT * FROM Mascota WHERE idOwner = ? ', [idOwner]);
+      res.json(rows);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Algo salió mal al obtener las mascotas' });
+    }
+  };
+
+
   
 
   

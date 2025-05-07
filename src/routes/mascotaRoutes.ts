@@ -8,6 +8,7 @@ const router = Router();
 //Rutas GET
 
 router.get('/mascotas', getMascotas);
+router.get('/mascotas/:idOwner', getMascotas);
 
 
 export default router;
