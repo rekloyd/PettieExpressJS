@@ -1,7 +1,7 @@
 import { Router } from "express";
 import {
   getMascotas,
-  getMascotasPorOwner,
+  getMascotasPorIdOwner,
   getMascotasPorId,
   crearMascota,
   actualizarMascota,
@@ -10,9 +10,9 @@ import {
 
 const router = Router();
 
-router.get("/mascotas", getMascotas);
-router.get("mascotas/:idOwner", getMascotasPorId);
-router.get("mascotas/owner/:idOwner", getMascotasPorOwner);
+router.get('/mascotas', getMascotas);
+router.get('/mascotas/owner/:idOwner', getMascotasPorIdOwner);
+router.get('/mascotas/:idMascota', getMascotasPorId);
 
 router.post("/mascotas", crearMascota);
 router.put("/mascotas/:idMascota", actualizarMascota);
