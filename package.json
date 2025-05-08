@@ -9,13 +9,14 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/app.js",
-    "dev": "ts-node src/app.ts"
+    "dev": "npx ts-node src/app.ts"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.18",
     "@types/express": "^5.0.1",
     "@types/node": "^22.15.13",
+    "concurrently": "^9.1.2",
     "typescript": "^5.8.3"
   }
 }
