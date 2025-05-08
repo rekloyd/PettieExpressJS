@@ -1,15 +1,21 @@
-import { Router, Request, Response } from 'express';
-import connectDB from '../db/connection';
-import path from 'path';
-import { getMascotas } from '../controllers/MascotaController';
+import { Router } from "express";
+import {
+  getMascotas,
+  getMascotasPorOwner,
+  getMascotasPorId,
+  crearMascota,
+  actualizarMascota,
+  eliminarMascota,
+} from "../controllers/MascotaController";
 
 const router = Router();
 
-//Rutas GET
+router.get("/mascotas", getMascotas);
+router.get("mascotas/:idOwner", getMascotasPorId);
+router.get("mascotas/owner/:idOwner", getMascotasPorOwner);
 
-router.get('/mascotas', getMascotas);
-router.get('/mascotas/:idOwner', getMascotas);
-
+router.post("/mascotas", crearMascota);
+router.put("/mascotas/:idMascota", actualizarMascota);
+router.delete("/mascotas/:idMascota", eliminarMascota);
 
 export default router;
-
