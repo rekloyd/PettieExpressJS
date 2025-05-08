@@ -199,6 +199,7 @@ export const updateUsuario = async (req: Request, res: Response): Promise<void> 
     res.status(500).json({ error: 'Error al actualizar el usuario' });
   }
 };
+
 export const insertUsuario = async (req: Request, res: Response): Promise<void> => {
   const {
     nombreUsuario,
