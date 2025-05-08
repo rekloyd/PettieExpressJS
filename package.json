@@ -9,7 +9,8 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/app.js",
-    "dev": "npx ts-node src/app.ts"
+    "dev": "concurrently \"npm run dev --prefix frontend/Pettie\" \"npx ts-node src/app.ts\""
+
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",

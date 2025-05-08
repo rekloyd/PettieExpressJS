@@ -1,0 +1,88 @@
+/* Fondo con degradado suave y sutil efecto */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(145deg, #f0f4f8, #d9e2ec);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Contenedor del login con efecto suave y sombra interior */
+  .login-container {
+    background: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff;
+    width: 100%;
+    max-width: 420px;
+    padding: 2.5rem;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .login-container h2 {
+    margin-top: 0;
+    margin-bottom: 2rem;
+    text-align: center;
+    color: #2c3e50;
+    font-size: 1.75rem;
+  }
+  
+  /* Grupos de campos */
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #34495e;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 0.8rem 1.2rem;
+    border: 1px solid #ccd6dd;
+    border-radius: 0.75rem;
+    font-size: 1rem;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+    box-shadow: inset 2px 2px 5px #d1d9e6, inset -2px -2px 5px #ffffff;
+  }
+  
+  .form-group input:focus {
+    outline: none;
+    border-color: #4a90e2;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.25);
+  }
+  
+  /* Botón principal */
+  .btn-submit {
+    width: 100%;
+    padding: 0.85rem;
+    background-color: #4a90e2;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 4px 4px 10px #b0c4de, -4px -4px 10px #ffffff;
+  }
+  
+  .btn-submit:hover {
+    background-color: #357ABD;
+    transform: translateY(-2px);
+  }
+  
+  /* Error */
+  #error-message {
+    margin-top: 1rem;
+    color: #e74c3c;
+    text-align: center;
+    font-weight: 500;
+  }
+  
