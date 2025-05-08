@@ -22,26 +22,7 @@ export const getMascotas = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
-// GET de las mascotas de un owner concreto
-export const getMascotasPorOwner = async (req: Request, res: Response): Promise<void> => {
-  const idOwner = parseInt(req.params.idOwner, 10);
 
-  try {
-    const db = await connectDB();
-    const [rows] = await db.query(`
-      SELECT * 
-      FROM Mascota 
-      WHERE idOwner = ?
-    `, [idOwner]);
-
-    res.json(rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Algo salió mal al obtener las mascotas del owner' });
-  }
-};
-
-// GET de una mascota por su idMascota
 export const getMascotasPorId = async (req: Request, res: Response): Promise<void> => {
   const idOwner = req.params.idOwner;
 
@@ -55,47 +36,16 @@ export const getMascotasPorId = async (req: Request, res: Response): Promise<voi
   }
 };
 
-// POST para crear una nueva mascota
-export const crearMascota = async (req: Request, res: Response): Promise<void> => {
-  const {
-    idOwner,
-    nombreMascota,
-    tamanoMascota,
-    cuidadosEspeciales,
-    paseoManana,
-    paseoMedioDia,
-    paseoTarde,
-    razaPerro,
-    razaGato
-  } = req.body;
+export const getMascotasPorIdOwner = async (req: Request, res: Response): Promise<void> => {
+  const idOwner = req.params.idOwner;
 
   try {
     const db = await connectDB();
-    const [result] = await db.query(`
-      INSERT INTO Mascota 
-        (idOwner, nombreMascota, tamanoMascota, cuidadosEspeciales, paseoManana, paseoMedioDia, paseoTarde, razaPerro, razaGato)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `, [
-      idOwner,
-      nombreMascota,
-      tamanoMascota,
-      cuidadosEspeciales,
-      paseoManana,
-      paseoMedioDia,
-      paseoTarde,
-      razaPerro,
-      razaGato
-    ]);
-
-    // insertId viene de ResultSetHeader
-    const insertId = (result as any).insertId;
-    res.status(201).json({
-      message: 'Mascota creada exitosamente',
-      idMascota: insertId
-    });
+    const [rows] = await db.query('SELECT * FROM Mascota WHERE idOwner = ? ', [idOwner]);
+    res.json(rows);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Error al crear la mascota' });
+    res.status(500).json({ error: 'Algo salió mal al obtener las mascotas' });
   }
 };
 
@@ -168,5 +118,18 @@ export const eliminarMascota = async (req: Request, res: Response): Promise<void
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Error al eliminar la mascota' });
+  }
+};
+
+export const crearMascota = async (req: Request, res: Response): Promise<void> => {
+  const { nombre, especie, edad, idOwner } = req.body;
+
+  try {
+    const db = await connectDB();
+    const [result] = await db.query('INSERT INTO Mascota (nombre, especie, edad, idOwner) VALUES (?, ?, ?, ?)', [nombre, especie, edad, idOwner]);
+    res.status(201).json({ message: 'Mascota creada exitosamente', id: (result as any).insertId });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al crear la mascota' });
   }
 };
