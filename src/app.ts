@@ -7,6 +7,9 @@ import { crearUsuariosPorDefecto } from './utils/crearUsuariosPorDefecto';
 import usuarioRoutes from './routes/usuarioRoutes';
 import mascotaRoutes from './routes/mascotaRoutes';
 import servicioRoutes from './routes/servicioRoutes'; 
+import cors from 'cors';
+
+
 
 dotenv.config();
 
@@ -14,6 +17,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
+app.use(cors({ origin: 'http://localhost:5173' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
