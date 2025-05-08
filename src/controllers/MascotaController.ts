@@ -24,11 +24,11 @@ export const getMascotas = async (req: Request, res: Response): Promise<void> =>
 
 
 export const getMascotasPorId = async (req: Request, res: Response): Promise<void> => {
-  const idOwner = req.params.idOwner;
+  const idMascota = req.params.idMascota;
 
   try {
     const db = await connectDB();
-    const [rows] = await db.query('SELECT * FROM Mascota WHERE idOwner = ? ', [idOwner]);
+    const [rows] = await db.query('SELECT * FROM Mascota WHERE idMascota = ? ', [idMascota]);
     res.json(rows);
   } catch (err) {
     console.error(err);
