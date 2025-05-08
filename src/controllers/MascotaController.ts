@@ -122,11 +122,11 @@ export const eliminarMascota = async (req: Request, res: Response): Promise<void
 };
 
 export const crearMascota = async (req: Request, res: Response): Promise<void> => {
-  const { nombre, especie, edad, idOwner } = req.body;
+  const { nombreMascota,tamanoMascota,cuidadosEspeciales,paseoManana,paseoMedioDia,paseoTarde,razaPerro,razaGato,idOwner } = req.body;
 
   try {
     const db = await connectDB();
-    const [result] = await db.query('INSERT INTO Mascota (nombre, especie, edad, idOwner) VALUES (?, ?, ?, ?)', [nombre, especie, edad, idOwner]);
+    const [result] = await db.query('INSERT INTO Mascota (nombreMascota,tamanoMascota,cuidadosEspeciales,paseoManana,paseoMedioDia,paseoTarde,razaPerro,razaGato,idOwner) VALUES (?,?,?,?,?,?,?,?,?)', [nombreMascota,tamanoMascota,cuidadosEspeciales,paseoManana,paseoMedioDia,paseoTarde,razaPerro,razaGato,idOwner]);
     res.status(201).json({ message: 'Mascota creada exitosamente', id: (result as any).insertId });
   } catch (err) {
     console.error(err);
