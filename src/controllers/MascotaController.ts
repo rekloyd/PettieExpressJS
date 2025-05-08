@@ -101,7 +101,7 @@ export const actualizarMascota = async (req: Request, res: Response): Promise<vo
 
 // DELETE para borrar una mascota
 export const eliminarMascota = async (req: Request, res: Response): Promise<void> => {
-  const idMascota = parseInt(req.params.idMascota, 10);
+  const idMascota = parseInt(req.params.idMascota, 10); // Si no funciona quitar el 10
 
   try {
     const db = await connectDB();
