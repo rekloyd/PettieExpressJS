@@ -6,16 +6,26 @@ import {
   crearMascota,
   actualizarMascota,
   eliminarMascota,
+  getMascotasFiltered
 } from "../controllers/MascotaController";
 
 const router = Router();
 
+// GET
 router.get('/mascotas', getMascotas);
 router.get('/mascotas/owner/:idOwner', getMascotasPorIdOwner);
 router.get('/mascotas/:idMascota', getMascotasPorId);
 
+// POST
 router.post("/mascotas", crearMascota);
+
+//PUT
 router.put("/mascotas/:idMascota", actualizarMascota);
+
+//DELETE
 router.delete("/mascotas/:idMascota", eliminarMascota);
+
+//FILTER
+router.get('/mascotas/filtered', getMascotasFiltered);
 
 export default router;

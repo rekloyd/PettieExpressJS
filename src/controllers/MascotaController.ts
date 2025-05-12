@@ -133,3 +133,49 @@ export const crearMascota = async (req: Request, res: Response): Promise<void> =
     res.status(500).json({ error: 'Error al crear la mascota' });
   }
 };
+
+export const getMascotasFiltered = async (req: Request, res: Response): Promise<void> => {
+  const page   = parseInt(req.query.page  as string) || 1;
+  const limit  = parseInt(req.query.limit as string) || 50;
+  const offset = (page - 1) * limit;
+
+  const { idOwner, nombreMascota, tamano, razaPerro, razaGato } = req.query;
+  const where: string[] = [];
+  const params: unknown[]  = [];
+
+  if (idOwner) {
+    if (isNaN(Number(idOwner))) throw new Error('"idOwner" debe ser numérico');
+    where.push('idOwner = ?');
+    params.push(Number(idOwner));
+    console.log(where);
+  }
+  if (nombreMascota) {
+    where.push('nombreMascota LIKE ?');
+    params.push(`%${nombreMascota}%`);
+  }
+  if (tamano) {
+    where.push('tamanoMascota = ?');
+    params.push(tamano);
+  }
+  if (razaPerro) {
+    where.push('razaPerro LIKE ?');
+    params.push(`%${razaPerro}%`);
+  }
+  if (razaGato) {
+    where.push('razaGato LIKE ?');
+    params.push(`%${razaGato}%`);
+  }
+
+  const whereSQL = where.length ? 'WHERE ' + where.join(' AND ') : '';
+  const sql = `
+    SELECT *
+    FROM Mascota
+    ${whereSQL}
+    ORDER BY idMascota
+    LIMIT ? OFFSET ?
+  `;
+
+  const db    = await connectDB();
+  const [rows] = await db.query(sql, [...params, limit, offset]);
+  res.send(sql);
+};
