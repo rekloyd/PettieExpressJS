@@ -4,12 +4,13 @@ import path from 'path';
 import { UsuarioBase } from '../models/UsuarioBase';
 import { TipoUsuario } from '../models/enum/TipoUsuario';
 
-import { deleteUsuario, getUsuarios, updatePettier, updateUsuario,getUsuarioCompletoID, updateOwner } from '../controllers/UsuarioController';
+import { deleteUsuario, getUsuarios, updatePettier, updateUsuario,getUsuarioCompletoID, updateOwner,getUsuariosFiltrados } from '../controllers/UsuarioController';
 import { getUsuarioPorID } from '../controllers/UsuarioController';
 
 const router = Router();
 
 // Ruta para devolver imagen según rol || Se podra aprovechar para dashboard posteriormente
+router.get("/usuarios/filter", getUsuariosFiltrados);
 router.get('/usuario/:id',getUsuarioPorID);
 
 // Ruta para devolver listado completo usuarios
@@ -25,7 +26,6 @@ router.delete('/usuario/:id', deleteUsuario);
 router.put('/pettier/:id', updatePettier);
 
 router.put('/owner/:id', updateOwner);
-
 
 router.get('/usuario/mascota/:idUsuario',getUsuarioCompletoID);
 

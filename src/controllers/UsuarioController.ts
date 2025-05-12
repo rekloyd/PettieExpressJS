@@ -379,4 +379,73 @@ export const deleteUsuario = async (req: Request, res: Response): Promise<void> 
     res.status(500).json({ error: 'Error al eliminar el usuario' });
   }
 };
+export const getUsuariosFiltrados = async (req: Request, res: Response): Promise<void> => {
+  // Filtros posibles
+  const { idUsuario, nombreUsuario, emailUsuario, role, fechaAltaPlataforma } = req.query;
+  
+  const whereClauses: string[] = [];
+  const params: any[]       = [];
 
+  // idUsuario
+  if (idUsuario) {
+    if (isNaN(Number(idUsuario))) {
+      res.status(400).json({ error: '"idUsuario" debe ser numérico' });
+    }
+    whereClauses.push('idUsuario = ?');
+    params.push(Number(idUsuario));
+  }
+
+  // nombreUsuario
+  if (nombreUsuario) {
+    whereClauses.push('nombreUsuario LIKE ?');
+    params.push(`%${nombreUsuario}%`);
+  }
+
+  // emailUsuario
+  if (emailUsuario) {
+    whereClauses.push('emailUsuario LIKE ?');
+    params.push(`%${emailUsuario}%`);
+  }
+
+  // role
+  if (role) {
+    const validRoles = ['admin','owner','pettier'];
+    if (!validRoles.includes(role as string)) {
+      res.status(400).json({ error: `"role" debe ser uno de ${validRoles.join(', ')}` });
+    }
+    whereClauses.push('role = ?');
+    params.push(role);
+  }
+
+  // fechaAltaPlataforma
+  if (fechaAltaPlataforma) {
+    const d = Date.parse(fechaAltaPlataforma as string);
+    if (isNaN(d)) {
+      res.status(400).json({ error: '"fechaAltaPlataforma" no es una fecha válida' });
+    }
+    whereClauses.push('fechaAltaPlataforma = ?');
+    params.push((req.query.fechaAltaPlataforma as string).split('T')[0]); 
+    // o bien >= / <= si quieres rango
+  }
+
+  const whereSQL = whereClauses.length
+    ? 'WHERE ' + whereClauses.join(' AND ')
+    : '';
+
+  const sql = `
+    SELECT *
+      FROM Usuario
+    ${whereSQL}
+    ORDER BY idUsuario
+  `;
+
+  try {
+    const db = await connectDB();
+    // ¡OJO! aquí pasamos siempre el array de params, aunque esté vacío
+    const [rows] = await db.query(sql, params);
+    res.status(200).json(rows);
+  } catch (err) {
+    console.error('Error al filtrar usuarios:', err);
+    res.status(500).json({ error: 'Error interno del servidor al filtrar usuarios.' });
+  }
+};
