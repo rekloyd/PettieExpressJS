@@ -380,68 +380,94 @@ export const deleteUsuario = async (req: Request, res: Response): Promise<void> 
   }
 };
 export const getUsuariosFiltrados = async (req: Request, res: Response): Promise<void> => {
-  // Filtros posibles
-  const { idUsuario, nombreUsuario, emailUsuario, role, fechaAltaPlataforma } = req.query;
-  
-  const whereClauses: string[] = [];
-  const params: any[]       = [];
+  const {
+    idUsuario,
+    nombreUsuario,
+    emailUsuario,
+    role,
+    fechaAltaPlataforma,
+    idOwner,
+    idPettier
+  } = req.query;
 
-  // idUsuario
+  // Claúsulas y parámetros
+  const whereClauses: string[] = [];
+  const params: any[] = [];
+  let joinClauses = '';
+
+  // — Filtrar por Usuario —
   if (idUsuario) {
     if (isNaN(Number(idUsuario))) {
       res.status(400).json({ error: '"idUsuario" debe ser numérico' });
     }
-    whereClauses.push('idUsuario = ?');
+    whereClauses.push('u.idUsuario = ?');
     params.push(Number(idUsuario));
   }
 
-  // nombreUsuario
   if (nombreUsuario) {
-    whereClauses.push('nombreUsuario LIKE ?');
+    whereClauses.push('u.nombreUsuario LIKE ?');
     params.push(`%${nombreUsuario}%`);
   }
 
-  // emailUsuario
   if (emailUsuario) {
-    whereClauses.push('emailUsuario LIKE ?');
+    whereClauses.push('u.emailUsuario LIKE ?');
     params.push(`%${emailUsuario}%`);
   }
 
-  // role
   if (role) {
     const validRoles = ['admin','owner','pettier'];
     if (!validRoles.includes(role as string)) {
       res.status(400).json({ error: `"role" debe ser uno de ${validRoles.join(', ')}` });
     }
-    whereClauses.push('role = ?');
+    whereClauses.push('u.role = ?');
     params.push(role);
   }
 
-  // fechaAltaPlataforma
   if (fechaAltaPlataforma) {
-    const d = Date.parse(fechaAltaPlataforma as string);
-    if (isNaN(d)) {
+    const ts = Date.parse(fechaAltaPlataforma as string);
+    if (isNaN(ts)) {
       res.status(400).json({ error: '"fechaAltaPlataforma" no es una fecha válida' });
     }
-    whereClauses.push('fechaAltaPlataforma = ?');
-    params.push((req.query.fechaAltaPlataforma as string).split('T')[0]); 
-    // o bien >= / <= si quieres rango
+    // Comparamos sólo la fecha (YYYY-MM-DD)
+    whereClauses.push('DATE(u.fechaAltaPlataforma) = ?');
+    params.push((fechaAltaPlataforma as string).split('T')[0]);
   }
 
+  // — Filtrar por Owner —
+  if (idOwner) {
+    if (isNaN(Number(idOwner))) {
+      res.status(400).json({ error: '"idOwner" debe ser numérico' });
+    }
+    // Hacemos el join con Owner
+    joinClauses += ' JOIN Owner o ON u.idUsuario = o.idOwner';
+    whereClauses.push('o.idOwner = ?');
+    params.push(Number(idOwner));
+  }
+
+  // — Filtrar por Pettier —
+  if (idPettier) {
+    if (isNaN(Number(idPettier))) {
+      res.status(400).json({ error: '"idPettier" debe ser numérico' });
+    }
+    joinClauses += ' JOIN Pettier p ON u.idUsuario = p.idPettier';
+    whereClauses.push('p.idPettier = ?');
+    params.push(Number(idPettier));
+  }
+
+  // Construir SQL
   const whereSQL = whereClauses.length
     ? 'WHERE ' + whereClauses.join(' AND ')
     : '';
-
   const sql = `
-    SELECT *
-      FROM Usuario
+    SELECT u.*
+    FROM Usuario u
+    ${joinClauses}
     ${whereSQL}
-    ORDER BY idUsuario
+    ORDER BY u.idUsuario
   `;
 
   try {
     const db = await connectDB();
-    // ¡OJO! aquí pasamos siempre el array de params, aunque esté vacío
     const [rows] = await db.query(sql, params);
     res.status(200).json(rows);
   } catch (err) {
