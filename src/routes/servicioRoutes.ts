@@ -4,13 +4,17 @@ import {
   getServicioPorID,
   insertServicio,
   updateServicio,
-  deleteServicio
+  deleteServicio,
+  getServiciosFiltered
 } from '../controllers/ServicioController';
 
 const router = Router();
 
 // Obtener todos los servicios
 router.get('/servicios', getServicios);
+
+//Obetener servicios con filtros flexibles
+router.get('/servicios/filtered', getServiciosFiltered);
 
 // Obtener un servicio por ID
 router.get('/servicios/:id', getServicioPorID);

@@ -24,6 +24,105 @@ export const getServicios = async (req: Request, res: Response): Promise<void> =
   }
 };
 
+export const getServiciosFiltered = async (req: Request, res: Response): Promise<void> => {
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = parseInt(req.query.limit as string) || 50;
+  const offset = (page - 1) * limit;
+
+  const {
+    idOwner,
+    idPettier,
+    idMascota,
+    tipoActividad,
+    fechaInicio,
+    fechaFinal,
+    precio,
+    finalizado
+  } = req.query;
+
+  const queryParams: any[] = [];
+  let whereClauses: string[] = [];
+
+  try {
+    // Construir condiciones WHERE dinámicamente
+    if (idOwner) {
+      if (isNaN(Number(idOwner))) throw new Error('El parámetro "idOwner" debe ser numérico.');
+      whereClauses.push('idOwner = ?');
+      queryParams.push(idOwner);
+    }
+
+    if (idPettier) {
+      if (isNaN(Number(idPettier))) throw new Error('El parámetro "idPettier" debe ser numérico.');
+      whereClauses.push('idPettier = ?');
+      queryParams.push(idPettier);
+    }
+
+    if (idMascota) {
+      if (isNaN(Number(idMascota))) throw new Error('El parámetro "idMascota" debe ser numérico.');
+      whereClauses.push('idMascota = ?');
+      queryParams.push(idMascota);
+    }
+
+    if (tipoActividad) {
+      whereClauses.push('tipoActividad LIKE ?');
+      queryParams.push(`%${tipoActividad}%`);
+    }
+
+    if (fechaInicio) {
+      if (isNaN(Date.parse(fechaInicio as string))) throw new Error('El parámetro "fechaInicio" no es una fecha válida.');
+      whereClauses.push('fechaInicio >= ?');
+      queryParams.push(fechaInicio);
+    }
+
+    if (fechaFinal) {
+      if (isNaN(Date.parse(fechaFinal as string))) throw new Error('El parámetro "fechaFinal" no es una fecha válida.');
+      whereClauses.push('fechaFinal <= ?');
+      queryParams.push(fechaFinal);
+    }
+
+    if (finalizado !== undefined) {
+      if (finalizado !== 'true' && finalizado !== 'false') {
+        throw new Error('El parámetro "finalizado" debe ser "true" o "false".');
+      }
+      whereClauses.push('finalizado = ?');
+      queryParams.push(finalizado === 'true');
+    }
+
+    if (precio) {
+      if (isNaN(Number(precio))) throw new Error('El parámetro "precio" debe ser numérico.');
+      whereClauses.push('precio = ?');
+      queryParams.push(precio);
+    }
+
+    const whereStatement = whereClauses.length > 0 ? 'WHERE ' + whereClauses.join(' AND ') : '';
+
+
+
+    const db = await connectDB();
+    const [rows] = await db.query(
+      `SELECT * FROM Servicio ${whereStatement}
+       ORDER BY fechaInicio DESC
+       LIMIT ? OFFSET ?`,
+      [...queryParams, limit, offset]
+    );
+
+    console.log(rows);
+    res.status(200).json(rows);
+  } catch (err) {
+    console.error('Error al procesar la solicitud de servicios:', err);
+
+    if (err instanceof Error) {
+      res.status(400).json({ error: err.message });
+    } else {
+      res.status(500).json({ error: 'Error interno del servidor al obtener los servicios.' });
+    }
+  }
+};
+
+
+
+
+
 // Obtener un servicio por su ID
 export const getServicioPorID = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
