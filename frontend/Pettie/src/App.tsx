@@ -1,18 +1,9 @@
 import { LoginForm } from './components/LoginForm';
-import Navbar from './components/Navbar';
-
+import { RegisterForm } from './components/RegisterForm'
 
 function App() {
-
-    return (
-    <div>
-      <Navbar/>
-      <LoginForm/>
-
-      
-    </div>
-  );
-  
+  //return <LoginForm />;
+  return <RegisterForm />
 }
 
 export default App;

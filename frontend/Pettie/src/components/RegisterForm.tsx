@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import logo from '../assets/logo.png';
 import '../styles/login.css';
 
-export const LoginForm = () => {
+export const RegisterForm = () => {
   const [nombreUsuario, setNombreUsuario] = useState('');
   const [contrasenaUsuario, setContrasenaUsuario] = useState('');
   const [error, setError] = useState('');
@@ -51,7 +51,7 @@ export const LoginForm = () => {
   <img 
     src={logo} 
     alt="Logo de Pettie" 
-    style={{ marginBottom: '20px', width: '243px', height: '161px' }} 
+    style={{ marginBottom: '0px', width: '243px', height: '161px' }} 
   />
   <h2 style={{
     fontFamily: 'Madimi One, cursive',
@@ -61,7 +61,7 @@ export const LoginForm = () => {
     marginBottom: '80px',
     textAlign: 'center',
   }}>
-    Inicia sesión en Pettie
+    Crea tu cuenta
   </h2>
 </div>
 
