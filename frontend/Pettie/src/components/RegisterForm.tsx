@@ -59,7 +59,7 @@ export const RegisterForm = () => {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          marginTop: "80px",
+          marginTop: "20px",
         }}
       >
         <img
