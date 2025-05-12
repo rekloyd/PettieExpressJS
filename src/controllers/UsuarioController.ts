@@ -272,13 +272,13 @@ export const insertUsuario = async (req: Request, res: Response): Promise<void> 
 
 export const updatePettier = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
-  const { numeroCuenta, serviciosOfrecidos, serviciosPendientes } = req.body;
+  const { numeroCuenta} = req.body;
 
   try {
     const conn = await connectDB();
     const [result] = await conn.execute(
-      `UPDATE Pettier SET numeroCuenta = ?, serviciosOfrecidos = ?, serviciosPendientes = ? WHERE idPettier = ?`,
-      [numeroCuenta, serviciosOfrecidos, serviciosPendientes, id]
+      `UPDATE Pettier SET numeroCuenta = ? WHERE idPettier = ?`,
+      [numeroCuenta, id]
     );
 
     const { affectedRows } = result as any;
@@ -299,6 +299,8 @@ export const updatePettier = async (req: Request, res: Response): Promise<void> 
 
 
 //Actualizar un Owner
+
+//ALTER TABLE Owner add column numeroCuenta varchar(100);
 
 export const updateOwner = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
