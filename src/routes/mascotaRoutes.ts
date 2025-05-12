@@ -13,6 +13,7 @@ const router = Router();
 
 // GET
 router.get('/mascotas', getMascotas);
+router.get('/mascotas/filtered', getMascotasFiltered);
 router.get('/mascotas/owner/:idOwner', getMascotasPorIdOwner);
 router.get('/mascotas/:idMascota', getMascotasPorId);
 
@@ -25,7 +26,6 @@ router.put("/mascotas/:idMascota", actualizarMascota);
 //DELETE
 router.delete("/mascotas/:idMascota", eliminarMascota);
 
-//FILTER
-router.get('/mascotas/filtered', getMascotasFiltered);
+
 
 export default router;
