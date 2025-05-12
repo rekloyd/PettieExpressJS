@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import logo from '../assets/logo.png';
+import info from '../assets/info.png'
 import '../styles/login.css';
 
 export const RegisterForm = () => {
   const [nombreUsuario, setNombreUsuario] = useState('');
+  const [email, setEmail] = useState('');
   const [contrasenaUsuario, setContrasenaUsuario] = useState('');
+  const [role, setRole] = useState('');
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -19,51 +22,51 @@ export const RegisterForm = () => {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:4000/api/login', {
+      const response = await fetch('http://localhost:4000/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nombreUsuario, contrasenaUsuario }),
+        body: JSON.stringify({ nombreUsuario, email, contrasenaUsuario, role }),
       });
 
       const result = await response.json();
 
       if (response.ok) {
-        alert('Login exitoso');
+        alert('Registro exitoso');
         window.location.href = '/';
       } else {
-        setError(result.message);
+        setError(result.message || 'Error en el registro.');
       }
     } catch (err) {
+      console.error(err);
       setError('Hubo un error al procesar la solicitud.');
-      console.log(err);
     }
   };
 
   return (
     <div style={{ fontFamily: 'Inter, sans-serif', maxWidth: '600px', margin: 'auto', padding: '1rem', fontSize: '20px' }}>
-<div style={{
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  marginTop: '80px',
-}}>
-  <img 
-    src={logo} 
-    alt="Logo de Pettie" 
-    style={{ marginBottom: '0px', width: '243px', height: '161px' }} 
-  />
-  <h2 style={{
-    fontFamily: 'Madimi One, cursive',
-    fontSize: '45px',
-    fontWeight: '400',
-    margin: '0',
-    marginBottom: '80px',
-    textAlign: 'center',
-  }}>
-    Crea tu cuenta
-  </h2>
-</div>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: '80px',
+      }}>
+        <img 
+          src={logo} 
+          alt="Logo de Pettie" 
+          style={{ marginBottom: '0px', width: '243px', height: '161px' }} 
+        />
+        <h2 style={{
+          fontFamily: 'Madimi One, cursive',
+          fontSize: '45px',
+          fontWeight: '400',
+          margin: '0',
+          marginBottom: '80px',
+          textAlign: 'center',
+        }}>
+          Crea tu cuenta
+        </h2>
+      </div>
 
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: '1rem' }}>
@@ -80,8 +83,24 @@ export const RegisterForm = () => {
             style={{ width: '100%', padding: '.75rem', fontSize: '1rem', borderRadius: '5px', border: 'black 1px solid'}}
           />
         </div>
+
         <div style={{ marginBottom: '1rem' }}>
-          <label htmlFor="contrasenaUsuario" style={{ display: 'block', marginBottom: '.5rem'}}>
+          <label htmlFor="email" style={{ display: 'block', marginBottom: '.5rem' }}>
+            Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            style={{ width: '100%', padding: '.75rem', fontSize: '1rem', borderRadius: '5px', border: 'black 1px solid'}}
+          />
+        </div>
+
+        <div style={{ marginBottom: '1rem' }}>
+          <label htmlFor="contrasenaUsuario" style={{ display: 'block', marginBottom: '.5rem' }}>
             Contraseña
           </label>
           <input
@@ -94,12 +113,40 @@ export const RegisterForm = () => {
             style={{ width: '100%', padding: '.75rem', fontSize: '1rem', borderRadius: '5px', border: 'black 1px solid'}}
           />
         </div>
-        <div style={{textAlign: 'center'}}>
-        <button type="submit" className='btn'>
-          Iniciar sesión
-        </button>
-        <br /><br /><br />
-        <p>¿Todavía no tienes cuenta?</p><a href="">Regístrate aquí</a>
+
+        <div style={{ marginBottom: '1rem' }}>
+          <label htmlFor="role" style={{ display: 'block', marginBottom: '.5rem' }}>
+            Rol
+          </label>
+          <select
+            id="role"
+            className='custom-select'
+            name="role"
+            required
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            style={{
+              width: '281px',
+              padding: '.85rem',
+              fontSize: '1rem',
+              borderRadius: '5px',
+              border: 'black 1px solid',
+              backgroundColor: 'white',
+            }}
+          >
+            <option value="">Selecciona un rol</option>
+            <option value="Owner">Owner</option>
+            <option value="Pettier">Pettier</option>
+          </select><img src={info} alt="info" style={{width: '28px'}} />
+        </div>
+
+        <div style={{ textAlign: 'center' }}>
+          <button type="submit" className="btn">
+            Regístrate
+          </button>
+          <br /><br /><br />
+          <p>¿Ya tienes una cuenta?</p>
+          <a href="/">Inicia sesión aquí</a>
         </div>
 
         {error && (

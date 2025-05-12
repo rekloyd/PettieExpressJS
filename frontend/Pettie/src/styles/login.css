@@ -41,3 +41,19 @@
 .btn:hover::before {
   width: 160%;
 }
+
+.custom-select {
+  appearance: none; /* Oculta la flecha nativa */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('../assets/arrow.png'); /* Ruta a tu flecha */
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1rem;
+  padding-right: 2.5rem; /* Espacio para la flecha */
+  transition: transform 0.3s ease; /* Transición suave para el giro */
+}
+
+.custom-select.open {
+  transform: rotate(180deg); /* Gira la flecha cuando el select está abierto */
+}
