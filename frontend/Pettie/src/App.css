@@ -44,11 +44,128 @@
 
 /*Botón de la newsletter*/
 
-.btn-custom {
-  background-color: #F7A952;
-  color: #fff; /* Color del texto */
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
+/* contenedor principal */
+.hero {
+  position: relative;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif; /* asume que ya la importaste */
 }
 
+/* fondo y overlay */
+.hero__bg {
+  position: relative;
+  width: 100%;
+  height: 60vh;
+  min-height: 300px;
+}
+.hero__img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* texto encima del fondo */
+.hero__content {
+  position: absolute;
+  top: 20%;
+  left: 10%;
+  color: #fff;
+  max-width: 500px;
+}
+.hero__title {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+.hero__subtitle {
+  font-size: 1.125rem;
+}
+
+/* tarjeta de búsqueda */
+.search-card {
+  position: relative;
+  max-width: 90%;
+  width: 1000px;
+  margin: -5rem auto 2rem;
+  background: #fff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  z-index: 10;
+}
+.search-card__heading {
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+}
+
+/* formulario interno */
+.search-card__form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+/* grupo de tamaños */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+.sizes {
+  display: flex;
+  gap: 0.75rem;
+}
+.sizes__option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+}
+.sizes__icon {
+  font-size: 1.5rem;
+}
+.sizes__label {
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+.sizes__option input {
+  display: none;
+}
+
+/* precio y select */
+.form-select {
+  min-width: 120px;
+  padding: 0.4rem;
+}
+.form-label {
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+/* input de nombre de actividad ocupa el resto */
+.fullwidth {
+  flex: 1;
+}
+
+/* botón */
+.btn--primary {
+  padding: 0.6rem 1.5rem;
+  background-color: #F7A952;
+  border: none;
+  color: #000;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.btn--primary:hover {
+  opacity: 0.9;
+}
