@@ -15,7 +15,6 @@ const Navbar: React.FC = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-white bg-white pettie-navbar">
       <div className="container-fluid">
-
         {/* BOTÓN HAMBURGER */}
         <button
           className="navbar-toggler"
@@ -31,46 +30,52 @@ const Navbar: React.FC = () => {
 
         <div className="collapse navbar-collapse w-100" id="pettieNavbar">
           <div className="d-flex w-100 justify-content-between align-items-center">
-
             {/* IZQUIERDA: logo + texto */}
             <Link className="navbar-brand d-flex align-items-center" to="/">
-              <img
-                src={logo}
-                alt="Pettie Logo"
-                style={{ width: "120px"}}
-              />
+              <img src={logo} alt="Pettie Logo" style={{ width: "120px" }} />
               <span className="pettie-title">Pettie</span>
             </Link>
 
             {/* CENTRO: enlaces */}
-            <ul className="navbar-nav d-flex flex-row gap-3">
+            <ul className="navbar-nav d-flex flex-row" style={{gap:'85px'}}>
               <li className="nav-item">
-                <Link className="nav-link" to="/">Inicio</Link>
+                <Link className="nav-link" to="/">
+                  Inicio
+                </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/servicios">Servicios</Link>
+                <Link className="nav-link" to="/servicios">
+                  Servicios
+                </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/contacto">Contacto</Link>
+                <Link className="nav-link" to="/contacto">
+                  Contacto
+                </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/acerca">Sobre Nosotros</Link>
+                <Link className="nav-link" to="/acerca">
+                  Sobre Nosotros
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/acerca">
+                  Conviertete en Pettier
+                </Link>
               </li>
             </ul>
-
-            {/* DERECHA: botones Login/Signup */}
-            <div className="d-flex gap-2">
-              <Link to="/login" className="btn btn-outline-light btn-sm">
-                Login
+            <div className="d-flex gap-3 align-items-center">
+              <Link to="/register" className="btnR">
+                Registrarse
               </Link>
-              <Link to="/register" className="btn btn-primary btn-sm">
-                Signup
+              <Link to="/login" className="login-link nav-link margin-login">
+                Iniciar sesión
               </Link>
             </div>
-
           </div>
         </div>
       </div>
+      <hr />
     </nav>
   );
 };

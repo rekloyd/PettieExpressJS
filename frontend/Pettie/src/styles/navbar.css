@@ -10,3 +10,74 @@
     color: black;
   }
   
+  *{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .btnR {
+    color: black;
+    text-decoration: none;
+    border: 1px solid black;
+    padding: 15px 30px;
+    font-size: 17px;
+    cursor: pointer;
+    font-family: 'Inter';
+    background: transparent;
+    position: relative;
+    transition: all 1s;
+    overflow: hidden;
+    border-radius: 5px;
+    font-size: 20px;
+    margin-top: 50px;
+  }
+  
+  
+  .btnR::before {
+    content: "";
+    position: absolute;
+    height: 100%;
+    width: 0%;
+    top: 0;
+    left: -40px;
+    transform: skewX(45deg);
+    background-color: #614117;
+    z-index: -1;
+    transition: all 1s;
+  }
+  
+  .btnR:hover::before {
+    width: 160%;
+  }
+  
+
+  .nav-link {
+    position: relative;
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    color: black;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 5px;
+    width: 0%;
+    height: 2px;
+    background-color: black;
+    transition: width 0.3s ease;
+  }
+  
+  .nav-link:hover::after {
+    width: 100%;
+  }
+  
+
+  .margin-login{
+    margin-right: 70px !important;
+  }
