@@ -38,7 +38,7 @@ const Footer: React.FC = () => {
           <div style={{ minWidth: '250px' }}>
             <h5>Suscríbete a nuestra newsletter</h5>
             <form>
-              <div className="mb-2">
+              <div>
                 <input
                   type="email"
                   className="form-control"
