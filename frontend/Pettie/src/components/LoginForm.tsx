@@ -34,7 +34,7 @@ const LoginForm = () => {
         setError(result.message);
       }
     } catch {
-      setError('Hubo un error al procesar la solicitud.');
+      setError('Credenciales incorrectas, intentalo de nuevo.');
     }
   };
 

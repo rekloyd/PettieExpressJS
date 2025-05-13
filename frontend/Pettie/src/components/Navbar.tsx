@@ -1,37 +1,74 @@
-import React from 'react';
+import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
+import logo from "../assets/logo.png";
+import "../styles/navbar.css";
 
 const Navbar: React.FC = () => {
+  useEffect(() => {
+    const link = document.createElement("link");
+    link.href =
+      "https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Madimi+One&display=swap";
+    link.rel = "stylesheet";
+    document.head.appendChild(link);
+  }, []);
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav className="navbar navbar-expand-lg navbar-white bg-white pettie-navbar">
       <div className="container-fluid">
-        <a className="navbar-brand" href="#">MiApp</a>
+
+        {/* BOTÓN HAMBURGER */}
         <button
           className="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
-          data-bs-target="#navbarResponsive"
-          aria-controls="navbarResponsive"
+          data-bs-target="#pettieNavbar"
+          aria-controls="pettieNavbar"
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span className="navbar-toggler-icon"></span>
+          <span className="navbar-toggler-icon" />
         </button>
 
-        <div className="collapse navbar-collapse" id="navbarResponsive">
-          <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-            <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="#">Inicio</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="#">Servicios</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="#">Acerca de</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="#">Contacto</a>
-            </li>
-          </ul>
+        <div className="collapse navbar-collapse w-100" id="pettieNavbar">
+          <div className="d-flex w-100 justify-content-between align-items-center">
+
+            {/* IZQUIERDA: logo + texto */}
+            <Link className="navbar-brand d-flex align-items-center" to="/">
+              <img
+                src={logo}
+                alt="Pettie Logo"
+                style={{ width: "120px"}}
+              />
+              <span className="pettie-title">Pettie</span>
+            </Link>
+
+            {/* CENTRO: enlaces */}
+            <ul className="navbar-nav d-flex flex-row gap-3">
+              <li className="nav-item">
+                <Link className="nav-link" to="/">Inicio</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/servicios">Servicios</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/contacto">Contacto</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/acerca">Sobre Nosotros</Link>
+              </li>
+            </ul>
+
+            {/* DERECHA: botones Login/Signup */}
+            <div className="d-flex gap-2">
+              <Link to="/login" className="btn btn-outline-light btn-sm">
+                Login
+              </Link>
+              <Link to="/register" className="btn btn-primary btn-sm">
+                Signup
+              </Link>
+            </div>
+
+          </div>
         </div>
       </div>
     </nav>
@@ -39,41 +76,3 @@ const Navbar: React.FC = () => {
 };
 
 export default Navbar;
-
-
-// ejemplo con router
-
-/**
- * 
- * 
- * 
- * 
- * 
- * 
- * import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Home from './pages/Home';
-import Servicios from './pages/Servicios';
-import Acerca from './pages/Acerca';
-import Contacto from './pages/Contacto';
-
-function App() {
-  return (
-    <Router>
-      <Navbar />
-      <div className="container mt-4">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/servicios" element={<Servicios />} />
-          <Route path="/acerca" element={<Acerca />} />
-          <Route path="/contacto" element={<Contacto />} />
-        </Routes>
-      </div>
-    </Router>
-  );
-}
-
-export default App;
-
- */
