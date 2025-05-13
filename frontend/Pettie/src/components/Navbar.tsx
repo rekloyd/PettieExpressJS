@@ -75,7 +75,7 @@ const Navbar: React.FC = () => {
           </div>
         </div>
       </div>
-      <hr />
+      
     </nav>
   );
 };
