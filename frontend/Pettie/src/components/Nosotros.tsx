@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import "../styles/nosotros.css";
-import logoImg from "../assets/logo.png"; // Puedes cambiar por otras imágenes
+import banner from '../assets/banner-us.jpeg'
+import rightUs from '../assets/right.jpg'
+import leftUs from '../assets/left.jpg'
 
 const Nosotros: React.FC = () => {
       useEffect(() => {
@@ -23,7 +25,7 @@ const Nosotros: React.FC = () => {
             con propietarios que buscan confianza y cariño para sus perros.
           </p>
         </div>
-        <img src={logoImg} alt="Nuestra misión" className="nosotros-img" />
+        <img src={rightUs} alt="Nuestra misión" className="nosotros-img" />
       </div>
 
       {/* Valores */}
@@ -37,7 +39,7 @@ const Nosotros: React.FC = () => {
             empatía, la comunidad y la transparencia.
           </p>
         </div>
-        <img src={logoImg} alt="Nuestros valores" className="nosotros-img" />
+        <img src={leftUs} alt="Nuestros valores" className="nosotros-img" />
       </div>
 
       {/* Cultura */}
@@ -54,7 +56,7 @@ const Nosotros: React.FC = () => {
       </div>
       </div>
       <div style={{textAlign:'center'}}>
-      <img src={logoImg} alt="Nuestra cultura" className="nosotros-img" />
+      <img src={banner} alt="Nuestra cultura" style={{width:'800px'}} />
       </div>
 
     </div>
