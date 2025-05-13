@@ -4,7 +4,7 @@
   padding: 0;
 }
 
-.btn {
+.btnL {
   color: black;
   text-decoration: none;
   border: 1px solid black;
@@ -21,11 +21,11 @@
   margin-top: 50px;
 }
 
-.btn:hover {
+.btnL:hover {
   color: white;
 }
 
-.btn::before {
+.btnL::before {
   content: "";
   position: absolute;
   height: 100%;
@@ -38,7 +38,7 @@
   transition: all 1s;
 }
 
-.btn:hover::before {
+.btnL:hover::before {
   width: 160%;
 }
 

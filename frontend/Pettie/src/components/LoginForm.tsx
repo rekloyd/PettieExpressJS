@@ -129,7 +129,7 @@ const LoginForm = () => {
         </div>
 
         <div style={{ textAlign: "center" }}>
-          <button type="submit" className="btn">
+          <button type="submit" className="btnL">
             Iniciar sesión
           </button>
           <p style={{ marginTop: "1rem" }}>

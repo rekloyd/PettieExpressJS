@@ -290,7 +290,7 @@ const RegisterForm = () => {
         </div>
 
         <div style={{ textAlign: "center" }}>
-          <button type="submit" className="btn">
+          <button type="submit" className="btnL">
             Regístrate
           </button>
           <p style={{ marginTop: "1rem" }}>
