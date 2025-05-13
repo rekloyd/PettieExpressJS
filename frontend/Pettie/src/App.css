@@ -40,3 +40,15 @@
 .read-the-docs {
   color: #888;
 }
+
+
+/*Botón de la newsletter*/
+
+.btn-custom {
+  background-color: #F7A952;
+  color: #fff; /* Color del texto */
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+}
+
