@@ -6,7 +6,13 @@ import Footer from './components/Footer';
 
 function App() {
   return (
-    <Footer/>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/register" element={<RegisterForm />} />
+        <Route path="/" element={<Navbar/>}/>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
