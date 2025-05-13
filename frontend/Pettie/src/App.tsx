@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Terminos from './components/Terminos';
 import Contacto from './components/Contacto';
+import Nosotros from './components/Nosotros';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/terminos" element={<Terminos />} />
         <Route path='/contacto' element={<Contacto/>}/>
+        <Route path='/nosotros' element={<Nosotros/>}/>
       </Routes>
       <Footer></Footer>
     </BrowserRouter>
