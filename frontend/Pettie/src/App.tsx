@@ -13,6 +13,7 @@ function App() {
   return (
     <BrowserRouter>
     <Navbar></Navbar>
+    <HeroComponent></HeroComponent>
       <Routes>
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
