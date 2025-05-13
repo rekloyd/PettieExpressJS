@@ -6,13 +6,14 @@ import Footer from './components/Footer';
 import Terminos from './components/Terminos';
 import Contacto from './components/Contacto';
 import Nosotros from './components/Nosotros';
+import HeroComponent from './components/HeroComponent';
 
 function App() {
   return (
     <BrowserRouter>
     <Navbar></Navbar>
-    <HeroComponent></HeroComponent>
       <Routes>
+        <Route path="/" element={<HeroComponent />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/terminos" element={<Terminos />} />
