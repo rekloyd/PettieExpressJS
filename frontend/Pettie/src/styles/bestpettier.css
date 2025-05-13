@@ -1,0 +1,69 @@
+.bestpettier-container {
+    max-width: 75%;
+    margin: 60px auto;
+    padding: 0 20px;
+
+  }
+  
+  .section-title {
+    font-size: 2rem;
+    margin-bottom: 40px;
+    text-align: center;
+  }
+  
+  .pettier-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+  }
+  
+  .pettier-card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    width: 390px;
+    height: 525px;
+    border: black 1px solid;
+  }
+  
+  .pettier-img {
+    width: 240px;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+  
+  .pettier-info h3 {
+    margin: 10px 0;
+    font-size: 1.2rem;
+  }
+  
+  .icons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .icon-placeholder {
+    font-size: 1.8rem;
+  }
+  
+  .pettier-info p {
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+    color: #444;
+  }
+  
+.buyButton{
+    border: black solid 1px;
+    width: 150px;
+    height: 35px;
+    border-radius: 5px;
+    background-color: rgb(247, 169, 82);
+}

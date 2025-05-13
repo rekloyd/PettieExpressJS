@@ -6,6 +6,8 @@ import Footer from './components/Footer';
 import Terminos from './components/Terminos';
 import Contacto from './components/Contacto';
 import Nosotros from './components/Nosotros';
+import BestPettier from './components/BestPettier';
+
 
 function App() {
   return (
@@ -17,6 +19,7 @@ function App() {
         <Route path="/terminos" element={<Terminos />} />
         <Route path='/contacto' element={<Contacto/>}/>
         <Route path='/nosotros' element={<Nosotros/>}/>
+        <Route path='/test' element={<BestPettier/>}/>
       </Routes>
       <Footer></Footer>
     </BrowserRouter>
