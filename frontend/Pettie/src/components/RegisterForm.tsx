@@ -9,6 +9,7 @@ export const RegisterForm = () => {
   const [contrasenaUsuario, setContrasenaUsuario] = useState("");
   const [role, setRole] = useState("");
   const [error, setError] = useState("");
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
 
   useEffect(() => {
     const link = document.createElement("link");
@@ -23,11 +24,14 @@ export const RegisterForm = () => {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:4000/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nombreUsuario, email, contrasenaUsuario, role }),
-      });
+      const response = await fetch(
+        "http://localhost:4000/api/register",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nombreUsuario, email, contrasenaUsuario, role }),
+        }
+      );
 
       const result = await response.json();
 
@@ -82,6 +86,7 @@ export const RegisterForm = () => {
       </div>
 
       <form onSubmit={handleSubmit}>
+        {/* Nombre de usuario */}
         <div style={{ marginBottom: "1rem" }}>
           <label
             htmlFor="nombreUsuario"
@@ -106,6 +111,7 @@ export const RegisterForm = () => {
           />
         </div>
 
+        {/* Email */}
         <div style={{ marginBottom: "1rem" }}>
           <label
             htmlFor="email"
@@ -130,6 +136,7 @@ export const RegisterForm = () => {
           />
         </div>
 
+        {/* Contraseña */}
         <div style={{ marginBottom: "1rem" }}>
           <label
             htmlFor="contrasenaUsuario"
@@ -161,29 +168,43 @@ export const RegisterForm = () => {
           >
             Rol
           </label>
-          <select
-            id="role"
-            className="custom-select"
-            name="role"
-            required
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            style={{
-              width: "281px",
-              padding: ".85rem",
-              fontSize: "1rem",
-              borderRadius: "5px",
-              border: "black 1px solid",
-              backgroundColor: "white",
-            }}
-          >
-            <option value="">Selecciona un rol</option>
-            <option value="Owner">Owner</option>
-            <option value="Pettier">Pettier</option>
-          </select>
-          <img src={info} alt="info" style={{ width: "28px" }} />
+
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <select
+              id="role"
+              className={`custom-select ${isSelectOpen ? 'open' : ''}`}
+              name="role"
+              required
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              onFocus={() => setIsSelectOpen(true)}
+              onBlur={() => setIsSelectOpen(false)}
+              style={{
+                width: "281px",
+                padding: ".85rem",
+                fontSize: "1rem",
+                borderRadius: "5px",
+                border: "black 1px solid",
+                backgroundColor: "white",
+              }}
+            >
+              <option value="">Selecciona un rol</option>
+              <option value="Owner">Owner</option>
+              <option value="Pettier">Pettier</option>
+            </select>
+
+            <div className="tooltip-wrapper" style={{ marginLeft: "15px", position: "relative", display: "inline-block" }}>
+              <img
+                src={info}
+                alt="info"
+                style={{ width: "28px", cursor: "pointer" }}
+              />
+              <span className="tooltip-text" style={{fontSize: '12px'}}> <b> Pettier:</b> Ofrece servicios de cuidados de mascotas.* <br /> <b>Propietario:</b> Contrata servicios de cuidados de mascotas.*</span>
+            </div>
+          </div>
         </div>
 
+        {/* Checkboxes */}
         <div
           style={{
             display: "flex",
@@ -193,53 +214,31 @@ export const RegisterForm = () => {
           }}
         >
           <label
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "10px",
-              fontSize: "14px",
-            }}
+            style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "14px" }}
           >
             <input
               type="checkbox"
               name="terms"
               required
-              style={{
-                width: "20px",
-                height: "20px",
-                accentColor: "#000",
-              }}
+              style={{ width: "20px", height: "20px", accentColor: "#000" }}
             />
-            <a
-              href="/terminos"
-              target="_blank"
-              style={{ color: "black", textDecoration: "none" }}
-            >
-              He leído y acepto los <u>términos y condiciones de uso</u>
+            <a href="/terminos" target="_blank" style={{ color: "black", textDecoration: "none" }}>
+              He leído y acepto los <u>términos y condiciones de uso</u><span style={{ color: "red" }}>*</span>
             </a>
           </label>
           <label
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "10px",
-              fontSize: "14px",
-            }}
+            style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "14px" }}
           >
             <input
               type="checkbox"
               name="newsletter"
-              style={{
-                width: "20px",
-                height: "20px",
-                accentColor: "#000",
-              }}
+              style={{ width: "20px", height: "20px", accentColor: "#000" }}
             />
-            Acepto recibir emails con promociones y ofertas de Pettie que sean
-            de mi interés{" "}
+            Acepto recibir emails con promociones y ofertas de Pettie que sean de mi interés
           </label>
         </div>
 
+        {/* Botón y enlace */}
         <div style={{ textAlign: "center" }}>
           <button type="submit" className="btn">
             Regístrate
