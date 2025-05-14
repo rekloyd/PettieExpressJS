@@ -37,12 +37,12 @@ export const getServiciosFiltered = async (req: Request, res: Response): Promise
     fechaFinal,
     precio,
     finalizado,
-    tamanoMascota // Nuevo parámetro
+    tamanoMascota  // Nuevo parámetro
   } = req.query;
 
   const queryParams: any[] = [];
   let whereClauses: string[] = [];
-  let joinClauses: string[] = []; // Almacenar los JOINs
+  let joinClause = '';  // Para el LEFT JOIN
 
   try {
     // Construir condiciones WHERE dinámicamente
@@ -95,25 +95,30 @@ export const getServiciosFiltered = async (req: Request, res: Response): Promise
       queryParams.push(precio);
     }
 
-    // Si se pasa el parámetro tamanoMascota, agregamos un LEFT JOIN
+    // Verificamos si se pasa el parámetro tamanoMascota para hacer un LEFT JOIN
     if (tamanoMascota) {
-      whereClauses.push('Mascota.tamano = ?');
+      whereClauses.push('Mascota.tamanoMascota = ?');
       queryParams.push(tamanoMascota);
-      joinClauses.push('LEFT JOIN Mascota ON Servicio.idMascota = Mascota.idMascota');
+      joinClause = 'LEFT JOIN Mascota AS mascota ON servicio.idMascota = mascota.idMascota';
     }
 
     const whereStatement = whereClauses.length > 0 ? 'WHERE ' + whereClauses.join(' AND ') : '';
-    const joinStatement = joinClauses.length > 0 ? joinClauses.join(' ') : ''; // Añadir JOINs al query
 
     const db = await connectDB();
-    const [rows] = await db.query(
-      `SELECT * FROM Servicio ${joinStatement} ${whereStatement}
-       ORDER BY fechaInicio DESC
-       LIMIT ? OFFSET ?`,
-      [...queryParams, limit, offset]
-    );
+    const query = `
+      SELECT * FROM Servicio AS servicio
+      ${joinClause}
+      ${whereStatement}
+      ORDER BY fechaInicio DESC
+      LIMIT ? OFFSET ?
+    `;
+    
+    // Mostrar la consulta en consola
+    console.log('Consulta ejecutada:', query);
+    console.log('Parámetros:', [...queryParams, limit, offset]);
 
-    console.log(rows);
+    const [rows] = await db.query(query, [...queryParams, limit, offset]);
+    
     res.status(200).json(rows);
   } catch (err) {
     console.error('Error al procesar la solicitud de servicios:', err);
@@ -125,7 +130,6 @@ export const getServiciosFiltered = async (req: Request, res: Response): Promise
     }
   }
 };
-
 
 
 
