@@ -7,6 +7,8 @@ import Terminos from './components/Terminos';
 import Contacto from './components/Contacto';
 import Nosotros from './components/Nosotros';
 import HeroComponent from './components/HeroComponent';
+import Servicio from './components/Servicio';
+import Dashboard from './components/Dashboard';
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
         <Route path="/terminos" element={<Terminos />} />
         <Route path='/contacto' element={<Contacto/>}/>
         <Route path='/nosotros' element={<Nosotros/>}/>
+        <Route path='/servicios' element={<Servicio/>}/>
+        <Route path='/dashboard' element={<Dashboard/>}/>
       </Routes>
       <Footer></Footer>
     </BrowserRouter>
