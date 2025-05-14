@@ -6,22 +6,19 @@ import Footer from './components/Footer';
 import Terminos from './components/Terminos';
 import Contacto from './components/Contacto';
 import Nosotros from './components/Nosotros';
-import BestPettier from './components/BestPettier';
 import HeroComponent from './components/HeroComponent';
-
 
 function App() {
   return (
     <BrowserRouter>
     <Navbar></Navbar>
-    <HeroComponent></HeroComponent>
       <Routes>
+        <Route path="/" element={<HeroComponent />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/terminos" element={<Terminos />} />
         <Route path='/contacto' element={<Contacto/>}/>
         <Route path='/nosotros' element={<Nosotros/>}/>
-        <Route path='/test' element={<BestPettier/>}/>
       </Routes>
       <Footer></Footer>
     </BrowserRouter>

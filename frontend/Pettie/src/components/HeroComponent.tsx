@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import '../heroComponent.css';
 import heroimg from '../assets/bg-hero.jpg';
-import type { Servicio } from '../interfaces/interfaces';
-
+import BestPettier from '../components/BestPettier';
 
 const HeroComponent: React.FC = () => {
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
@@ -108,7 +107,9 @@ const HeroComponent: React.FC = () => {
           </form>
         </div>
       </div>
+      <BestPettier></BestPettier>
     </section>
+
   );
 };
 
