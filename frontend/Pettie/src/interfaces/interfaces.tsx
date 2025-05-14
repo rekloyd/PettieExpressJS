@@ -1,6 +1,7 @@
 export interface Servicio {
   idActividad: number;
   idOwner: number;
+  nombreUsuario:String,
   idPettier: number;
   idMascota: number;
   tipoActividad: string;
