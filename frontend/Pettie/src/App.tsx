@@ -7,6 +7,7 @@ import Terminos from './components/Terminos';
 import Contacto from './components/Contacto';
 import Nosotros from './components/Nosotros';
 import BestPettier from './components/BestPettier';
+import HeroComponent from './components/HeroComponent';
 
 
 function App() {
