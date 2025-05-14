@@ -1,3 +1,4 @@
+// src/components/Servicio.tsx
 import { useEffect } from "react";
 
 const Servicio = () => {
@@ -13,7 +14,7 @@ const Servicio = () => {
     <div
       style={{
         fontFamily: "Inter, sans-serif",
-        maxWidth: "900px",
+        maxWidth: "1100px",
         margin: "auto",
         padding: "2rem 1rem",
         fontSize: "20px",
@@ -45,9 +46,10 @@ const Servicio = () => {
           width: "100%",
         }}
       >
+        {/* Carta del Pettier */}
         <div
           style={{
-            flex: "1 1 350px",
+            flex: "1 1 450px",
             border: "1px solid #ccc",
             borderRadius: "15px",
             padding: "2rem",
@@ -63,18 +65,25 @@ const Servicio = () => {
               textAlign: "center",
             }}
           >
-            Pettier 🐕 🦺
+            Pettier 🐕🦺
           </h3>
-          <p style={{ lineHeight: "1.6", textAlign: "justify" }}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-            placerat, velit in sodales facilisis, ligula nisl malesuada lorem,
-            et porttitor elit risus eget justo.
+          <p style={{ lineHeight: "1.6", textAlign: "justify", marginBottom: "1rem" }}>
+            Como Pettier, puedes ofrecer servicios personalizados y de confianza para los dueños que necesiten ayuda con sus mascotas. Los servicios disponibles incluyen:
           </p>
+          <ul style={{ paddingLeft: "1.5rem", lineHeight: "1.6" }}>
+            <li>🏠 Alojamiento en casa del cuidador</li>
+            <li>🛏️ Guardería en el domicilio del cliente</li>
+            <li>🐾 Paseos personalizados</li>
+            {/* <li>🕐 Guardería de un día</li>
+            <li>🏡 Visitas al domicilio</li>
+            <li>✂️ Peluquería para mascotas</li> */}
+          </ul>
         </div>
 
+        {/* Carta del Propietario */}
         <div
           style={{
-            flex: "1 1 350px",
+            flex: "1 1 450px",
             border: "1px solid #ccc",
             borderRadius: "15px",
             padding: "2rem",
@@ -90,12 +99,10 @@ const Servicio = () => {
               textAlign: "center",
             }}
           >
-            Propietario 😼 🏠
+            Propietario 😼🏠
           </h3>
           <p style={{ lineHeight: "1.6", textAlign: "justify" }}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur
-            at ligula sodales, blandit mi nec, bibendum lorem. Nullam ac magna
-            non sapien imperdiet accumsan.
+            Si eres propietario, puedes registrar a tus mascotas en la plataforma y asegurarte de que siempre estén cubiertas. Cuando surja una necesidad, podrás encontrar rápidamente un Pettier que ofrezca exactamente lo que necesitas, desde paseos hasta alojamiento temporal o cuidados especiales.
           </p>
         </div>
       </div>
