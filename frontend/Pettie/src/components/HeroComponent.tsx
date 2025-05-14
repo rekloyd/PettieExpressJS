@@ -2,26 +2,39 @@ import React, { useState } from 'react';
 import '../heroComponent.css';
 import heroimg from '../assets/bg-hero.jpg';
 import BestPettier from '../components/BestPettier';
+import ServicioCard from '../components/ServicioCard';
 import type { Servicio } from '../interfaces/interfaces';
 
 const HeroComponent: React.FC = () => {
-  const [selectedSize, setSelectedSize] = useState<string | null>(null);
-  const [activityName, setActivityName] = useState<string>('');
-  const [price, setPrice] = useState<string>('');
+  const [tipoActividad, setTipoActividad] = useState<string>(''); // Cambié el estado a tipoActividad
+  const [precio, setPrecio] = useState<string>('');
+  const [tamanoMascota, setTamanoMascota] = useState<string>(''); // Nuevo estado para tamaño
+  const [resultados, setResultados] = useState<Servicio[]>([]);
 
   const handleSizeChange = (size: string) => {
     setSelectedSize(size);
+    setTamanoMascota(size); // Cambié el estado de tamanoMascota
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Crea el objeto con los parámetros de búsqueda
+    const params = new URLSearchParams();
+
+    if (precio) params.append('price', precio); 
+    if (tipoActividad) params.append('tipoActividad', tipoActividad);
+    if (tamanoMascota) params.append('tamanoMascota', tamanoMascota); // Añadido el tamaño
+
+    const url = `http://localhost:4000/api/servicios/filtered?${params.toString()}`;
+    console.log('URL de la petición:', url); // Agregado para hacer log de la URL
+
     try {
-      const response = await fetch('http://localhost:4000/api/servicios/filtered');
+      const response = await fetch(url);
       if (!response.ok) throw new Error('Error en la petición');
 
       const data: Servicio[] = await response.json();
-      console.log('Servicios recibidos:', data);
+      setResultados(data);
     } catch (error) {
       console.error('Error al obtener los servicios:', error);
     }
@@ -44,6 +57,7 @@ const HeroComponent: React.FC = () => {
         </div>
       </div>
 
+      {/* Tarjeta de búsqueda */}
       <div className="search-card">
         <div className="search-card-content">
           <h2 className="search-card__heading">
@@ -52,34 +66,31 @@ const HeroComponent: React.FC = () => {
           <form className="search-card__form" onSubmit={handleSubmit}>
             <fieldset className="form-group sizes">
               <legend>Tamaño de tu mascota</legend>
-              {[
-                { label: 'Pequeño (0–7kg)', icon: '🐱', value: 'pequeno' },
+              {[{ label: 'Pequeño (0–7kg)', icon: '🐱', value: 'pequeno' },
                 { label: 'Mediano (7–18kg)', icon: '🐶', value: 'mediano' },
-                { label: 'Grande (+45kg)', icon: '🐕', value: 'grande' },
-              ].map((opt) => (
-                <label
-                  key={opt.value}
-                  className={`sizes__option ${selectedSize === opt.value ? 'selected' : ''}`}
-                >
-                  <input
-                    type="radio"
-                    name="size"
-                    value={opt.value}
-                    onChange={() => handleSizeChange(opt.value)}
-                  />
-                  <span className="sizes__icon">{opt.icon}</span>
-                  <span className="sizes__label">{opt.label}</span>
-                </label>
-              ))}
-
+                { label: 'Grande (+45kg)', icon: '🐕', value: 'grande' }].map((opt) => (
+                  <label
+                    key={opt.value}
+                    className={`sizes__option ${tamanoMascota === opt.value ? 'selected' : ''}`}
+                  >
+                    <input
+                      type="radio"
+                      name="size"
+                      value={opt.value}
+                      onChange={() => handleSizeChange(opt.value)} // Cambié el manejador de cambio
+                    />
+                    <span className="sizes__icon">{opt.icon}</span>
+                    <span className="sizes__label">{opt.label}</span>
+                  </label>
+                ))}
               {/* Precio */}
               <div className="contenedorPrecio">
                 <legend className="form-label">Elige el precio de la actividad:</legend>
                 <select
-                  id="price"
+                  id="precio"
                   className="form-select"
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
+                  value={precio}
+                  onChange={(e) => setPrecio(e.target.value)}
                   style={{ width: '90%', height: '90px', fontSize: '1.3rem' }}
                 >
                   <option value="" disabled>
@@ -98,8 +109,8 @@ const HeroComponent: React.FC = () => {
                 type="text"
                 className="form-control-input"
                 placeholder="Nombre de la actividad..."
-                value={activityName}
-                onChange={(e) => setActivityName(e.target.value)}
+                value={tipoActividad}
+                onChange={(e) => setTipoActividad(e.target.value)}
               />
               <button type="submit" className="btnL">
                 Buscar
@@ -108,9 +119,29 @@ const HeroComponent: React.FC = () => {
           </form>
         </div>
       </div>
-      <BestPettier></BestPettier>
-    </section>
 
+      {/* Resultados de la búsqueda */}
+      {resultados.length > 0 && (
+        <div style={{ padding: '2rem' }}>
+          <h3 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Resultados de búsqueda</h3>
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '1rem',
+              justifyContent: 'flex-start',
+            }}
+          >
+            {resultados.map((servicio, index) => (
+              <ServicioCard key={index} servicio={servicio} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Mejores pet sitters */}
+      <BestPettier />
+    </section>
   );
 };
 
