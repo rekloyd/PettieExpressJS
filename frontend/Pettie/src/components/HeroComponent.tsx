@@ -12,7 +12,6 @@ const HeroComponent: React.FC = () => {
   const [resultados, setResultados] = useState<Servicio[]>([]);
 
   const handleSizeChange = (size: string) => {
-    setSelectedSize(size);
     setTamanoMascota(size); // Cambié el estado de tamanoMascota
   };
 
