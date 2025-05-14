@@ -120,7 +120,7 @@ const HeroComponent: React.FC = () => {
       </div>
 
       {/* Resultados de la búsqueda */}
-      {resultados.length > 0 && (
+      {resultados.length > 0 ? (
         <div style={{ padding: '2rem' }}>
           <h3 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Resultados de búsqueda</h3>
           <div
@@ -136,6 +136,8 @@ const HeroComponent: React.FC = () => {
             ))}
           </div>
         </div>
+      ) : (
+        <h3 style={{ padding: '2rem', fontSize: '1.5rem' }}>No hay resultados para esta búsqueda.</h3>
       )}
 
       {/* Mejores pet sitters */}

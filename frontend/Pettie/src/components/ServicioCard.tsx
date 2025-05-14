@@ -1,21 +1,27 @@
 import React from 'react';
 import '../styles/bestpettier.css'; // reutilizamos estilos
 import type { Servicio } from '../interfaces/interfaces';
+import fotoUsuario from "../assets/face1.jpg";
 
 interface ServicioCardProps {
   servicio: Servicio;
 }
 
 const ServicioCard: React.FC<ServicioCardProps> = ({ servicio }) => {
+  // Verificamos que el nombreUsuario no esté vacío o no definido
+  console.log('Contenido recibido para mostrar:', servicio);
+  const nombreUsuario = servicio.nombreUsuario ? servicio.nombreUsuario : "Nombre no disponible";
+
   return (
     <div className="pettier-card">
       <img
-        src="/default-pet.png" // Imagen por defecto o podrías usar una propiedad del backend
+        src={fotoUsuario} // Imagen por defecto o podrías usar una propiedad del backend
         alt={servicio.tipoActividad}
         className="pettier-img"
       />
       <div className="pettier-info">
-        <h3 style={{ fontSize: '30px' }}>{servicio.tipoActividad}</h3>
+        <h2 style={{ fontSize: '30px' }}>{nombreUsuario}</h2>
+        <h3 style={{ fontSize: '20px' }}>{servicio.tipoActividad}</h3>
         <div className="icons">
           <div className="icon-placeholder">📅</div>
           <div className="icon-placeholder">💰</div>
