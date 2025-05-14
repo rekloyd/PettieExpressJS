@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../heroComponent.css';
 import heroimg from '../assets/bg-hero.jpg';
 import BestPettier from '../components/BestPettier';
+import type { Servicio } from '../interfaces/interfaces';
 
 const HeroComponent: React.FC = () => {
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
@@ -16,7 +17,7 @@ const HeroComponent: React.FC = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:4000/api/servicios');
+      const response = await fetch('http://localhost:4000/api/servicios/filtered');
       if (!response.ok) throw new Error('Error en la petición');
 
       const data: Servicio[] = await response.json();
