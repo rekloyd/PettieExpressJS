@@ -42,42 +42,41 @@ export const getServiciosFiltered = async (req: Request, res: Response): Promise
 
   const queryParams: any[] = [];
   let whereClauses: string[] = [];
-  let joinClause = '';  // Para el LEFT JOIN
 
   try {
     // Construir condiciones WHERE dinámicamente
     if (idOwner) {
       if (isNaN(Number(idOwner))) throw new Error('El parámetro "idOwner" debe ser numérico.');
-      whereClauses.push('idOwner = ?');
+      whereClauses.push('servicio.idOwner = ?');
       queryParams.push(idOwner);
     }
 
     if (idPettier) {
       if (isNaN(Number(idPettier))) throw new Error('El parámetro "idPettier" debe ser numérico.');
-      whereClauses.push('idPettier = ?');
+      whereClauses.push('servicio.idPettier = ?');
       queryParams.push(idPettier);
     }
 
     if (idMascota) {
       if (isNaN(Number(idMascota))) throw new Error('El parámetro "idMascota" debe ser numérico.');
-      whereClauses.push('idMascota = ?');
+      whereClauses.push('servicio.idMascota = ?');
       queryParams.push(idMascota);
     }
 
     if (tipoActividad) {
-      whereClauses.push('tipoActividad LIKE ?');
+      whereClauses.push('servicio.tipoActividad LIKE ?');
       queryParams.push(`%${tipoActividad}%`);
     }
 
     if (fechaInicio) {
       if (isNaN(Date.parse(fechaInicio as string))) throw new Error('El parámetro "fechaInicio" no es una fecha válida.');
-      whereClauses.push('fechaInicio >= ?');
+      whereClauses.push('servicio.fechaInicio >= ?');
       queryParams.push(fechaInicio);
     }
 
     if (fechaFinal) {
       if (isNaN(Date.parse(fechaFinal as string))) throw new Error('El parámetro "fechaFinal" no es una fecha válida.');
-      whereClauses.push('fechaFinal <= ?');
+      whereClauses.push('servicio.fechaFinal <= ?');
       queryParams.push(fechaFinal);
     }
 
@@ -85,31 +84,36 @@ export const getServiciosFiltered = async (req: Request, res: Response): Promise
       if (finalizado !== 'true' && finalizado !== 'false') {
         throw new Error('El parámetro "finalizado" debe ser "true" o "false".');
       }
-      whereClauses.push('finalizado = ?');
+      whereClauses.push('servicio.finalizado = ?');
       queryParams.push(finalizado === 'true');
     }
 
     if (precio) {
       if (isNaN(Number(precio))) throw new Error('El parámetro "precio" debe ser numérico.');
-      whereClauses.push('precio = ?');
+      whereClauses.push('servicio.precio >= ?');  // Cambiado de "=" a ">="
       queryParams.push(precio);
     }
 
-    // Verificamos si se pasa el parámetro tamanoMascota para hacer un LEFT JOIN
     if (tamanoMascota) {
-      whereClauses.push('Mascota.tamanoMascota = ?');
+      whereClauses.push('mascota.tamanoMascota = ?');
       queryParams.push(tamanoMascota);
-      joinClause = 'LEFT JOIN Mascota AS mascota ON servicio.idMascota = mascota.idMascota';
     }
 
+    // Crear la cláusula WHERE
     const whereStatement = whereClauses.length > 0 ? 'WHERE ' + whereClauses.join(' AND ') : '';
 
+    // Siempre hacer ambos LEFT JOINs
     const db = await connectDB();
     const query = `
-      SELECT * FROM Servicio AS servicio
-      ${joinClause}
+      SELECT servicio.*, 
+             mascota.tamanoMascota, 
+             usuario.idUsuario, 
+             usuario.nombreUsuario 
+      FROM Servicio AS servicio
+      LEFT JOIN Mascota AS mascota ON servicio.idMascota = mascota.idMascota
+      LEFT JOIN Usuario AS usuario ON servicio.idPettier = usuario.idUsuario
       ${whereStatement}
-      ORDER BY fechaInicio DESC
+      ORDER BY servicio.fechaInicio DESC
       LIMIT ? OFFSET ?
     `;
     
@@ -130,6 +134,7 @@ export const getServiciosFiltered = async (req: Request, res: Response): Promise
     }
   }
 };
+
 
 
 
