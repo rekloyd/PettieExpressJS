@@ -91,7 +91,7 @@ const Navbar: React.FC = () => {
               </div>
             ) : (
               <div className="d-flex gap-3 align-items-center">
-                <Link to="/perfil" className="btn btn-outline-primary">
+                <Link to="/dashboard" className="btn btn-outline-primary">
                   Mi Cuenta
                 </Link>
                 <button
