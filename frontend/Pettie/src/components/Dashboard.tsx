@@ -136,7 +136,7 @@ const Dashboard = () => {
   };
 
   const conseguirMas = () => {
-    alert("Aquí puedes implementar la lógica para conseguir más PettieCoins.");
+     navigate('/pasarelaDePago');
   };
 
   if (!usuario) {

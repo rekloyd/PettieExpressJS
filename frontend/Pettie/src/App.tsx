@@ -9,6 +9,7 @@ import Nosotros from './components/Nosotros';
 import HeroComponent from './components/HeroComponent';
 import Servicio from './components/Servicio';
 import Dashboard from './components/Dashboard';
+import Checkout from './components/Checkout';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path='/nosotros' element={<Nosotros/>}/>
         <Route path='/servicios' element={<Servicio/>}/>
         <Route path='/dashboard' element={<Dashboard/>}/>
+        <Route path='/pasarelaDePago' element={<Checkout/>}/>
       </Routes>
       <Footer></Footer>
     </BrowserRouter>
