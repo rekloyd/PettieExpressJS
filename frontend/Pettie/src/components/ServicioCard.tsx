@@ -13,14 +13,14 @@ const ServicioCard: React.FC<ServicioCardProps> = ({ servicio }) => {
   const nombreUsuario = servicio.nombreUsuario ? servicio.nombreUsuario : "Nombre no disponible";
 
   return (
-    <div className="pettier-card">
+    <div className="pettier-card" style={{marginRight:'5px;'}}>
       <img
         src={fotoUsuario} // Imagen por defecto o podrías usar una propiedad del backend
         alt={servicio.tipoActividad}
         className="pettier-img"
       />
       <div className="pettier-info">
-        <h2 style={{ fontSize: '30px' }}>{nombreUsuario}</h2>
+        <h2 style={{ fontSize: '30px', fontFamily:'Madimi One'}}>{nombreUsuario}</h2>
         <h3 style={{ fontSize: '20px' }}>{servicio.tipoActividad}</h3>
         <div className="icons">
           <div className="icon-placeholder">📅</div>

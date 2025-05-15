@@ -26,7 +26,7 @@ const Servicio = () => {
     <div
       style={{
         fontFamily: "Inter, sans-serif",
-        maxWidth: "1100px",
+        maxWidth: "1700px",
         margin: "auto",
         padding: "2rem 1rem",
         fontSize: "20px",
@@ -121,7 +121,7 @@ const Servicio = () => {
         style={{
           width: "100%",
           marginTop: "3rem",
-          textAlign: "center",
+
         }}
       >
         <SearchComponent onSearch={handleSearch} /> {/* Usamos el componente de búsqueda */}
@@ -141,7 +141,7 @@ const Servicio = () => {
           <ResultComponent resultados={resultados} /> {/* Usamos el componente de resultados */}
         </div>
       ) : (
-        <h3 style={{ padding: '2rem', fontSize: '1.5rem' }}>No hay resultados para esta búsqueda.</h3>
+        <span></span>
       )}
     </div>
   );

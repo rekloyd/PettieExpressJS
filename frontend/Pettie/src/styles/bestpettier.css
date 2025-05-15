@@ -1,5 +1,5 @@
 .bestpettier-container {
-    max-width: 75%;
+    width: 65%;
     margin: 60px auto;
     padding: 0 20px;
 
@@ -66,4 +66,5 @@
     height: 35px;
     border-radius: 5px;
     background-color: rgb(247, 169, 82);
+    margin-bottom: 4px;
 }

@@ -21,7 +21,7 @@ const ResultComponent: React.FC<ResultComponentProps> = ({ resultados }) => {
           </div>
         </>
       ) : (
-        <h3 className="fs-4">No hay resultados para esta búsqueda.</h3>
+        <span></span>
       )}
     </div>
   );
