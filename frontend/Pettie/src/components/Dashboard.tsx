@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 type Rol = "admin" | "owner" | "pettier";
 
@@ -19,6 +20,8 @@ const Dashboard = () => {
     emailUsuario: false,
     role: false,
   });
+
+  const navigate = useNavigate();
 
   // Formatea una fecha ISO a "día de mes de año"
   const formatearFecha = (fechaISO: string) => {
@@ -44,6 +47,7 @@ const Dashboard = () => {
     const idUsuario = sessionStorage.getItem("idUsuario");
     if (!idUsuario) {
       console.error("No se encontró sessionStorage.idUsuario");
+      navigate("/login");
       return;
     }
 
@@ -54,7 +58,12 @@ const Dashboard = () => {
           throw new Error(`Error al cargar usuario: ${res.statusText}`);
         }
         const data = await res.json();
-        // Mapeo respuesta al estado
+
+        if (!data || !data.nombreUsuario) {
+          navigate("/login");
+          return;
+        }
+
         setUsuario({
           nombreUsuario: data.nombreUsuario,
           emailUsuario: data.emailUsuario,
@@ -64,11 +73,12 @@ const Dashboard = () => {
         });
       } catch (err) {
         console.error("Error fetch usuario:", err);
+        navigate("/login");
       }
     };
 
     fetchUsuario();
-  }, []);
+  }, [navigate]);
 
   const handleChange = (campo: CamposEditables, valor: string) => {
     if (!usuario) return;
@@ -79,7 +89,6 @@ const Dashboard = () => {
     setEditando({ ...editando, [campo]: !editando[campo] });
   };
 
-  // Mientras carga
   if (!usuario) {
     return <p>Cargando usuario...</p>;
   }
