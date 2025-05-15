@@ -21,6 +21,7 @@ const LoginForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
     try {
       const response = await fetch("http://localhost:4000/api/login", {
         method: "POST",
@@ -28,13 +29,19 @@ const LoginForm = () => {
         body: JSON.stringify({ nombreUsuario, contrasenaUsuario }),
       });
       const result = await response.json();
+
       if (response.ok) {
-        navigate("/"); // redirige a home u otra ruta
+        // ——— Aquí extraemos y guardamos el idUsuario en sessionStorage ———
+        const { idUsuario } = result.usuario;
+        sessionStorage.setItem("idUsuario", idUsuario.toString());
+
+        // Redirigimos al home (o la ruta que necesites)
+        navigate("/");
       } else {
         setError(result.message);
       }
     } catch {
-      setError("Credenciales incorrectas, intentalo de nuevo.");
+      setError("Credenciales incorrectas, inténtalo de nuevo.");
     }
   };
 
@@ -83,10 +90,7 @@ const LoginForm = () => {
 
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: "1rem" }}>
-          <label
-            htmlFor="nombreUsuario"
-            style={{ display: "block", marginBottom: ".5rem" }}
-          >
+          <label htmlFor="nombreUsuario" style={{ display: "block", marginBottom: ".5rem" }}>
             Nombre de usuario
           </label>
           <input
@@ -106,10 +110,7 @@ const LoginForm = () => {
         </div>
 
         <div style={{ marginBottom: "1rem" }}>
-          <label
-            htmlFor="contrasenaUsuario"
-            style={{ display: "block", marginBottom: ".5rem" }}
-          >
+          <label htmlFor="contrasenaUsuario" style={{ display: "block", marginBottom: ".5rem" }}>
             Contraseña
           </label>
           <input
@@ -133,8 +134,7 @@ const LoginForm = () => {
             Iniciar sesión
           </button>
           <p style={{ marginTop: "1rem" }}>
-            ¿Todavía no tienes cuenta?{" "}
-            <Link to="/register">Regístrate aquí</Link>
+            ¿Todavía no tienes cuenta? <Link to="/register">Regístrate aquí</Link>
           </p>
         </div>
 
