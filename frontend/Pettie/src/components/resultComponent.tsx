@@ -11,7 +11,7 @@ const ResultComponent: React.FC<ResultComponentProps> = ({ resultados }) => {
     <div className="container py-4">
       {resultados.length > 0 ? (
         <>
-          <h3 className="fs-3 mb-4">Resultados de búsqueda</h3>
+          <h3 className="fs-5 mb-7" style={{fontFamily:'Inter',fontSize:'28px;'}}>Resultados de búsqueda</h3>
           <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
             {resultados.map((servicio, index) => (
               <div className="col" key={index}>
@@ -21,7 +21,7 @@ const ResultComponent: React.FC<ResultComponentProps> = ({ resultados }) => {
           </div>
         </>
       ) : (
-        <span></span>
+        <h3 style={{textAlign:'center'}}>No hay resultados</h3>
       )}
     </div>
   );

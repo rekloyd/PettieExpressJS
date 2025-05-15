@@ -30,7 +30,7 @@ const ServicioCard: React.FC<ServicioCardProps> = ({ servicio }) => {
         <p>
           {servicio.precio}€ - Desde el {new Date(servicio.fechaInicio).toLocaleDateString()}
         </p>
-        <button className="buyButton">Ver más</button>
+        <button className="buyButton" style={{marginBottom:"10px;"}}>Ver más</button>
       </div>
     </div>
   );
