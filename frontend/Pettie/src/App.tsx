@@ -10,6 +10,7 @@ import HeroComponent from './components/HeroComponent';
 import Servicio from './components/Servicio';
 import Dashboard from './components/Dashboard';
 import Checkout from './components/Checkout';
+import DashboardPorId from './components/DashboardPorId';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path='/servicios' element={<Servicio/>}/>
         <Route path='/dashboard' element={<Dashboard/>}/>
         <Route path='/pasarelaDePago' element={<Checkout/>}/>
+        <Route path="/dashboard/:id" element={<DashboardPorId />} />
       </Routes>
       <Footer></Footer>
     </BrowserRouter>
