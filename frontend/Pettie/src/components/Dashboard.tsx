@@ -9,7 +9,7 @@ interface Usuario {
   cantidadPettieCoins: number;
   role: Rol;
   fechaAltaPlataforma: string;
-  contrasenaUsuario?: string;
+  contrasenaUsuario: string;
 }
 
 type CamposEditables = "nombreUsuario" | "emailUsuario" | "role" | "contrasenaUsuario";
