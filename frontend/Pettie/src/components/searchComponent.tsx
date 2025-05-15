@@ -78,7 +78,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ onSearch }) => {
           value={tipoActividad}
           onChange={(e) => setTipoActividad(e.target.value)}
         />
-        <button type="submit" className="btn btn-warning ms-2 mt-3"> {/* Agregado mt-3 aquí */}
+        <button type="submit" className="btn btn-warning ms-2"> {/* Agregado mt-3 aquí */}
           Buscar
         </button>
       </div>
