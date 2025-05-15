@@ -198,7 +198,6 @@ export const insertUsuario = async (req: Request, res: Response): Promise<void> 
     cantidadPettieCoins = 0,
     role,
     fechaAltaPlataforma,
-    numeroCuenta // solo necesario para pettier
   } = req.body;
 
   if (!nombreUsuario || !emailUsuario || !contrasenaUsuario || !role) {
@@ -207,36 +206,37 @@ export const insertUsuario = async (req: Request, res: Response): Promise<void> 
   }
 
   try {
-    const conn = await connectDB(); // conexión directa
-
+    const conn = await connectDB();
     await conn.beginTransaction();
 
-    const [usuarioResult] = await conn.execute(
-      `INSERT INTO Usuario (nombreUsuario, emailUsuario, contrasenaUsuario, cantidadPettieCoins, role, fechaAltaPlataforma)
-       VALUES (?, ?, ?, ?, ?, ?)`,
-      [nombreUsuario, emailUsuario, contrasenaUsuario, cantidadPettieCoins, role, fechaAltaPlataforma || new Date()]
-    );
+    const insertUsuarioSQL = `
+      INSERT INTO Usuario (nombreUsuario, emailUsuario, contrasenaUsuario, cantidadPettieCoins, role, fechaAltaPlataforma)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `;
+    const usuarioParams = [nombreUsuario, emailUsuario, contrasenaUsuario, cantidadPettieCoins, role, fechaAltaPlataforma || new Date()];
 
+    console.log('🟨 SQL Usuario:', insertUsuarioSQL);
+    console.log('🟨 Params Usuario:', usuarioParams);
+
+    const [usuarioResult] = await conn.execute(insertUsuarioSQL, usuarioParams);
     const idUsuario = (usuarioResult as any).insertId;
 
     switch (role) {
       case 'admin':
+        console.log('🟨 INSERT INTO Admin (idAdmin)', [idUsuario]);
         await conn.execute(`INSERT INTO Admin (idAdmin) VALUES (?)`, [idUsuario]);
         break;
 
       case 'owner':
+        console.log('🟨 INSERT INTO Owner (idOwner)', [idUsuario]);
         await conn.execute(`INSERT INTO Owner (idOwner) VALUES (?)`, [idUsuario]);
         break;
 
       case 'pettier':
-        if (!numeroCuenta) {
-          await conn.rollback();
-          res.status(400).json({ error: 'numeroCuenta es obligatorio para pettier' });
-          return;
-        }
+        console.log('🟨 INSERT INTO Pettier (idPettier)', [idUsuario]);
         await conn.execute(
-          `INSERT INTO Pettier (idPettier, numeroCuenta) VALUES (?, ?)`,
-          [idUsuario, numeroCuenta]
+          `INSERT INTO Pettier (idPettier) VALUES (?, ?)`,
+          [idUsuario]
         );
         break;
 
@@ -247,12 +247,12 @@ export const insertUsuario = async (req: Request, res: Response): Promise<void> 
     }
 
     await conn.commit();
-    await conn.end(); // cerrar la conexión después de usarla
+    await conn.end();
 
     res.status(201).json({ mensaje: 'Usuario creado correctamente', idUsuario });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Error al insertar el usuario' });
+    console.error('❌ Error al insertar usuario:', err);
+    res.status(500).json({ error: 'Error al insertar el usuario', detalles: err instanceof Error ? err.message : err });
   }
 };
 

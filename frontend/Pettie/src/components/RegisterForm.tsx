@@ -37,25 +37,35 @@ const RegisterForm = () => {
       contrasenaUsuario,
       cantidadPettieCoins: 0,
       role,
-      fechaAltaPlataforma: new Date().toISOString().split("T")[0],
-      ...(role === "pettier" ? { numeroCuenta } : {}),
+      fechaAltaPlataforma: new Date().toISOString().split("T")[0]
     };
 
-    try {
-      const response = await fetch("http://localhost:4000/usuario/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      const result = await response.json();
-      if (response.ok) {
-        navigate("/login");
-      } else {
-        setError(result.error || "Error en el registro.");
-      }
-    } catch {
-      setError("Hubo un error al procesar la solicitud.");
-    }
+try {
+  const response = await fetch("http://localhost:4000/api/usuario/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  const result = await response.json();
+
+  if (response.ok) {
+    navigate("/login");
+  } else {
+    // Mostrar más detalles del error devuelto por el servidor
+    console.error("🔴 Error del servidor:", {
+      status: response.status,
+      statusText: response.statusText,
+      body: result
+    });
+
+    setError(result.error || `Error ${response.status}: ${response.statusText}`);
+  }
+} catch (err: unknown) {
+  console.error("❌ Error de red o runtime:", err);
+  setError(err instanceof Error ? err.message : "Error inesperado.");
+}
+
   };
 
   return (
