@@ -21,6 +21,12 @@ const Dashboard = () => {
     role: false,
   });
 
+  const [loadingCampo, setLoadingCampo] = useState<Record<CamposEditables, boolean>>({
+    nombreUsuario: false,
+    emailUsuario: false,
+    role: false,
+  });
+
   const navigate = useNavigate();
 
   const formatearFecha = (fechaISO: string) => {
@@ -50,9 +56,7 @@ const Dashboard = () => {
 
     const fetchUsuario = async () => {
       try {
-        const res = await fetch(
-          `http://localhost:4000/api/usuario/${idUsuario}`
-        );
+        const res = await fetch(`http://localhost:4000/api/usuario/${idUsuario}`);
         if (!res.ok) {
           throw new Error(`Error al cargar usuario: ${res.statusText}`);
         }
@@ -68,8 +72,7 @@ const Dashboard = () => {
           emailUsuario: data.emailUsuario,
           cantidadPettieCoins: data.cantidadPettieCoins ?? 0,
           role: (data.role ?? "pettier").toLowerCase() as Rol,
-          fechaAltaPlataforma:
-            data.fechaAltaPlataforma ?? new Date().toISOString(),
+          fechaAltaPlataforma: data.fechaAltaPlataforma ?? new Date().toISOString(),
         });
       } catch (err) {
         console.error("Error fetch usuario:", err);
@@ -85,19 +88,66 @@ const Dashboard = () => {
     setUsuario({ ...usuario, [campo]: valor });
   };
 
+  // Función que hace el PUT a la API para actualizar solo un campo
+  const guardarCampo = async (campo: CamposEditables) => {
+    if (!usuario) return;
+
+    const idUsuario = sessionStorage.getItem("idUsuario");
+    if (!idUsuario) {
+      alert("No se encontró el id de usuario para actualizar");
+      return;
+    }
+
+    setLoadingCampo((prev) => ({ ...prev, [campo]: true }));
+
+    try {
+      const body = { [campo]: usuario[campo] };
+      const res = await fetch(`http://localhost:4000/api/usuario/${idUsuario}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Error al actualizar");
+      }
+
+      alert("Campo actualizado correctamente");
+      setEditando((prev) => ({ ...prev, [campo]: false }));
+    } catch (error: unknown) {
+      alert("Error al actualizar: " + error);
+    } finally {
+      setLoadingCampo((prev) => ({ ...prev, [campo]: false }));
+    }
+  };
+
+  // Al hacer click en el botón, si está editando, guarda, si no, activa edición
   const toggleEditar = (campo: CamposEditables) => {
-    setEditando({ ...editando, [campo]: !editando[campo] });
+    if (editando[campo]) {
+      // Estamos en modo "Guardar" -> enviamos PUT
+      guardarCampo(campo);
+    } else {
+      // Activamos modo edición
+      setEditando({ ...editando, [campo]: true });
+    }
   };
 
   // Función para el botón "Conseguir más PettieCoins"
   const conseguirMas = () => {
     alert("Aquí puedes implementar la lógica para conseguir más PettieCoins.");
-    // O redirigir a otra página, abrir modal, etc.
   };
 
   if (!usuario) {
     return (
-      <h1 style={{ fontFamily: "Madimi One, cursive", fontSize: "38px", margin:'200px 0', textAlign:'center' }}>
+      <h1
+        style={{
+          fontFamily: "Madimi One, cursive",
+          fontSize: "38px",
+          margin: "200px 0",
+          textAlign: "center",
+        }}
+      >
         Cargando..
       </h1>
     );
@@ -146,8 +196,15 @@ const Dashboard = () => {
         ) : (
           <span>{usuario.nombreUsuario}</span>
         )}
-        <button onClick={() => toggleEditar("nombreUsuario")}>
-          {editando.nombreUsuario ? "Guardar" : "Editar"}
+        <button
+          onClick={() => toggleEditar("nombreUsuario")}
+          disabled={loadingCampo.nombreUsuario}
+        >
+          {loadingCampo.nombreUsuario
+            ? "Guardando..."
+            : editando.nombreUsuario
+            ? "Guardar"
+            : "Editar"}
         </button>
 
         {/* Email */}
@@ -161,8 +218,15 @@ const Dashboard = () => {
         ) : (
           <span>{usuario.emailUsuario}</span>
         )}
-        <button onClick={() => toggleEditar("emailUsuario")}>
-          {editando.emailUsuario ? "Guardar" : "Editar"}
+        <button
+          onClick={() => toggleEditar("emailUsuario")}
+          disabled={loadingCampo.emailUsuario}
+        >
+          {loadingCampo.emailUsuario
+            ? "Guardando..."
+            : editando.emailUsuario
+            ? "Guardar"
+            : "Editar"}
         </button>
 
         {/* Rol */}
@@ -186,8 +250,15 @@ const Dashboard = () => {
               : "Administrador"}
           </span>
         )}
-        <button onClick={() => toggleEditar("role")}>
-          {editando.role ? "Guardar" : "Editar"}
+        <button
+          onClick={() => toggleEditar("role")}
+          disabled={loadingCampo.role}
+        >
+          {loadingCampo.role
+            ? "Guardando..."
+            : editando.role
+            ? "Guardar"
+            : "Editar"}
         </button>
 
         {/* PettieCoins */}
@@ -207,8 +278,8 @@ const Dashboard = () => {
               fontWeight: "500",
               transition: "background-color 0.3s",
             }}
-            onMouseOver={e => (e.currentTarget.style.backgroundColor = "#0056b3")}
-            onMouseOut={e => (e.currentTarget.style.backgroundColor = "#007bff")}
+            onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#0056b3")}
+            onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#007bff")}
           >
             Conseguir más PettieCoins
           </button>
