@@ -10,7 +10,7 @@ import HeroComponent from './components/HeroComponent';
 import Servicio from './components/Servicio';
 import Dashboard from './components/Dashboard';
 import Checkout from './components/Checkout';
-import DashboardPorId from './components/DashboardPorId';
+import DashboardPorId from './components/DashboardCompleto';
 
 function App() {
   return (
