@@ -23,7 +23,6 @@ const Dashboard = () => {
 
   const navigate = useNavigate();
 
-  // Formatea una fecha ISO a "día de mes de año"
   const formatearFecha = (fechaISO: string) => {
     const fecha = new Date(fechaISO);
     return fecha.toLocaleDateString("es-ES", {
@@ -33,7 +32,6 @@ const Dashboard = () => {
     });
   };
 
-  // Carga la fuente de Google sólo una vez
   useEffect(() => {
     const link = document.createElement("link");
     link.href =
@@ -42,7 +40,6 @@ const Dashboard = () => {
     document.head.appendChild(link);
   }, []);
 
-  // Al montar, leo sessionStorage.idUsuario y traigo los datos
   useEffect(() => {
     const idUsuario = sessionStorage.getItem("idUsuario");
     if (!idUsuario) {
@@ -90,6 +87,12 @@ const Dashboard = () => {
 
   const toggleEditar = (campo: CamposEditables) => {
     setEditando({ ...editando, [campo]: !editando[campo] });
+  };
+
+  // Función para el botón "Conseguir más PettieCoins"
+  const conseguirMas = () => {
+    alert("Aquí puedes implementar la lógica para conseguir más PettieCoins.");
+    // O redirigir a otra página, abrir modal, etc.
   };
 
   if (!usuario) {
@@ -189,7 +192,27 @@ const Dashboard = () => {
 
         {/* PettieCoins */}
         <strong>PettieCoins:</strong>
-        <span>{usuario.cantidadPettieCoins} 🪙</span>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <span>{usuario.cantidadPettieCoins} 🪙</span>
+          <button
+            onClick={conseguirMas}
+            style={{
+              cursor: "pointer",
+              padding: "0.4rem 0.8rem",
+              fontSize: "14px",
+              borderRadius: "6px",
+              border: "none",
+              backgroundColor: "#007bff",
+              color: "#fff",
+              fontWeight: "500",
+              transition: "background-color 0.3s",
+            }}
+            onMouseOver={e => (e.currentTarget.style.backgroundColor = "#0056b3")}
+            onMouseOut={e => (e.currentTarget.style.backgroundColor = "#007bff")}
+          >
+            Conseguir más PettieCoins
+          </button>
+        </div>
         <span />
 
         {/* Fecha de alta */}
