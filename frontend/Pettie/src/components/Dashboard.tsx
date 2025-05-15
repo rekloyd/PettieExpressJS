@@ -9,9 +9,10 @@ interface Usuario {
   cantidadPettieCoins: number;
   role: Rol;
   fechaAltaPlataforma: string;
+  contrasenaUsuario?: string;
 }
 
-type CamposEditables = "nombreUsuario" | "emailUsuario" | "role";
+type CamposEditables = "nombreUsuario" | "emailUsuario" | "role" | "contrasenaUsuario";
 
 const Dashboard = () => {
   const [usuario, setUsuario] = useState<Usuario | null>(null);
@@ -19,12 +20,14 @@ const Dashboard = () => {
     nombreUsuario: false,
     emailUsuario: false,
     role: false,
+    contrasenaUsuario: false,
   });
 
   const [loadingCampo, setLoadingCampo] = useState<Record<CamposEditables, boolean>>({
     nombreUsuario: false,
     emailUsuario: false,
     role: false,
+    contrasenaUsuario: false,
   });
 
   const navigate = useNavigate();
@@ -73,6 +76,7 @@ const Dashboard = () => {
           cantidadPettieCoins: data.cantidadPettieCoins ?? 0,
           role: (data.role ?? "pettier").toLowerCase() as Rol,
           fechaAltaPlataforma: data.fechaAltaPlataforma ?? new Date().toISOString(),
+          contrasenaUsuario: "", // vacía para editar luego
         });
       } catch (err) {
         console.error("Error fetch usuario:", err);
@@ -88,7 +92,6 @@ const Dashboard = () => {
     setUsuario({ ...usuario, [campo]: valor });
   };
 
-  // Función que hace el PUT a la API para actualizar solo un campo
   const guardarCampo = async (campo: CamposEditables) => {
     if (!usuario) return;
 
@@ -122,18 +125,14 @@ const Dashboard = () => {
     }
   };
 
-  // Al hacer click en el botón, si está editando, guarda, si no, activa edición
   const toggleEditar = (campo: CamposEditables) => {
     if (editando[campo]) {
-      // Estamos en modo "Guardar" -> enviamos PUT
       guardarCampo(campo);
     } else {
-      // Activamos modo edición
       setEditando({ ...editando, [campo]: true });
     }
   };
 
-  // Función para el botón "Conseguir más PettieCoins"
   const conseguirMas = () => {
     alert("Aquí puedes implementar la lógica para conseguir más PettieCoins.");
   };
@@ -257,6 +256,30 @@ const Dashboard = () => {
           {loadingCampo.role
             ? "Guardando..."
             : editando.role
+            ? "Guardar"
+            : "Editar"}
+        </button>
+
+        {/* Contraseña */}
+        <strong>Contraseña:</strong>
+        {editando.contrasenaUsuario ? (
+          <input
+            type="text"
+            value={usuario.contrasenaUsuario || ""}
+            onChange={(e) => handleChange("contrasenaUsuario", e.target.value)}
+            style={{ padding: "0.4rem", fontSize: "16px", width: "100%" }}
+            placeholder="Escribe nueva contraseña"
+          />
+        ) : (
+          <span>********</span>
+        )}
+        <button
+          onClick={() => toggleEditar("contrasenaUsuario")}
+          disabled={loadingCampo.contrasenaUsuario}
+        >
+          {loadingCampo.contrasenaUsuario
+            ? "Guardando..."
+            : editando.contrasenaUsuario
             ? "Guardar"
             : "Editar"}
         </button>
