@@ -13,37 +13,14 @@ interface Usuario {
 type CamposEditables = "nombreUsuario" | "emailUsuario" | "role";
 
 const Dashboard = () => {
-  useEffect(() => {
-    const link = document.createElement("link");
-    link.href =
-      "https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Madimi+One&display=swap";
-    link.rel = "stylesheet";
-    document.head.appendChild(link);
-  }, []);
-
-  const usuarioFake: Usuario = {
-    nombreUsuario: "didacmorillas",
-    emailUsuario: "didacmorillas19@gmail.com",
-    cantidadPettieCoins: 128,
-    role: "owner",
-    fechaAltaPlataforma: "2023-08-15",
-  };
-
-  const [usuario, setUsuario] = useState<Usuario>(usuarioFake);
+  const [usuario, setUsuario] = useState<Usuario | null>(null);
   const [editando, setEditando] = useState<Record<CamposEditables, boolean>>({
     nombreUsuario: false,
     emailUsuario: false,
     role: false,
   });
 
-  const handleChange = (campo: CamposEditables, valor: string) => {
-    setUsuario({ ...usuario, [campo]: valor });
-  };
-
-  const toggleEditar = (campo: CamposEditables) => {
-    setEditando({ ...editando, [campo]: !editando[campo] });
-  };
-
+  // Formatea una fecha ISO a "día de mes de año"
   const formatearFecha = (fechaISO: string) => {
     const fecha = new Date(fechaISO);
     return fecha.toLocaleDateString("es-ES", {
@@ -52,6 +29,60 @@ const Dashboard = () => {
       day: "numeric",
     });
   };
+
+  // Carga la fuente de Google sólo una vez
+  useEffect(() => {
+    const link = document.createElement("link");
+    link.href =
+      "https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Madimi+One&display=swap";
+    link.rel = "stylesheet";
+    document.head.appendChild(link);
+  }, []);
+
+  // Al montar, leo sessionStorage.idUsuario y traigo los datos
+  useEffect(() => {
+    const idUsuario = sessionStorage.getItem("idUsuario");
+    if (!idUsuario) {
+      console.error("No se encontró sessionStorage.idUsuario");
+      return;
+    }
+
+    const fetchUsuario = async () => {
+      try {
+        const res = await fetch(`http://localhost:4000/api/usuario/${idUsuario}`);
+        if (!res.ok) {
+          throw new Error(`Error al cargar usuario: ${res.statusText}`);
+        }
+        const data = await res.json();
+        // Mapeo respuesta al estado
+        setUsuario({
+          nombreUsuario: data.nombreUsuario,
+          emailUsuario: data.emailUsuario,
+          cantidadPettieCoins: data.cantidadPettieCoins ?? 0,
+          role: (data.role ?? "pettier").toLowerCase() as Rol,
+          fechaAltaPlataforma: data.fechaAltaPlataforma ?? new Date().toISOString(),
+        });
+      } catch (err) {
+        console.error("Error fetch usuario:", err);
+      }
+    };
+
+    fetchUsuario();
+  }, []);
+
+  const handleChange = (campo: CamposEditables, valor: string) => {
+    if (!usuario) return;
+    setUsuario({ ...usuario, [campo]: valor });
+  };
+
+  const toggleEditar = (campo: CamposEditables) => {
+    setEditando({ ...editando, [campo]: !editando[campo] });
+  };
+
+  // Mientras carga
+  if (!usuario) {
+    return <p>Cargando usuario...</p>;
+  }
 
   return (
     <div

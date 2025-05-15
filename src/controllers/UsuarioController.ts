@@ -27,60 +27,50 @@ export const getUsuarios = async (req: Request, res: Response): Promise<void> =>
     }
   };
   
-
-
-  //Obtener usuarios por role segun ID
-export const getUsuarioPorID = async (req: Request, res: Response): Promise<void> => {
-  const id = req.params.id;
-
-  try {
-    // Conectar a la base de datos
-    const db = await connectDB();
-    const [rows]: any = await db.query(
-      'SELECT idUsuario, nombreUsuario, emailUsuario, role FROM Usuario WHERE idUsuario = ?',
-      [id]
-    );
-
-    if (!rows || rows.length === 0) {
-      res.status(404).send('Usuario no encontrado');
+  export const getUsuarioPorID = async (req: Request, res: Response): Promise<void> => {
+    const id = req.params.id;
+  
+    try {
+      // Conectar a la base de datos
+      const db = await connectDB();
+      const [rows]: any = await db.query(
+        `SELECT idUsuario, nombreUsuario, emailUsuario, role, cantidadPettieCoins, fechaAltaPlataforma
+         FROM Usuario WHERE idUsuario = ?`,
+        [id]
+      );
+  
+      if (!rows || rows.length === 0) {
+        res.status(404).json({ error: "Usuario no encontrado" });
+        return;
+      }
+  
+      const user = rows[0];
+  
+      // Validar role, convierto a mayúsculas para comparar
+      const roleUpper = user.role.toUpperCase();
+  
+      if (!(roleUpper in TipoUsuario)) {
+        res.status(400).json({ error: "Role de usuario no válido" });
+        return;
+      }
+  
+      // Crear instancia UsuarioBase si necesitas lógica adicional, o simplemente responde JSON
+      const usuario = {
+        nombreUsuario: user.nombreUsuario,
+        emailUsuario: user.emailUsuario,
+        cantidadPettieCoins: user.cantidadPettieCoins ?? 0,
+        role: user.role.toLowerCase(), // Para que coincida con frontend "admin" | "owner" | "pettier"
+        fechaAltaPlataforma: user.fechaAltaPlataforma ? user.fechaAltaPlataforma.toISOString() : new Date().toISOString(),
+      };
+  
+      // Enviar JSON con los datos del usuario
+      res.json(usuario);
+    } catch (err) {
+      console.error("Error fetching user:", err);
+      res.status(500).json({ error: "Error interno del servidor" });
     }
-
-    const user = rows[0];
-
-    console.log('Role del usuario desde DB:', user.role);
-
-    const role = user.role.toUpperCase(); // Aseguramos que el valor del rol está en mayúsculas
-
-    // Verificamos que el rol sea válido en el enum
-    if (!(role in TipoUsuario)) {
-      res.status(400).send('Role de usuario no válido');
-    }
-
-    // Creamos un objeto UsuarioBase con los datos obtenidos
-    const usuario = new UsuarioBase(
-      user.idUsuario,
-      'nombrePlaceholder',
-      user.nombreUsuario,
-      'contrasenaPlaceholder',
-      user.emailUsuario,
-      0,
-      TipoUsuario[role as keyof typeof TipoUsuario],
-      new Date()
-    );
-
-    console.log('Role mapeado del usuario:', usuario.role);
-
-    // Generar la ruta de la imagen según el rol
-    const imagePath = path.resolve(__dirname, '..', '..', 'public', 'images', `${usuario.role}.png`);
-    console.log('Ruta de la imagen:', imagePath);
-
-    // Enviar el archivo de imagen como respuesta
-    return res.sendFile(imagePath);
-  } catch (err) {
-    console.error('Error fetching user:', err);
-    res.status(500).send('Error interno del servidor');
-  }
-};
+  };
+  
 
 
 
