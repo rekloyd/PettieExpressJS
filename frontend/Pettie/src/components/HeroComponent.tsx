@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import '../heroComponent.css';
 import heroimg from '../assets/bg-hero.jpg';
 import BestPettier from '../components/BestPettier';
 import SearchComponent from './searchComponent';
@@ -25,16 +24,37 @@ const HeroComponent: React.FC = () => {
   };
 
   return (
-    <section className="hero">
+    <section style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', fontFamily: 'Inter, sans-serif' }}>
       {/* Imagen de fondo */}
-      <div className="hero__bg">
-        <img src={heroimg} alt="Hero placeholder" className="hero__img" />
-        <div className="hero__overlay" />
-        <div className="hero__content">
-          <h1 className="hero__title">
+      <div
+        style={{
+          display: 'grid',
+          width: '85%',
+          height: '70vh',
+          minHeight: '300px',
+          marginTop: '30px',
+          borderRadius: '15px',
+          overflow: 'hidden',
+          backgroundColor: 'black',
+        }}
+      >
+        <img src={heroimg} alt="Hero placeholder" style={{ gridArea: '1 / 1', width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', zIndex: 0 }} />
+        <div style={{ gridArea: '1 / 1', background: 'rgba(0, 0, 0, 0.4)', width: '100%', height: '100%', zIndex: 1 }} />
+        <div style={{
+          gridArea: '1 / 1',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'flex-start',
+          padding: '5% 5% 0',
+          color: '#fff',
+          zIndex: 2,
+          width: '100%',
+          boxSizing: 'border-box'
+        }}>
+          <h1 style={{ fontSize: '5rem', marginBottom: '0.5rem', width: '90%', fontFamily: 'Madimi One' }}>
             Servicios de cuidado de Mascotas en tu ciudad
           </h1>
-          <p className="hero__subtitle">
+          <p style={{ fontSize: '2.5rem' }}>
             Cuidadores de mascota en tu misma ciudad. Encuentra paseadores,
             pet sitters y otros servicios para tus animales.
           </p>
@@ -42,20 +62,30 @@ const HeroComponent: React.FC = () => {
       </div>
 
       {/* Tarjeta de búsqueda */}
-      <div className="search-card">
-        <div className="search-card-content">
-          <h2 className="search-card__heading">
-            Encuentra el servicio que buscas para tu mascota
-          </h2>
-          <SearchComponent onSearch={handleSearch} /> {/* Usamos el nuevo componente */}
+      <div style={{
+
+        width: '63%',
+        margin: '-10rem auto 2rem',
+        borderRadius: '8px',
+        padding: '1.5rem',
+        // Se ha eliminado el box-shadow aquí
+        zIndex: 10
+      }}>
+        <div style={{ width: '95%', marginLeft: '50px' }}>
+          <SearchComponent onSearch={handleSearch} />
         </div>
       </div>
 
       {/* Resultados de la búsqueda */}
-      <ResultComponent resultados={resultados} /> {/* Usamos ResultComponent para mostrar los resultados */}
+      <div style={{textAlign:'center'}}>
+      <ResultComponent resultados={resultados} />
+      </div>
+
 
       {/* Mejores pet sitters */}
+
       <BestPettier />
+
     </section>
   );
 };

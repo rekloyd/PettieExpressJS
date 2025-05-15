@@ -8,25 +8,20 @@ interface ResultComponentProps {
 
 const ResultComponent: React.FC<ResultComponentProps> = ({ resultados }) => {
   return (
-    <div style={{ padding: '2rem' }}>
+    <div className="container py-4">
       {resultados.length > 0 ? (
         <>
-          <h3 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Resultados de búsqueda</h3>
-          <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: '1rem',
-              justifyContent: 'flex-start',
-            }}
-          >
+          <h3 className="fs-3 mb-4">Resultados de búsqueda</h3>
+          <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
             {resultados.map((servicio, index) => (
-              <ServicioCard key={index} servicio={servicio} />
+              <div className="col" key={index}>
+                <ServicioCard servicio={servicio} />
+              </div>
             ))}
           </div>
         </>
       ) : (
-        <h3 style={{ fontSize: '1.5rem' }}>No hay resultados para esta búsqueda.</h3>
+        <span></span>
       )}
     </div>
   );

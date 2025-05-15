@@ -7,6 +7,7 @@ export interface Servicio {
   tipoActividad: string;
   fechaInicio: string;   // o Date si parseas
   fechaFinal: string;    // o Date si parseas
+  tamanoMascota: string,
   precio: number;
   finalizado: boolean;
 }

@@ -1,20 +1,32 @@
 // src/components/Servicio.tsx
-import { useEffect } from "react";
+import { useState } from "react";
+import SearchComponent from './searchComponent';  // Asegúrate de que el path sea correcto
+import ResultComponent from './resultComponent';  // Asegúrate de que el path sea correcto
 
 const Servicio = () => {
-  useEffect(() => {
-    const link = document.createElement("link");
-    link.href =
-      "https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Madimi+One&display=swap";
-    link.rel = "stylesheet";
-    document.head.appendChild(link);
-  }, []);
+  const [resultados, setResultados] = useState<any[]>([]);  // Almacena los resultados de la búsqueda
+
+  // Maneja la búsqueda, recibimos los parámetros de búsqueda como URLSearchParams
+  const handleSearch = async (params: URLSearchParams) => {
+    const url = `http://localhost:4000/api/servicios/filtered?${params.toString()}`;
+    console.log('URL de la petición:', url); // Agregado para hacer log de la URL
+
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Error en la petición');
+
+      const data = await response.json();
+      setResultados(data);  // Guardamos los resultados de la búsqueda
+    } catch (error) {
+      console.error('Error al obtener los servicios:', error);
+    }
+  };
 
   return (
     <div
       style={{
         fontFamily: "Inter, sans-serif",
-        maxWidth: "1100px",
+        maxWidth: "1700px",
         margin: "auto",
         padding: "2rem 1rem",
         fontSize: "20px",
@@ -74,9 +86,6 @@ const Servicio = () => {
             <li>🏠 Alojamiento en casa del cuidador</li>
             <li>🛏️ Guardería en el domicilio del cliente</li>
             <li>🐾 Paseos personalizados</li>
-            {/* <li>🕐 Guardería de un día</li>
-            <li>🏡 Visitas al domicilio</li>
-            <li>✂️ Peluquería para mascotas</li> */}
           </ul>
         </div>
 
@@ -106,6 +115,34 @@ const Servicio = () => {
           </p>
         </div>
       </div>
+
+      {/* Agregamos el SearchComponent */}
+      <div
+        style={{
+          width: "100%",
+          marginTop: "3rem",
+
+        }}
+      >
+        <SearchComponent onSearch={handleSearch} /> {/* Usamos el componente de búsqueda */}
+      </div>
+
+      {/* Mostramos los resultados de la búsqueda */}
+      {resultados.length > 0 ? (
+        <div
+          style={{
+            padding: "2rem",
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "1rem",
+            justifyContent: "center",
+          }}
+        >
+          <ResultComponent resultados={resultados} /> {/* Usamos el componente de resultados */}
+        </div>
+      ) : (
+        <span></span>
+      )}
     </div>
   );
 };

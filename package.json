@@ -1,11 +1,13 @@
 {
   "dependencies": {
+    "@types/react-bootstrap": "^0.32.37",
     "bcryptjs": "^3.0.2",
     "bootstrap": "^5.3.6",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "mysql2": "^3.14.1",
+    "react-bootstrap": "^2.10.10",
     "react-router-dom": "^7.6.0"
   },
   "scripts": {
