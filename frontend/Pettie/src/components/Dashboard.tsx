@@ -47,20 +47,22 @@ const Dashboard = () => {
     const idUsuario = sessionStorage.getItem("idUsuario");
     if (!idUsuario) {
       console.error("No se encontró sessionStorage.idUsuario");
-      navigate("/login");
+      navigate("/");
       return;
     }
 
     const fetchUsuario = async () => {
       try {
-        const res = await fetch(`http://localhost:4000/api/usuario/${idUsuario}`);
+        const res = await fetch(
+          `http://localhost:4000/api/usuario/${idUsuario}`
+        );
         if (!res.ok) {
           throw new Error(`Error al cargar usuario: ${res.statusText}`);
         }
         const data = await res.json();
 
         if (!data || !data.nombreUsuario) {
-          navigate("/login");
+          navigate("/");
           return;
         }
 
@@ -69,7 +71,8 @@ const Dashboard = () => {
           emailUsuario: data.emailUsuario,
           cantidadPettieCoins: data.cantidadPettieCoins ?? 0,
           role: (data.role ?? "pettier").toLowerCase() as Rol,
-          fechaAltaPlataforma: data.fechaAltaPlataforma ?? new Date().toISOString(),
+          fechaAltaPlataforma:
+            data.fechaAltaPlataforma ?? new Date().toISOString(),
         });
       } catch (err) {
         console.error("Error fetch usuario:", err);
@@ -90,7 +93,11 @@ const Dashboard = () => {
   };
 
   if (!usuario) {
-    return <p>Cargando usuario...</p>;
+    return (
+      <h1 style={{ fontFamily: "Madimi One, cursive", fontSize: "38px", margin:'200px 0', textAlign:'center' }}>
+        Cargando..
+      </h1>
+    );
   }
 
   return (
