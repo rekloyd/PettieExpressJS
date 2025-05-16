@@ -97,7 +97,7 @@ const CrearMascota = () => {
 
       const result = await res.json();
       alert("Mascota creada con ID: " + result.id);
-      navigate("/misMascotas");
+      navigate("/dashboard");
     } catch (err: unknown) {
       alert(err || "Error inesperado");
       console.error(err);
@@ -250,7 +250,7 @@ const CrearMascota = () => {
               name="razaPerro"
               value={formData.razaPerro}
               onChange={handleChange}
-              placeholder="Opcional"
+              placeholder="Introduce la raza..."
               style={{
                 display: "block",
                 width: "100%",
@@ -273,7 +273,7 @@ const CrearMascota = () => {
               name="razaGato"
               value={formData.razaGato}
               onChange={handleChange}
-              placeholder="Opcional"
+              placeholder="Introduce la raza..."
               style={{
                 display: "block",
                 width: "100%",
