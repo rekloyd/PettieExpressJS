@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { validarContrasena } from "../utils/validarContrasena";
 import MascotaPorId from "./MascotaPorId";
+import CrearMascota from "./CrearMascota";
 import ServiciosOfrecidosComponent from "./ServiciosOfrecidosComponent";
 
 type Rol = "admin" | "owner" | "pettier";
@@ -248,7 +249,15 @@ const Dashboard = () => {
       </div>
 
       {usuario.role === "pettier" && <ServiciosOfrecidosComponent />}
-      {usuario.role === "owner" &&  <MascotaPorId/>}
+
+
+      {usuario.role === "pettier" && <ServiciosOfrecidosComponent /> }
+      {usuario.role === "owner" && (
+  <div>
+    <MascotaPorId />
+    <CrearMascota />
+  </div>
+)}
       
     </div>
   );

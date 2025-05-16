@@ -97,7 +97,7 @@ const CrearMascota = () => {
 
       const result = await res.json();
       alert("Mascota creada con ID: " + result.id);
-      navigate("/dashboard");
+      window.location.reload();
     } catch (err: unknown) {
       alert(err || "Error inesperado");
       console.error(err);
