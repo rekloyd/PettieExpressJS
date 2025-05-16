@@ -15,11 +15,11 @@ const CrearMascota = () => {
   });
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLSelectElement>
   ): void => {
     const target = e.target;
     const name = target.name;
-  
+
     if (target instanceof HTMLInputElement && target.type === "checkbox") {
       const checked = target.checked;
       setFormData((prev) => ({
@@ -28,16 +28,46 @@ const CrearMascota = () => {
       }));
     } else {
       const value = target.value;
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
+
+      // Si escriben en razaPerro vaciamos razaGato y viceversa
+      if (name === "razaPerro" && value.trim() !== "") {
+        setFormData((prev) => ({
+          ...prev,
+          razaPerro: value,
+          razaGato: "",
+        }));
+      } else if (name === "razaGato" && value.trim() !== "") {
+        setFormData((prev) => ({
+          ...prev,
+          razaGato: value,
+          razaPerro: "",
+        }));
+      } else {
+        setFormData((prev) => ({
+          ...prev,
+          [name]: value,
+        }));
+      }
     }
   };
-  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const { nombreMascota, tamanoMascota, razaPerro, razaGato } = formData;
+
+    if (!nombreMascota.trim()) {
+      alert("El nombre de la mascota es obligatorio.");
+      return;
+    }
+    if (!tamanoMascota.trim()) {
+      alert("Debes seleccionar un tamaño para la mascota.");
+      return;
+    }
+    if (!razaPerro.trim() && !razaGato.trim()) {
+      alert("Debes indicar al menos una raza: perro o gato.");
+      return;
+    }
 
     const idOwner = sessionStorage.getItem("idUsuario");
     if (!idOwner) {
@@ -46,13 +76,11 @@ const CrearMascota = () => {
       return;
     }
 
-    // Prepara los datos para enviar
     const dataToSend = {
       ...formData,
       idOwner: Number(idOwner),
-      // Para campos vacíos que pueden ser null:
-      razaPerro: formData.razaPerro || null,
-      razaGato: formData.razaGato || null,
+      razaPerro: razaPerro || null,
+      razaGato: razaGato || null,
     };
 
     try {
@@ -69,7 +97,7 @@ const CrearMascota = () => {
 
       const result = await res.json();
       alert("Mascota creada con ID: " + result.id);
-      navigate("/misMascotas"); // Cambia esta ruta si quieres ir a otra página
+      navigate("/misMascotas");
     } catch (err: unknown) {
       alert(err || "Error inesperado");
       console.error(err);
@@ -81,17 +109,25 @@ const CrearMascota = () => {
       style={{
         maxWidth: 600,
         margin: "60px auto",
-        padding: "1rem",
-        fontFamily: "Inter, sans-serif",
-        backgroundColor: "#fff",
+        padding: "2rem",
+        fontFamily: "'Inter', sans-serif",
+        backgroundColor: "#f9f9f9",
         borderRadius: 20,
+        boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
       }}
     >
-      <h2 style={{ fontFamily: "Madimi One, cursive", textAlign: "center" }}>
+      <h2
+        style={{
+          fontFamily: "'Madimi One', cursive",
+          textAlign: "center",
+          color: "#333",
+          marginBottom: "1.5rem",
+        }}
+      >
         Crear Nueva Mascota
       </h2>
       <form onSubmit={handleSubmit}>
-        <label>
+        <label style={{ display: "block", marginBottom: 12, fontWeight: "600" }}>
           Nombre de la Mascota:
           <input
             type="text"
@@ -100,22 +136,47 @@ const CrearMascota = () => {
             onChange={handleChange}
             required
             placeholder="Ej: Firulais"
+            style={{
+              display: "block",
+              width: "100%",
+              padding: "8px 12px",
+              marginTop: 6,
+              borderRadius: 8,
+              border: "1.5px solid #ccc",
+              fontSize: "1rem",
+              boxSizing: "border-box",
+            }}
           />
         </label>
-        <br />
-        <label>
+
+        <label style={{ display: "block", marginBottom: 12, fontWeight: "600" }}>
           Tamaño de la Mascota:
-          <input
-            type="text"
+          <select
             name="tamanoMascota"
             value={formData.tamanoMascota}
             onChange={handleChange}
             required
-            placeholder="Ej: Pequeño, Mediano, Grande"
-          />
+            style={{
+              display: "block",
+              width: "100%",
+              padding: "8px 12px",
+              marginTop: 6,
+              borderRadius: 8,
+              border: "1.5px solid #ccc",
+              fontSize: "1rem",
+              boxSizing: "border-box",
+              backgroundColor: "white",
+              cursor: "pointer",
+            }}
+          >
+            <option value="">-- Selecciona un tamaño --</option>
+            <option value="Pequeño">Pequeño</option>
+            <option value="Mediano">Mediano</option>
+            <option value="Grande">Grande</option>
+          </select>
         </label>
-        <br />
-        <label>
+
+        <label style={{ display: "block", marginBottom: 12, fontWeight: "600" }}>
           Cuidados Especiales:
           <textarea
             name="cuidadosEspeciales"
@@ -123,76 +184,131 @@ const CrearMascota = () => {
             onChange={handleChange}
             placeholder="Ej: Medicación diaria, alergias..."
             rows={3}
+            style={{
+              display: "block",
+              width: "100%",
+              padding: "8px 12px",
+              marginTop: 6,
+              borderRadius: 8,
+              border: "1.5px solid #ccc",
+              fontSize: "1rem",
+              boxSizing: "border-box",
+              resize: "vertical",
+            }}
           />
         </label>
-        <br />
-        <fieldset style={{ border: "1px solid #ddd", padding: "0.5rem" }}>
-          <legend>Paseos</legend>
-          <label>
+
+        <fieldset
+          style={{
+            border: "1.5px solid #ddd",
+            padding: "1rem",
+            borderRadius: 12,
+            marginBottom: 20,
+          }}
+        >
+          <legend style={{ fontWeight: "700", fontSize: "1.1rem" }}>Paseos</legend>
+          <label style={{ display: "block", marginBottom: 6, cursor: "pointer" }}>
             <input
               type="checkbox"
               name="paseoManana"
               checked={formData.paseoManana}
               onChange={handleChange}
+              style={{ marginRight: 8 }}
             />
             Paseo Mañana
           </label>
-          <br />
-          <label>
+
+          <label style={{ display: "block", marginBottom: 6, cursor: "pointer" }}>
             <input
               type="checkbox"
               name="paseoMedioDia"
               checked={formData.paseoMedioDia}
               onChange={handleChange}
+              style={{ marginRight: 8 }}
             />
             Paseo Mediodía
           </label>
-          <br />
-          <label>
+
+          <label style={{ display: "block", marginBottom: 6, cursor: "pointer" }}>
             <input
               type="checkbox"
               name="paseoTarde"
               checked={formData.paseoTarde}
               onChange={handleChange}
+              style={{ marginRight: 8 }}
             />
             Paseo Tarde
           </label>
         </fieldset>
-        <br />
-        <label>
-          Raza Perro:
-          <input
-            type="text"
-            name="razaPerro"
-            value={formData.razaPerro}
-            onChange={handleChange}
-            placeholder="Opcional"
-          />
-        </label>
-        <br />
-        <label>
-          Raza Gato:
-          <input
-            type="text"
-            name="razaGato"
-            value={formData.razaGato}
-            onChange={handleChange}
-            placeholder="Opcional"
-          />
-        </label>
-        <br />
+
+        {/* Solo muestra uno de los dos inputs de raza */}
+        {formData.razaGato.trim() === "" && (
+          <label style={{ display: "block", marginBottom: 12, fontWeight: "600" }}>
+            Raza Perro:
+            <input
+              type="text"
+              name="razaPerro"
+              value={formData.razaPerro}
+              onChange={handleChange}
+              placeholder="Opcional"
+              style={{
+                display: "block",
+                width: "100%",
+                padding: "8px 12px",
+                marginTop: 6,
+                borderRadius: 8,
+                border: "1.5px solid #ccc",
+                fontSize: "1rem",
+                boxSizing: "border-box",
+              }}
+            />
+          </label>
+        )}
+
+        {formData.razaPerro.trim() === "" && (
+          <label style={{ display: "block", marginBottom: 12, fontWeight: "600" }}>
+            Raza Gato:
+            <input
+              type="text"
+              name="razaGato"
+              value={formData.razaGato}
+              onChange={handleChange}
+              placeholder="Opcional"
+              style={{
+                display: "block",
+                width: "100%",
+                padding: "8px 12px",
+                marginTop: 6,
+                borderRadius: 8,
+                border: "1.5px solid #ccc",
+                fontSize: "1rem",
+                boxSizing: "border-box",
+              }}
+            />
+          </label>
+        )}
+
         <button
           type="submit"
           style={{
-            marginTop: 12,
-            padding: "0.5rem 1rem",
-            fontSize: "1rem",
-            borderRadius: 8,
+            marginTop: 20,
+            padding: "0.75rem 1.5rem",
+            fontSize: "1.1rem",
+            borderRadius: 12,
             cursor: "pointer",
             backgroundColor: "#007bff",
             color: "white",
             border: "none",
+            width: "100%",
+            fontWeight: "700",
+            transition: "background-color 0.3s ease",
           }}
+          onMouseEnter={(e) =>
+            ((e.target as HTMLButtonElement).style.backgroundColor = "#0056b3")
+          }
+          onMouseLeave={(e) =>
+            ((e.target as HTMLButtonElement).style.backgroundColor = "#007bff")
+          }
         >
           Crear Mascota
         </button>
