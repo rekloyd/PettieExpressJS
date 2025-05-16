@@ -11,6 +11,7 @@ import Servicio from './components/Servicio';
 import Dashboard from './components/Dashboard';
 import Checkout from './components/Checkout';
 import DashboardPorId from './components/DashboardCompleto';
+import CrearMascota from './components/CrearMascota';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path='/dashboard' element={<Dashboard/>}/>
         <Route path='/pasarelaDePago' element={<Checkout/>}/>
         <Route path="/dashboard/:id" element={<DashboardPorId />} />
+        <Route path="/anadirMascota" element={<CrearMascota />} />
       </Routes>
       <Footer></Footer>
     </BrowserRouter>
