@@ -269,7 +269,7 @@ try {
         </div>
 
         <div style={{ textAlign: "center" }}>
-          <button type="submit" className="btnL">
+          <button type="submit" className="btnLogin">
             Regístrate
           </button>
           <p style={{ marginTop: "1rem" }}>

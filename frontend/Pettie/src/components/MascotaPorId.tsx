@@ -240,8 +240,9 @@ const MascotaPorId = () => {
                     placeholder="Raza Gato"
                   />
                   <br />
-                  <button onClick={() => handleSaveClick(m.idMascota)}>Guardar</button>
-                  <button onClick={() => setEditIndex(null)}>Cancelar</button>
+                  <br />
+                  <button className="btn" onClick={() => handleSaveClick(m.idMascota)}>Guardar</button>
+                  <button className="btn btn-danger" onClick={() => setEditIndex(null)}>Cancelar</button>
                 </>
               ) : (
                 <>
@@ -272,8 +273,9 @@ const MascotaPorId = () => {
                       <strong>Raza (Gato):</strong> {m.razaGato}
                     </p>
                   ) : null}
-                  <button onClick={() => handleEditClick(i)}>Editar</button>
+                  <button className="btn" onClick={() => handleEditClick(i)}>Editar</button>
                   <button
+                  className="btn btn-danger"
                     style={{ marginLeft: 8, backgroundColor: "red", color: "white" }}
                     onClick={() => handleDelete(m.idMascota, i)}
                   >

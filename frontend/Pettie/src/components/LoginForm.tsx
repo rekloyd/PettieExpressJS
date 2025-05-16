@@ -1,10 +1,15 @@
 // src/components/LoginForm.tsx
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import logo from "../assets/logo.png";
 import "../styles/login.css";
 
-const LoginForm = () => {
+// Define el tipo de las props que recibe LoginForm
+interface LoginFormProps {
+  onLoginSuccess: () => void;
+}
+
+const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
   const [nombreUsuario, setNombreUsuario] = useState("");
   const [contrasenaUsuario, setContrasenaUsuario] = useState("");
   const [error, setError] = useState("");
@@ -31,11 +36,14 @@ const LoginForm = () => {
       const result = await response.json();
 
       if (response.ok) {
-        // ——— Aquí extraemos y guardamos el idUsuario en sessionStorage ———
+        // Guardamos el idUsuario en sessionStorage
         const { idUsuario } = result.usuario;
         sessionStorage.setItem("idUsuario", idUsuario.toString());
 
-        // Redirigimos al home (o la ruta que necesites)
+        // Avisamos a App que login fue exitoso para refrescar Navbar
+        onLoginSuccess();
+
+        // Navegamos al home
         navigate("/");
       } else {
         setError(result.message);
@@ -130,7 +138,7 @@ const LoginForm = () => {
         </div>
 
         <div style={{ textAlign: "center" }}>
-          <button type="submit" className="btnL">
+          <button type="submit" className="btnLogin">
             Iniciar sesión
           </button>
           <p style={{ marginTop: "1rem" }}>

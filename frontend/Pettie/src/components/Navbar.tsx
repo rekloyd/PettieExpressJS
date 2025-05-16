@@ -96,7 +96,7 @@ const Navbar: React.FC = () => {
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="btn btn-danger"
+                  className="btn"
                   type="button"
                 >
                   Cerrar Sesión

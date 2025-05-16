@@ -19,6 +19,8 @@ interface Usuario {
 type CamposEditables = "nombreUsuario" | "emailUsuario" | "role" | "contrasenaUsuario";
 
 const Dashboard = () => {
+
+  
   const [usuario, setUsuario] = useState<Usuario | null>(null);
   const [editando, setEditando] = useState<Record<CamposEditables, boolean>>({
     nombreUsuario: false,
@@ -167,7 +169,7 @@ const Dashboard = () => {
         ) : (
           <span>{usuario.nombreUsuario}</span>
         )}
-        <button onClick={() => toggleEditar("nombreUsuario")} disabled={loadingCampo.nombreUsuario}>
+        <button onClick={() => toggleEditar("nombreUsuario")} disabled={loadingCampo.nombreUsuario} className="btn">
           {loadingCampo.nombreUsuario ? "Guardando..." : editando.nombreUsuario ? "Guardar" : "Editar"}
         </button>
 
@@ -182,7 +184,7 @@ const Dashboard = () => {
         ) : (
           <span>{usuario.emailUsuario}</span>
         )}
-        <button onClick={() => toggleEditar("emailUsuario")} disabled={loadingCampo.emailUsuario}>
+        <button onClick={() => toggleEditar("emailUsuario")} disabled={loadingCampo.emailUsuario} className="btn">
           {loadingCampo.emailUsuario ? "Guardando..." : editando.emailUsuario ? "Guardar" : "Editar"}
         </button>
 
@@ -203,7 +205,7 @@ const Dashboard = () => {
               : "Administrador"}
           </span>
         )}
-        <button onClick={() => toggleEditar("role")} disabled={loadingCampo.role}>
+        <button onClick={() => toggleEditar("role")} disabled={loadingCampo.role} className="btn">
           {loadingCampo.role ? "Guardando..." : editando.role ? "Guardar" : "Editar"}
         </button>
 
@@ -223,7 +225,7 @@ const Dashboard = () => {
         ) : (
           <span>********</span>
         )}
-        <button onClick={() => toggleEditar("contrasenaUsuario")} disabled={loadingCampo.contrasenaUsuario}>
+        <button onClick={() => toggleEditar("contrasenaUsuario")} disabled={loadingCampo.contrasenaUsuario} className="btn">
           {loadingCampo.contrasenaUsuario ? "Guardando..." : editando.contrasenaUsuario ? "Guardar" : "Editar"}
         </button>
 

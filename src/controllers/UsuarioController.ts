@@ -369,6 +369,8 @@ export const deleteUsuario = async (req: Request, res: Response): Promise<void> 
     res.status(500).json({ error: 'Error al eliminar el usuario' });
   }
 };
+
+
 export const getUsuariosFiltrados = async (req: Request, res: Response): Promise<void> => {
   const {
     idUsuario,
@@ -463,5 +465,49 @@ export const getUsuariosFiltrados = async (req: Request, res: Response): Promise
   } catch (err) {
     console.error('Error al filtrar usuarios:', err);
     res.status(500).json({ error: 'Error interno del servidor al filtrar usuarios.' });
+  }
+};
+
+
+export const sumarPettieCoins = async (req: Request, res: Response): Promise<void> => {
+  const idUsuario = parseInt(req.params.idUsuario, 10);
+  const { cantidad } = req.body;
+  //console.log("PARAMS:", req.params);
+  //console.log("BODY:", req.body);
+
+
+  if (isNaN(idUsuario) || typeof cantidad !== "number" || cantidad <= 0) {
+    res.status(400).json({ error: "Parámetros inválidos" });
+    return;
+  }
+
+  try {
+    const db = await connectDB();
+    const [result] = await db.query(
+      `UPDATE Usuario
+       SET cantidadPettieCoins = cantidadPettieCoins + ?
+       WHERE idUsuario = ?`,
+      [cantidad, idUsuario]
+    );
+
+    if ((result as any).affectedRows === 0) {
+      res.status(404).json({ error: "Usuario no encontrado" });
+      return;
+    }
+
+    const [rows] = await db.query(
+      `SELECT cantidadPettieCoins FROM Usuario WHERE idUsuario = ?`,
+      [idUsuario]
+    );
+    const nuevoTotal = (rows as any[])[0]?.cantidadPettieCoins;
+
+    res.json({
+      message: "PettieCoins sumados correctamente",
+      cantidadSumada: cantidad,
+      nuevoTotal,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error al actualizar PettieCoins" });
   }
 };
