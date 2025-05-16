@@ -9,13 +9,6 @@ interface Servicio {
   animalesAdmitidos: string;
 }
 
-interface ServicioSinId {
-  tipoActividad: string;
-  precio: number;
-  fechaInicio: string;
-  fechaFinal: string;
-  animalesAdmitidos: string;
-}
 
 const ServiciosOfrecidosComponent = () => {
   const [servicios, setServicios] = useState<Servicio[]>([]);
