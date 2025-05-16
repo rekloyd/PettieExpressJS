@@ -136,9 +136,6 @@ export const getServiciosFiltered = async (req: Request, res: Response): Promise
 };
 
 
-
-
-
 // Obtener un servicio por su ID
 export const getServicioPorID = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;

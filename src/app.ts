@@ -8,6 +8,7 @@ import usuarioRoutes from './routes/usuarioRoutes';
 import mascotaRoutes from './routes/mascotaRoutes';
 import servicioRoutes from './routes/servicioRoutes'; 
 import cors from 'cors';
+import servicioOfrecidoRoutes from './routes/servicioOfrecidoRoutes';
 
 
 
@@ -29,6 +30,7 @@ app.use('/api', loginController);
 app.use('/api', usuarioRoutes);
 app.use('/api', mascotaRoutes);
 app.use('/api', servicioRoutes); 
+app.use('/api', servicioOfrecidoRoutes); 
 
 // Ruta raíz
 app.use('/', (req: Request, res: Response) => {
