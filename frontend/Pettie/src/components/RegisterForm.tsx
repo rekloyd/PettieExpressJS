@@ -10,7 +10,6 @@ const RegisterForm = () => {
   const [email, setEmail] = useState("");
   const [contrasenaUsuario, setContrasenaUsuario] = useState("");
   const [role, setRole] = useState("");
-  const [numeroCuenta, setNumeroCuenta] = useState("");
   const [error, setError] = useState("");
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const navigate = useNavigate();
@@ -26,11 +25,6 @@ const RegisterForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    if (role === "pettier" && !numeroCuenta.trim()) {
-      setError("El número de cuenta es obligatorio para rol Pettier");
-      return;
-    }
-
     const payload = {
       nombreUsuario,
       emailUsuario: email,
@@ -230,31 +224,6 @@ try {
             </div>
           </div>
         </div>
-
-        {role === "pettier" && (
-          <div style={{ marginBottom: "1rem" }}>
-            <label
-              htmlFor="numeroCuenta"
-              style={{ display: "block", marginBottom: ".5rem" }}
-            >
-              Número de cuenta
-            </label>
-            <input
-              type="text"
-              id="numeroCuenta"
-              required
-              value={numeroCuenta}
-              onChange={(e) => setNumeroCuenta(e.target.value)}
-              style={{
-                width: "100%",
-                padding: ".75rem",
-                fontSize: "1rem",
-                borderRadius: "5px",
-                border: "1px solid black",
-              }}
-            />
-          </div>
-        )}
 
         <div
           style={{

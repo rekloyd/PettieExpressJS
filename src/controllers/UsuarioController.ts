@@ -235,7 +235,7 @@ export const insertUsuario = async (req: Request, res: Response): Promise<void> 
       case 'pettier':
         console.log('🟨 INSERT INTO Pettier (idPettier)', [idUsuario]);
         await conn.execute(
-          `INSERT INTO Pettier (idPettier) VALUES (?, ?)`,
+          `INSERT INTO Pettier (idPettier) VALUES (?)`,
           [idUsuario]
         );
         break;
