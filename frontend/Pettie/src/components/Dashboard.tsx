@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { validarContrasena } from "../utils/validarContrasena";
+import MascotaPorId from "./MascotaPorId";
 
 type Rol = "admin" | "owner" | "pettier";
 
@@ -244,6 +245,7 @@ const Dashboard = () => {
         <span>{formatearFecha(usuario.fechaAltaPlataforma)}</span>
         <span />
       </div>
+      <MascotaPorId/>
     </div>
   );
 };
