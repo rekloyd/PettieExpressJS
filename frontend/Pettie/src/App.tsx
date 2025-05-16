@@ -12,6 +12,7 @@ import Servicio from "./components/Servicio";
 import Dashboard from "./components/Dashboard";
 import Checkout from "./components/Checkout";
 import DashboardPorId from "./components/DashboardCompleto";
+import Blog from "./components/Blog";
 
 function App() {
   const [refreshNavbarKey, setRefreshNavbarKey] = useState(0);
@@ -33,6 +34,7 @@ function App() {
         <Route path="/servicios" element={<Servicio />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/pasarelaDePago" element={<Checkout />} />
+        <Route path="/blog" element={<Blog />} />
         <Route path="/dashboard/:id" element={<DashboardPorId />} />
       </Routes>
       <Footer />

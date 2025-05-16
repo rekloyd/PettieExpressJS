@@ -107,7 +107,7 @@ const Contacto: React.FC = () => {
             <textarea className="form-control" id="mensaje" rows={5} required />
           </div>
           <div className="text-center">
-            <button type="submit" className="btnL" style={{width:'180px', height:'70px', fontSize:'16px'}}>
+            <button type="submit" className="btnLogin" style={{width:'180px', height:'70px', fontSize:'16px'}}>
               Enviar mensaje
             </button>
           </div>

@@ -17,22 +17,13 @@ const Footer: React.FC = () => {
           <div>
             <h5>Enlaces útiles</h5>
             <ul className="list-unstyled">
-              <li><a href="#" className="text-light text-decoration-none">Inicio</a></li>
-              <li><a href="#" className="text-light text-decoration-none">Servicios</a></li>
-              <li><a href="#" className="text-light text-decoration-none">Blog</a></li>
-              <li><a href="#" className="text-light text-decoration-none">Contacto</a></li>
+              <li><a href="/" className="text-light text-decoration-none">Inicio</a></li>
+              <li><a href="/servicios" className="text-light text-decoration-none">Servicios</a></li>
+              <li><a href="/blog" className="text-light text-decoration-none">Blog</a></li>
+              <li><a href="/contacto" className="text-light text-decoration-none">Contacto</a></li>
             </ul>
           </div>
 
-          {/* Segunda lista */}
-          <div>
-            <h5>Legal</h5>
-            <ul className="list-unstyled">
-              <li><a href="#" className="text-light text-decoration-none">Aviso legal</a></li>
-              <li><a href="#" className="text-light text-decoration-none">Privacidad</a></li>
-              <li><a href="#" className="text-light text-decoration-none">Cookies</a></li>
-            </ul>
-          </div>
 
           {/* Formulario */}
           <div style={{ minWidth: '250px' }}>
