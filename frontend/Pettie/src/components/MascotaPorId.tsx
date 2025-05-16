@@ -285,22 +285,6 @@ const MascotaPorId = () => {
           );
         })}
       </ul>
-      <div style={{ textAlign: "center", marginTop: "2rem" }}>
-        <button
-          style={{
-            padding: "0.5rem 1rem",
-            fontSize: "1rem",
-            borderRadius: 8,
-            cursor: "pointer",
-            backgroundColor: "#007bff",
-            color: "#fff",
-            border: "none",
-          }}
-          onClick={() => navigate("/anadirMascota")}
-        >
-          Añadir Mascota
-        </button>
-      </div>
     </div>
   );
 };
