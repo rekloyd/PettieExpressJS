@@ -96,6 +96,29 @@ const MascotaPorId = () => {
     }
   };
 
+  const handleDelete = async (idMascota: number, index: number) => {
+    if (!window.confirm("¿Seguro que quieres eliminar esta mascota?")) return;
+
+    try {
+      const res = await fetch(`http://localhost:4000/api/mascotas/${idMascota}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) throw new Error("Error al eliminar la mascota");
+
+      setMascotas((prev) => {
+        const updated = [...prev];
+        updated.splice(index, 1);
+        return updated;
+      });
+
+      if (editIndex === index) setEditIndex(null);
+    } catch (err) {
+      console.error(err);
+      alert("No se pudo eliminar la mascota");
+    }
+  };
+
   if (loading) {
     return (
       <h2
@@ -111,9 +134,7 @@ const MascotaPorId = () => {
   }
 
   if (error) {
-    return (
-      <h2 style={{ color: "red", textAlign: "center" }}>{error}</h2>
-    );
+    return <h2 style={{ color: "red", textAlign: "center" }}>{error}</h2>;
   }
 
   return (
@@ -138,137 +159,132 @@ const MascotaPorId = () => {
         Mis Mascotas
       </h2>
       <ul style={{ listStyle: "none", padding: 0 }}>
-        {mascotas.map((m, i) => (
-          <li
-            key={i}
-            style={{
-              padding: "1rem 0",
-              borderBottom: i !== mascotas.length - 1 ? "1px solid #ddd" : "none",
-            }}
-          >
-            {editIndex === i ? (
-              <>
-                <input
-                  name="nombreMascota"
-                  value={formData.nombreMascota || ""}
-                  onChange={handleInputChange}
-                  placeholder="Nombre"
-                />
-                <br />
-                <input
-                  name="tamanoMascota"
-                  value={formData.tamanoMascota || ""}
-                  onChange={handleInputChange}
-                  placeholder="Tamaño"
-                />
-                <br />
-                <input
-                  name="cuidadosEspeciales"
-                  value={formData.cuidadosEspeciales || ""}
-                  onChange={handleInputChange}
-                  placeholder="Cuidados especiales"
-                />
-                <br />
-                <label>
+        {mascotas.map((m, i) => {
+          // Mostrar solo si razaPerro o razaGato no son null, si ambos null, no mostrar nada (display none)
+          if (m.razaPerro === null && m.razaGato === null) {
+            return null;
+          }
+
+          return (
+            <li
+              key={i}
+              style={{
+                padding: "1rem 0",
+                borderBottom: i !== mascotas.length - 1 ? "1px solid #ddd" : "none",
+              }}
+            >
+              {editIndex === i ? (
+                <>
                   <input
-                    type="checkbox"
-                    name="paseoManana"
-                    checked={formData.paseoManana || false}
+                    name="nombreMascota"
+                    value={formData.nombreMascota || ""}
                     onChange={handleInputChange}
-                  />{" "}
-                  Paseo Mañana
-                </label>
-                <br />
-                <label>
+                    placeholder="Nombre"
+                  />
+                  <br />
                   <input
-                    type="checkbox"
-                    name="paseoMedioDia"
-                    checked={formData.paseoMedioDia || false}
+                    name="tamanoMascota"
+                    value={formData.tamanoMascota || ""}
                     onChange={handleInputChange}
-                  />{" "}
-                  Paseo Mediodía
-                </label>
-                <br />
-                <label>
+                    placeholder="Tamaño"
+                  />
+                  <br />
                   <input
-                    type="checkbox"
-                    name="paseoTarde"
-                    checked={formData.paseoTarde || false}
+                    name="cuidadosEspeciales"
+                    value={formData.cuidadosEspeciales || ""}
                     onChange={handleInputChange}
-                  />{" "}
-                  Paseo Tarde
-                </label>
-                <br />
-                <input
-                  name="razaPerro"
-                  value={formData.razaPerro || ""}
-                  onChange={handleInputChange}
-                  placeholder="Raza Perro"
-                />
-                <br />
-                <input
-                  name="razaGato"
-                  value={formData.razaGato || ""}
-                  onChange={handleInputChange}
-                  placeholder="Raza Gato"
-                />
-                <br />
-                <button onClick={() => handleSaveClick(m.idMascota)}>
-                  Guardar
-                </button>
-                <button onClick={() => setEditIndex(null)}>Cancelar</button>
-              </>
-            ) : (
-              <>
-                <p>
-                  <strong>Nombre:</strong> {m.nombreMascota}
-                </p>
-                <p>
-                  <strong>Tamaño:</strong> {m.tamanoMascota}
-                </p>
-                <p>
-                  <strong>Cuidados especiales:</strong> {m.cuidadosEspeciales}
-                </p>
-                <p>
-                  <strong>Paseos:</strong>
-                  <ul>
-                    <li>Mañana: {m.paseoManana ? "Sí" : "No"}</li>
-                    <li>Mediodía: {m.paseoMedioDia ? "Sí" : "No"}</li>
-                    <li>Tarde: {m.paseoTarde ? "Sí" : "No"}</li>
-                  </ul>
-                </p>
-                {m.razaPerro ? (
+                    placeholder="Cuidados especiales"
+                  />
+                  <br />
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="paseoManana"
+                      checked={formData.paseoManana || false}
+                      onChange={handleInputChange}
+                    />{" "}
+                    Paseo Mañana
+                  </label>
+                  <br />
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="paseoMedioDia"
+                      checked={formData.paseoMedioDia || false}
+                      onChange={handleInputChange}
+                    />{" "}
+                    Paseo Mediodía
+                  </label>
+                  <br />
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="paseoTarde"
+                      checked={formData.paseoTarde || false}
+                      onChange={handleInputChange}
+                    />{" "}
+                    Paseo Tarde
+                  </label>
+                  <br />
+                  <input
+                    name="razaPerro"
+                    value={formData.razaPerro || ""}
+                    onChange={handleInputChange}
+                    placeholder="Raza Perro"
+                  />
+                  <br />
+                  <input
+                    name="razaGato"
+                    value={formData.razaGato || ""}
+                    onChange={handleInputChange}
+                    placeholder="Raza Gato"
+                  />
+                  <br />
+                  <button onClick={() => handleSaveClick(m.idMascota)}>Guardar</button>
+                  <button onClick={() => setEditIndex(null)}>Cancelar</button>
+                </>
+              ) : (
+                <>
                   <p>
-                    <strong>Raza (Perro):</strong> {m.razaPerro}
+                    <strong>Nombre:</strong> {m.nombreMascota}
                   </p>
-                ) : null}
-                {m.razaGato ? (
                   <p>
-                    <strong>Raza (Gato):</strong> {m.razaGato}
+                    <strong>Tamaño:</strong> {m.tamanoMascota}
                   </p>
-                ) : null}
-                <button onClick={() => handleEditClick(i)}>Editar</button>
-              </>
-            )}
-          </li>
-        ))}
+                  <p>
+                    <strong>Cuidados especiales:</strong> {m.cuidadosEspeciales}
+                  </p>
+                  <p>
+                    <strong>Paseos:</strong>
+                    <ul>
+                      <li>Mañana: {m.paseoManana ? "Sí" : "No"}</li>
+                      <li>Mediodía: {m.paseoMedioDia ? "Sí" : "No"}</li>
+                      <li>Tarde: {m.paseoTarde ? "Sí" : "No"}</li>
+                    </ul>
+                  </p>
+                  {m.razaPerro ? (
+                    <p>
+                      <strong>Raza (Perro):</strong> {m.razaPerro}
+                    </p>
+                  ) : null}
+                  {m.razaGato ? (
+                    <p>
+                      <strong>Raza (Gato):</strong> {m.razaGato}
+                    </p>
+                  ) : null}
+                  <button onClick={() => handleEditClick(i)}>Editar</button>
+                  <button
+                    style={{ marginLeft: 8, backgroundColor: "red", color: "white" }}
+                    onClick={() => handleDelete(m.idMascota, i)}
+                  >
+                    Borrar
+                  </button>
+                </>
+              )}
+            </li>
+          );
+        })}
       </ul>
-      <div style={{ textAlign: "center", marginTop: "2rem" }}>
-        <button
-          style={{
-            padding: "0.5rem 1rem",
-            fontSize: "1rem",
-            borderRadius: 8,
-            cursor: "pointer",
-            backgroundColor: "#007bff",
-            color: "#fff",
-            border: "none",
-          }}
-          onClick={() => navigate("/anadirMascota")}
-        >
-          Añadir Mascota
-        </button>
-      </div>
     </div>
   );
 };
