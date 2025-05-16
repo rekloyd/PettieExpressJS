@@ -290,18 +290,14 @@ const CrearMascota = () => {
 
         <button
           type="submit"
+          className="btnLogin"
           style={{
             marginTop: 20,
             padding: "0.75rem 1.5rem",
             fontSize: "1.1rem",
-            borderRadius: 12,
             cursor: "pointer",
-            backgroundColor: "#007bff",
-            color: "white",
-            border: "none",
             width: "100%",
             fontWeight: "700",
-            transition: "background-color 0.3s ease",
           }}
           onMouseEnter={(e) =>
             ((e.target as HTMLButtonElement).style.backgroundColor = "#0056b3")
