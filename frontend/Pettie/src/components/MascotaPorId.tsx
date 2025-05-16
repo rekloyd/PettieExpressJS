@@ -46,8 +46,14 @@ const MascotaPorId = () => {
   }, [navigate]);
 
   const handleEditClick = (index: number) => {
+    const mascota = mascotas[index];
     setEditIndex(index);
-    setFormData({ ...mascotas[index] });
+    setFormData({
+      ...mascota,
+      cuidadosEspeciales: mascota.cuidadosEspeciales || "",
+      razaPerro: mascota.razaPerro || "",
+      razaGato: mascota.razaGato || "",
+    });
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -61,27 +67,37 @@ const MascotaPorId = () => {
     }
   };
   
-  
 
   const handleSaveClick = async (idMascota: number) => {
     try {
+      if (editIndex === null) return;
+  
       const res = await fetch(`http://localhost:4000/api/mascotas/${idMascota}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-
+  
+      const text = await res.text();
+      console.log("STATUS:", res.status);
+      console.log("BODY:", text);
+  
       if (!res.ok) throw new Error("Error al actualizar la mascota");
-
-      const updatedMascotas = [...mascotas];
-      updatedMascotas[editIndex!] = { ...updatedMascotas[editIndex!], ...(formData as Mascota) };
-      setMascotas(updatedMascotas);
+  
+      // Actualiza solo los campos editables en el array local
+      setMascotas((prev) => {
+        const updated = [...prev];
+        updated[editIndex] = { ...updated[editIndex], ...formData };
+        return updated;
+      });
+  
       setEditIndex(null);
     } catch (err) {
       console.error(err);
       alert("No se pudo actualizar la mascota");
     }
   };
+  
 
   if (loading) {
     return <h2 style={{ fontFamily: "Madimi One, cursive", marginTop: "200px", textAlign: "center" }}>Cargando mascotas...</h2>;
