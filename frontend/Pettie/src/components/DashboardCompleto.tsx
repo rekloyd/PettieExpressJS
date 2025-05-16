@@ -21,11 +21,32 @@ interface Mascota {
   razaGato: string | null;
 }
 
+interface ServicioOfrecido {
+  idActividad: number;
+  tipoActividad: string;
+  fechaInicio: string;
+  fechaFinal: string;
+  precio: number;
+  animalesAdmitidos: "pequeno" | "mediano" | "grande";
+}
+
+
+const buttonStyle = {
+  border: '1px solid black',
+  width: '150px',
+  height: '35px',
+  borderRadius: '5px',
+  backgroundColor: 'rgb(247, 169, 82)',
+  marginBottom: '4px',
+};
+
+
 const DashboardCompleto = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [usuario, setUsuario] = useState<Usuario | null>(null);
   const [mascotas, setMascotas] = useState<Mascota[]>([]);
+  const [serviciosOfrecidos, setServiciosOfrecidos] = useState<ServicioOfrecido[]>([]);
 
   const formatearFecha = (fechaISO: string) =>
     new Date(fechaISO).toLocaleDateString("es-ES", {
@@ -57,37 +78,47 @@ const DashboardCompleto = () => {
   useEffect(() => {
     if (!id) {
       navigate("/");
-      return; // solo para salir del efecto
+      return;
     }
-  
+
     (async () => {
       try {
         const userRes = await fetch(`http://localhost:4000/api/usuario/${id}`);
-        const mascotasRes = await fetch(`http://localhost:4000/api/mascotas/owner/${id}`);
-  
-        if (!userRes.ok || !mascotasRes.ok) throw new Error();
-  
+        if (!userRes.ok) throw new Error();
+
         const userData = await userRes.json();
-        const mascotasData = await mascotasRes.json();
-  
+
         if (!userData.nombreUsuario) {
           navigate("/");
           return;
         }
-  
+
+        const role: Rol = (userData.role ?? "pettier").toLowerCase();
+
         setUsuario({
           nombreUsuario: userData.nombreUsuario,
-          role: (userData.role ?? "pettier").toLowerCase() as Rol,
+          role,
           fechaAltaPlataforma: userData.fechaAltaPlataforma ?? new Date().toISOString(),
         });
-  
-        setMascotas(mascotasData);
+
+        if (role === "owner") {
+          const mascotasRes = await fetch(`http://localhost:4000/api/mascotas/owner/${id}`);
+          if (!mascotasRes.ok) throw new Error();
+          const mascotasData = await mascotasRes.json();
+          setMascotas(mascotasData);
+        }
+
+        if (role === "pettier") {
+          const serviciosRes = await fetch(`http://localhost:4000/api/serviciosOfrecidos?idPettier=${id}`);
+          if (!serviciosRes.ok) throw new Error();
+          const serviciosData = await serviciosRes.json();
+          setServiciosOfrecidos(serviciosData);
+        }
       } catch {
         navigate("/login");
       }
     })();
   }, [id, navigate]);
-  
 
   if (!usuario) {
     return (
@@ -125,12 +156,7 @@ const DashboardCompleto = () => {
           textAlign: "center",
         }}
       >
-        <h1
-          style={{
-            fontFamily: "Madimi One, cursive",
-            fontSize: 42,
-          }}
-        >
+        <h1 style={{ fontFamily: "Madimi One, cursive", fontSize: 42 }}>
           {usuario.nombreUsuario}
         </h1>
         <p style={{ fontSize: 18, color: "#666" }}>
@@ -139,10 +165,12 @@ const DashboardCompleto = () => {
         <h3 style={{ fontSize: 16, color: "#999", marginTop: 16 }}>
           Miembro desde
         </h3>
-        <p style={{ fontSize: 18 }}>{formatearFecha(usuario.fechaAltaPlataforma)}</p>
+        <p style={{ fontSize: 18 }}>
+          {formatearFecha(usuario.fechaAltaPlataforma)}
+        </p>
       </div>
 
-      {/* Lista de Mascotas */}
+      {/* Panel Mascotas (Owner) */}
       {usuario.role === "owner" && (
         <>
           <h2
@@ -205,11 +233,9 @@ const DashboardCompleto = () => {
                   {(mascota.paseoManana || mascota.paseoMedioDia || mascota.paseoTarde) && (
                     <p>
                       <strong>Paseos:</strong>{" "}
-                      {[
-                        mascota.paseoManana && "Mañana",
+                      {[mascota.paseoManana && "Mañana",
                         mascota.paseoMedioDia && "Mediodía",
-                        mascota.paseoTarde && "Tarde",
-                      ]
+                        mascota.paseoTarde && "Tarde"]
                         .filter(Boolean)
                         .join(", ")}
                     </p>
@@ -220,12 +246,80 @@ const DashboardCompleto = () => {
                       <strong>Raza perro:</strong> {mascota.razaPerro}
                     </p>
                   )}
-
                   {mascota.razaGato && (
                     <p>
                       <strong>Raza gato:</strong> {mascota.razaGato}
                     </p>
                   )}
+                </div>
+              ))}
+            </div>
+          )}
+        </>
+      )}
+
+      {/* Panel Servicios Ofrecidos (Pettier) */}
+      {usuario.role === "pettier" && (
+        <>
+          <h2
+            style={{
+              fontFamily: "Madimi One, cursive",
+              fontSize: 32,
+              textAlign: "center",
+              marginBottom: "2rem",
+            }}
+          >
+            Mis servicios ofrecidos
+          </h2>
+          {serviciosOfrecidos.length === 0 ? (
+            <p style={{ textAlign: "center", fontSize: 18 }}>
+              Todavía no has publicado servicios.
+            </p>
+          ) : (
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+                gap: "2rem",
+              }}
+            >
+              {serviciosOfrecidos.map((servicio) => (
+                <div
+                  key={servicio.idActividad}
+                  style={{
+                    border: "1px solid #ddd",
+                    borderRadius: 12,
+                    padding: "1rem",
+                    background: "#fff",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+                  }}
+                >
+                  <h3
+                    style={{
+                      fontSize: 22,
+                      fontWeight: 600,
+                      fontFamily: "Madimi One, cursive",
+                      marginBottom: ".8rem",
+                    }}
+                  >
+                    {servicio.tipoActividad}
+                  </h3>
+
+                  <p>
+                    <strong>Fecha Inicio del Servicio:</strong> {formatearFecha(servicio.fechaInicio)}
+                  </p>
+                  <p>
+                    <strong>Fecha Fin del Servicio:</strong> {formatearFecha(servicio.fechaFinal)}
+                  </p>
+                  <p>
+                    <strong>Precio:</strong> {servicio.precio}€
+                  </p>
+                  <p>
+                    <strong>Tamaño admitido:</strong> {servicio.animalesAdmitidos}
+                  </p>
+                  <button style={buttonStyle}>
+                    Contratar Servicio
+                  </button>
                 </div>
               ))}
             </div>
