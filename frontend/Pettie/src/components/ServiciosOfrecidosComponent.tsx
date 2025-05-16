@@ -1,23 +1,63 @@
 import { useEffect, useState } from "react";
 
 interface Servicio {
-  id: number;
-  nombreServicio: string;
-  descripcion: string;
+  idActividad: number;
+  tipoActividad: string;
   precio: number;
+  fechaInicio: string;
+  fechaFinal: string;
+  animalesAdmitidos: string;
+}
+
+interface ServicioSinId {
+  tipoActividad: string;
+  precio: number;
+  fechaInicio: string;
+  fechaFinal: string;
+  animalesAdmitidos: string;
 }
 
 const ServiciosOfrecidosComponent = () => {
   const [servicios, setServicios] = useState<Servicio[]>([]);
   const [nuevoServicio, setNuevoServicio] = useState<Servicio>({
-    id: 0,
-    nombreServicio: "",
-    descripcion: "",
+    idActividad: 0,
+    tipoActividad: "",
     precio: 0,
+    fechaInicio: "",
+    fechaFinal: "",
+    animalesAdmitidos: "",
   });
   const [editando, setEditando] = useState(false);
-  const [servicioAEditar, setServicioAEditar] = useState<Servicio | null>(null);
   const [loading, setLoading] = useState(false);
+
+  // Función para formatear las fechas al formato 'YYYY-MM-DD HH:mm:ss'
+  const formatDate = (date: string) => {
+    const dateObj = new Date(date);
+    const year = dateObj.getFullYear();
+    const month = (dateObj.getMonth() + 1).toString().padStart(2, "0");
+    const day = dateObj.getDate().toString().padStart(2, "0");
+    const hours = dateObj.getHours().toString().padStart(2, "0");
+    const minutes = dateObj.getMinutes().toString().padStart(2, "0");
+    const seconds = dateObj.getSeconds().toString().padStart(2, "0");
+
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  };
+
+  // Función para extraer solo la parte de la fecha (sin la hora)
+  const formatDateForInput = (date: string) => {
+    const dateObj = new Date(date);
+
+    // Validar si la fecha es válida
+    if (isNaN(dateObj.getTime())) {
+      return ""; // Devuelve un valor vacío si la fecha no es válida
+    }
+
+    const year = dateObj.getFullYear();
+    const month = (dateObj.getMonth() + 1).toString().padStart(2, "0");
+    const day = dateObj.getDate().toString().padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  };
 
   const fetchServicios = async () => {
     try {
@@ -30,29 +70,49 @@ const ServiciosOfrecidosComponent = () => {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setNuevoServicio((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: name === "precio" ? Number(value) : value,
     }));
   };
 
   const handleCreate = async () => {
+    const idPettier = sessionStorage.getItem("idUsuario");
+
+    if (!idPettier) {
+      alert("No se encontró ID de usuario (Pettier). Inicia sesión nuevamente.");
+      return;
+    }
+
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:4000/api/serviciosOfrecidos", {
+
+      // Formateamos las fechas antes de enviarlas
+      const formattedFechaInicio = formatDate(nuevoServicio.fechaInicio);
+      const formattedFechaFinal = formatDate(nuevoServicio.fechaFinal);
+
+      const res = await fetch("http://localhost:4000/api/servicioOfrecido", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(nuevoServicio),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...nuevoServicio,
+          fechaInicio: formattedFechaInicio,
+          fechaFinal: formattedFechaFinal,
+          idPettier: Number(idPettier),
+        }),
       });
-      if (!res.ok) throw new Error("Error al crear el servicio");
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Error al crear el servicio");
+      }
       fetchServicios();
-      setNuevoServicio({ id: 0, nombreServicio: "", descripcion: "", precio: 0 });
+      resetForm();
     } catch (error) {
       console.error(error);
+      alert(error);
     } finally {
       setLoading(false);
     }
@@ -60,25 +120,33 @@ const ServiciosOfrecidosComponent = () => {
 
   const handleEdit = (servicio: Servicio) => {
     setEditando(true);
-    setServicioAEditar(servicio);
     setNuevoServicio(servicio);
   };
 
   const handleUpdate = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`http://localhost:4000/api/serviciosOfrecidos/${nuevoServicio.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(nuevoServicio),
-      });
+
+      // Formateamos las fechas antes de enviarlas
+      const formattedFechaInicio = formatDate(nuevoServicio.fechaInicio);
+      const formattedFechaFinal = formatDate(nuevoServicio.fechaFinal);
+
+      const res = await fetch(
+        `http://localhost:4000/api/servicioOfrecido/${nuevoServicio.idActividad}`, // Utilizamos nuevoServicio.idActividad para hacer el PUT
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ...nuevoServicio,
+            fechaInicio: formattedFechaInicio,
+            fechaFinal: formattedFechaFinal,
+          }),
+        }
+      );
+
       if (!res.ok) throw new Error("Error al actualizar el servicio");
       fetchServicios();
-      setNuevoServicio({ id: 0, nombreServicio: "", descripcion: "", precio: 0 });
-      setEditando(false);
-      setServicioAEditar(null);
+      resetForm();
     } catch (error) {
       console.error(error);
     } finally {
@@ -89,9 +157,12 @@ const ServiciosOfrecidosComponent = () => {
   const handleDelete = async (id: number) => {
     try {
       setLoading(true);
-      const res = await fetch(`http://localhost:4000/api/serviciosOfrecidos/${id}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `http://localhost:4000/api/servicioOfrecido/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
       if (!res.ok) throw new Error("Error al eliminar el servicio");
       fetchServicios();
     } catch (error) {
@@ -101,49 +172,94 @@ const ServiciosOfrecidosComponent = () => {
     }
   };
 
+  const resetForm = () => {
+    setNuevoServicio({
+      idActividad: 0,
+      tipoActividad: "",
+      precio: 0,
+      fechaInicio: "",
+      fechaFinal: "",
+      animalesAdmitidos: "",
+    });
+    setEditando(false);
+  };
+
   useEffect(() => {
     fetchServicios();
   }, []);
 
   return (
     <div style={{ marginTop: "20px", fontFamily: "Inter, sans-serif" }}>
-      <h3 style={{ textAlign: "center", fontSize: "24px" }}>
-        Servicios Ofrecidos
-      </h3>
+      <h3 style={{ textAlign: "center", fontSize: "24px" }}>Servicios Ofrecidos</h3>
 
       <div style={{ marginBottom: "20px" }}>
+        <label>Tipo de Actividad</label>
         <input
           type="text"
-          name="nombreServicio"
-          placeholder="Nombre del Servicio"
-          value={nuevoServicio.nombreServicio}
+          name="tipoActividad"
+          value={nuevoServicio.tipoActividad}
           onChange={handleChange}
           disabled={loading}
           style={{ padding: "0.5rem", width: "100%", marginBottom: "10px" }}
         />
-        <textarea
-          name="descripcion"
-          placeholder="Descripción"
-          value={nuevoServicio.descripcion}
-          onChange={handleChange}
-          disabled={loading}
-          style={{ padding: "0.5rem", width: "100%", marginBottom: "10px", height: "80px" }}
-        />
+
+        <label>Precio</label>
         <input
           type="number"
           name="precio"
-          placeholder="Precio"
           value={nuevoServicio.precio}
           onChange={handleChange}
           disabled={loading}
           style={{ padding: "0.5rem", width: "100%", marginBottom: "10px" }}
         />
+
+        <label>Fecha de Inicio</label>
+        <input
+          type="date"
+          name="fechaInicio"
+          value={formatDateForInput(nuevoServicio.fechaInicio)}
+          onChange={handleChange}
+          disabled={loading}
+          style={{ padding: "0.5rem", width: "100%", marginBottom: "10px" }}
+        />
+
+        <label>Fecha Final</label>
+        <input
+          type="date"
+          name="fechaFinal"
+          value={formatDateForInput(nuevoServicio.fechaFinal)}
+          onChange={handleChange}
+          disabled={loading}
+          style={{ padding: "0.5rem", width: "100%", marginBottom: "10px" }}
+        />
+
+        <label>Animales Admitidos</label>
+        <input
+          type="text"
+          name="animalesAdmitidos"
+          value={nuevoServicio.animalesAdmitidos}
+          onChange={handleChange}
+          disabled={loading}
+          style={{ padding: "0.5rem", width: "100%", marginBottom: "10px" }}
+        />
+
         <button
           onClick={editando ? handleUpdate : handleCreate}
           disabled={loading}
-          style={{ padding: "0.7rem", width: "100%", backgroundColor: "#4CAF50", color: "white", border: "none", borderRadius: "5px" }}
+          style={{
+            padding: "0.7rem",
+            width: "100%",
+            backgroundColor: "#4CAF50",
+            color: "white",
+            border: "none",
+            borderRadius: "5px",
+          }}
         >
-          {loading ? "Guardando..." : editando ? "Actualizar Servicio" : "Crear Servicio"}
+          {loading
+            ? "Guardando..."
+            : editando
+            ? "Actualizar Servicio"
+            : "Crear Servicio"}
         </button>
       </div>
 
@@ -154,7 +270,7 @@ const ServiciosOfrecidosComponent = () => {
           <ul style={{ listStyleType: "none", padding: 0 }}>
             {servicios.map((servicio) => (
               <li
-                key={servicio.id}
+                key={servicio.idActividad}
                 style={{
                   padding: "10px",
                   border: "1px solid #ddd",
@@ -165,9 +281,12 @@ const ServiciosOfrecidosComponent = () => {
                 }}
               >
                 <div>
-                  <strong>{servicio.nombreServicio}</strong>
-                  <p>{servicio.descripcion}</p>
+                  <strong>{servicio.tipoActividad}</strong>
+                  <p>id: {servicio.idActividad}</p>
                   <p>Precio: {servicio.precio} 🪙</p>
+                  <p>Fecha Inicio: {servicio.fechaInicio}</p>
+                  <p>Fecha Final: {servicio.fechaFinal}</p>
+                  <p>Animales admitidos: {servicio.animalesAdmitidos}</p>
                 </div>
                 <div>
                   <button
@@ -184,7 +303,7 @@ const ServiciosOfrecidosComponent = () => {
                     Editar
                   </button>
                   <button
-                    onClick={() => handleDelete(servicio.id)}
+                    onClick={() => handleDelete(servicio.idActividad)}
                     style={{
                       padding: "0.5rem",
                       margin: "5px",
