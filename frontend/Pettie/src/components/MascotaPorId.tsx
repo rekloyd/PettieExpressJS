@@ -10,8 +10,8 @@ interface Mascota {
   paseoManana: boolean;
   paseoMedioDia: boolean;
   paseoTarde: boolean;
-  razaPerro: string;
-  razaGato: string;
+  razaPerro: string | null;
+  razaGato: string | null;
 }
 
 const MascotaPorId = () => {
@@ -58,7 +58,7 @@ const MascotaPorId = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
-  
+
     if (type === "checkbox") {
       const checked = (e.target as HTMLInputElement).checked;
       setFormData((prev) => ({ ...prev, [name]: checked }));
@@ -70,25 +70,25 @@ const MascotaPorId = () => {
   const handleSaveClick = async (idMascota: number) => {
     try {
       if (editIndex === null) return;
-  
+
       const res = await fetch(`http://localhost:4000/api/mascotas/${idMascota}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-  
+
       const text = await res.text();
       console.log("STATUS:", res.status);
       console.log("BODY:", text);
-  
+
       if (!res.ok) throw new Error("Error al actualizar la mascota");
-  
+
       setMascotas((prev) => {
         const updated = [...prev];
         updated[editIndex] = { ...updated[editIndex], ...formData };
         return updated;
       });
-  
+
       setEditIndex(null);
     } catch (err) {
       console.error(err);
@@ -98,12 +98,13 @@ const MascotaPorId = () => {
 
   if (loading) {
     return (
-      <h2 style={{ 
-        fontFamily: "Madimi One, cursive", 
-        marginTop: "200px", 
-        textAlign: "center", 
-        color: "#6c757d" 
-      }}>
+      <h2
+        style={{
+          fontFamily: "Madimi One, cursive",
+          marginTop: "200px",
+          textAlign: "center",
+        }}
+      >
         Cargando mascotas...
       </h2>
     );
@@ -111,45 +112,40 @@ const MascotaPorId = () => {
 
   if (error) {
     return (
-      <h2 style={{ 
-        color: "#dc3545", 
-        textAlign: "center", 
-        fontWeight: "bold",
-        marginTop: "200px"
-      }}>
-        {error}
-      </h2>
+      <h2 style={{ color: "red", textAlign: "center" }}>{error}</h2>
     );
   }
 
   return (
-    <div style={{
-      fontFamily: "Inter, sans-serif",
-      maxWidth: 800,
-      margin: "80px auto",
-      padding: "2.5rem 3rem",
-      backgroundColor: "#fefefe",
-      borderRadius: 20
-    }}>
-      <h2 style={{
-        fontFamily: "Madimi One, cursive",
-        fontSize: 36,
-        marginBottom: "2rem",
-        textAlign: "center",
-        color: "#343a40",
-        textShadow: "1px 1px 2px rgba(0,0,0,0.1)"
-      }}>
+    <div
+      style={{
+        fontFamily: "Inter, sans-serif",
+        maxWidth: 800,
+        margin: "80px auto",
+        padding: "2rem",
+        backgroundColor: "#fff",
+        borderRadius: 20,
+      }}
+    >
+      <h2
+        style={{
+          fontFamily: "Madimi One, cursive",
+          fontSize: 32,
+          marginBottom: "1.5rem",
+          textAlign: "center",
+        }}
+      >
         Mis Mascotas
       </h2>
       <ul style={{ listStyle: "none", padding: 0 }}>
         {mascotas.map((m, i) => (
-          <li key={i} style={{
-            borderBottom: i !== mascotas.length - 1 ? "1px solid #ddd" : "none",
-            padding: "1.5rem 0",
-            transition: "background-color 0.3s ease",
-            borderRadius: editIndex === i ? 12 : 0,
-            backgroundColor: editIndex === i ? "#f0f8ff" : "transparent"
-          }}>
+          <li
+            key={i}
+            style={{
+              padding: "1rem 0",
+              borderBottom: i !== mascotas.length - 1 ? "1px solid #ddd" : "none",
+            }}
+          >
             {editIndex === i ? (
               <>
                 <input
@@ -157,142 +153,124 @@ const MascotaPorId = () => {
                   value={formData.nombreMascota || ""}
                   onChange={handleInputChange}
                   placeholder="Nombre"
-                  style={inputStyle}
-                  autoFocus
                 />
+                <br />
                 <input
                   name="tamanoMascota"
                   value={formData.tamanoMascota || ""}
                   onChange={handleInputChange}
                   placeholder="Tamaño"
-                  style={inputStyle}
                 />
+                <br />
                 <input
                   name="cuidadosEspeciales"
                   value={formData.cuidadosEspeciales || ""}
                   onChange={handleInputChange}
                   placeholder="Cuidados especiales"
-                  style={inputStyle}
                 />
-                <div style={{ marginBottom: 12 }}>
-                  <label style={checkboxLabelStyle}>
-                    <input
-                      type="checkbox"
-                      name="paseoManana"
-                      checked={formData.paseoManana || false}
-                      onChange={handleInputChange}
-                      style={{ marginRight: 8 }}
-                    />
-                    Paseo Mañana
-                  </label>
-                  <label style={checkboxLabelStyle}>
-                    <input
-                      type="checkbox"
-                      name="paseoMedioDia"
-                      checked={formData.paseoMedioDia || false}
-                      onChange={handleInputChange}
-                      style={{ marginRight: 8 }}
-                    />
-                    Paseo Mediodía
-                  </label>
-                  <label style={checkboxLabelStyle}>
-                    <input
-                      type="checkbox"
-                      name="paseoTarde"
-                      checked={formData.paseoTarde || false}
-                      onChange={handleInputChange}
-                      style={{ marginRight: 8 }}
-                    />
-                    Paseo Tarde
-                  </label>
-                </div>
+                <br />
+                <label>
+                  <input
+                    type="checkbox"
+                    name="paseoManana"
+                    checked={formData.paseoManana || false}
+                    onChange={handleInputChange}
+                  />{" "}
+                  Paseo Mañana
+                </label>
+                <br />
+                <label>
+                  <input
+                    type="checkbox"
+                    name="paseoMedioDia"
+                    checked={formData.paseoMedioDia || false}
+                    onChange={handleInputChange}
+                  />{" "}
+                  Paseo Mediodía
+                </label>
+                <br />
+                <label>
+                  <input
+                    type="checkbox"
+                    name="paseoTarde"
+                    checked={formData.paseoTarde || false}
+                    onChange={handleInputChange}
+                  />{" "}
+                  Paseo Tarde
+                </label>
+                <br />
                 <input
                   name="razaPerro"
                   value={formData.razaPerro || ""}
                   onChange={handleInputChange}
                   placeholder="Raza Perro"
-                  style={inputStyle}
                 />
+                <br />
                 <input
                   name="razaGato"
                   value={formData.razaGato || ""}
                   onChange={handleInputChange}
                   placeholder="Raza Gato"
-                  style={inputStyle}
                 />
-                <div style={{ marginTop: 16 }}>
-                  <button
-                    onClick={() => handleSaveClick(m.idMascota)}
-                    style={{ ...buttonStyle, backgroundColor: "#28a745", marginRight: 12 }}
-                  >
-                    Guardar
-                  </button>
-                  <button
-                    onClick={() => setEditIndex(null)}
-                    style={{ ...buttonStyle, backgroundColor: "#dc3545" }}
-                  >
-                    Cancelar
-                  </button>
-                </div>
+                <br />
+                <button onClick={() => handleSaveClick(m.idMascota)}>
+                  Guardar
+                </button>
+                <button onClick={() => setEditIndex(null)}>Cancelar</button>
               </>
             ) : (
               <>
-                <p><strong>Nombre:</strong> {m.nombreMascota}</p>
-                <p><strong>Tamaño:</strong> {m.tamanoMascota}</p>
-                <p><strong>Cuidados especiales:</strong> {m.cuidadosEspeciales || <em style={{color:"#6c757d"}}>Ninguno</em>}</p>
-                <p><strong>Paseos:</strong></p>
-                <ul style={{ paddingLeft: "1.2rem", marginTop: 0, marginBottom: 10 }}>
-                  <li>Mañana: <span style={{ color: m.paseoManana ? "#198754" : "#dc3545" }}>{m.paseoManana ? "Sí" : "No"}</span></li>
-                  <li>Mediodía: <span style={{ color: m.paseoMedioDia ? "#198754" : "#dc3545" }}>{m.paseoMedioDia ? "Sí" : "No"}</span></li>
-                  <li>Tarde: <span style={{ color: m.paseoTarde ? "#198754" : "#dc3545" }}>{m.paseoTarde ? "Sí" : "No"}</span></li>
-                </ul>
-                <p><strong>Raza (Perro):</strong> {m.razaPerro || <em style={{color:"#6c757d"}}>No especificada</em>}</p>
-                <p><strong>Raza (Gato):</strong> {m.razaGato || <em style={{color:"#6c757d"}}>No especificada</em>}</p>
-                <button
-                  onClick={() => handleEditClick(i)}
-                  style={{ ...buttonStyle, backgroundColor: "#0d6efd", marginTop: 8 }}
-                >
-                  Editar
-                </button>
+                <p>
+                  <strong>Nombre:</strong> {m.nombreMascota}
+                </p>
+                <p>
+                  <strong>Tamaño:</strong> {m.tamanoMascota}
+                </p>
+                <p>
+                  <strong>Cuidados especiales:</strong> {m.cuidadosEspeciales}
+                </p>
+                <p>
+                  <strong>Paseos:</strong>
+                  <ul>
+                    <li>Mañana: {m.paseoManana ? "Sí" : "No"}</li>
+                    <li>Mediodía: {m.paseoMedioDia ? "Sí" : "No"}</li>
+                    <li>Tarde: {m.paseoTarde ? "Sí" : "No"}</li>
+                  </ul>
+                </p>
+                {m.razaPerro ? (
+                  <p>
+                    <strong>Raza (Perro):</strong> {m.razaPerro}
+                  </p>
+                ) : null}
+                {m.razaGato ? (
+                  <p>
+                    <strong>Raza (Gato):</strong> {m.razaGato}
+                  </p>
+                ) : null}
+                <button onClick={() => handleEditClick(i)}>Editar</button>
               </>
             )}
           </li>
         ))}
       </ul>
+      <div style={{ textAlign: "center", marginTop: "2rem" }}>
+        <button
+          style={{
+            padding: "0.5rem 1rem",
+            fontSize: "1rem",
+            borderRadius: 8,
+            cursor: "pointer",
+            backgroundColor: "#007bff",
+            color: "#fff",
+            border: "none",
+          }}
+          onClick={() => navigate("/anadirMascota")}
+        >
+          Añadir Mascota
+        </button>
+      </div>
     </div>
   );
-};
-
-const inputStyle: React.CSSProperties = {
-  width: "100%",
-  padding: "10px 14px",
-  marginBottom: 14,
-  fontSize: 16,
-  borderRadius: 8,
-  border: "1.5px solid #ccc",
-  outlineColor: "#0d6efd",
-  transition: "border-color 0.3s ease",
-};
-
-const checkboxLabelStyle: React.CSSProperties = {
-  display: "inline-flex",
-  alignItems: "center",
-  marginRight: 20,
-  fontSize: 15,
-  color: "#495057",
-  cursor: "pointer",
-  userSelect: "none"
-};
-
-const buttonStyle: React.CSSProperties = {
-  color: "#fff",
-  fontWeight: "600",
-  padding: "10px 18px",
-  fontSize: 16,
-  borderRadius: 8,
-  border: "none",
-  cursor: "pointer",
-  transition: "background-color 0.3s ease",
 };
 
 export default MascotaPorId;
