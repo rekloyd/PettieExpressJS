@@ -43,26 +43,40 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ onSearch }) => {
           </h2>
         <fieldset className="form-group">
           <legend className="form-label">Tamaño de tu mascota</legend>
-          <div className="d-flex gap-3 flex-wrap">
-            {[{ label: 'Pequeño (0–7kg)', icon: '🐱', value: 'pequeno' },
-              { label: 'Mediano (7–18kg)', icon: '🐶', value: 'mediano' },
-              { label: 'Grande (+45kg)', icon: '🐕', value: 'grande' }].map((opt) => (
-                <label
-                  key={opt.value}
-                  className={`sizes__option ${tamanoMascota === opt.value ? 'selected' : ''} p-2 border rounded`}
-                >
-                  <input
-                    type="radio"
-                    name="size"
-                    value={opt.value}
-                    onChange={() => handleSizeChange(opt.value)}
-                    className="d-none"
-                  />
-                  <span className="sizes__icon fs-3">{opt.icon}</span>
-                  <span className="sizes__label">{opt.label}</span>
-                </label>
-            ))}
-          </div>
+<div className="d-flex gap-3 flex-wrap">
+  {[
+    { label: 'Pequeño (0–7kg)', icon: '🐱', value: 'pequeno' },
+    { label: 'Mediano (7–18kg)', icon: '🐶', value: 'mediano' },
+    { label: 'Grande (+45kg)', icon: '🐕', value: 'grande' },
+  ].map((opt) => {
+    const isSelected = tamanoMascota === opt.value;
+
+      return (
+        <label
+          key={opt.value}
+          className={`sizes__option p-2 border rounded`}
+          style={{
+            cursor: 'pointer',
+            border: isSelected ? '1px solid #8B4513' : '1px solid #ccc',
+            boxShadow: isSelected ? '0 4px 8px rgba(139, 69, 19, 0.4)' : 'none',
+            transition: 'all 0.2s ease-in-out',
+            backgroundColor: isSelected ? '#fefaf6' : '#fff',
+          }}
+        >
+          <input
+            type="radio"
+            name="size"
+            value={opt.value}
+            onChange={() => handleSizeChange(opt.value)}
+            className="d-none"
+          />
+          <span className="sizes__icon fs-3">{opt.icon}</span>
+          <span className="sizes__label ms-2">{opt.label}</span>
+        </label>
+      );
+    })}
+  </div>
+
 
           {/* Precio */}
           <div className="mb-3">
