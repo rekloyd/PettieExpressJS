@@ -250,7 +250,6 @@ const Dashboard = () => {
         <span />
       </div>
 
-      {usuario.role === "pettier" && <ServiciosOfrecidosComponent />}
 
 
       {usuario.role === "pettier" && <ServiciosOfrecidosComponent /> }

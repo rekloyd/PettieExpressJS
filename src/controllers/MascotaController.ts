@@ -42,6 +42,7 @@ export const getMascotasPorIdOwner = async (req: Request, res: Response): Promis
   try {
     const db = await connectDB();
     const [rows] = await db.query('SELECT * FROM Mascota WHERE idOwner = ? ', [idOwner]);
+    console.log(`SELECT * FROM Mascota WHERE idOwner = ${idOwner}`)
     res.json(rows);
   } catch (err) {
     console.error(err);
