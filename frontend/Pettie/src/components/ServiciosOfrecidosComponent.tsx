@@ -49,9 +49,13 @@ const ServiciosOfrecidosComponent = () => {
     const month = (dateObj.getMonth() + 1).toString().padStart(2, "0");
     const day = dateObj.getDate().toString().padStart(2, "0");
 
-    return `${year}-${month}-${day}`;
+    return `${day}/${month}/${year}`;
   };
 
+
+
+
+  
   const fetchServicios = async () => {
     try {
       const res = await fetch("http://localhost:4000/api/serviciosOfrecidos");
@@ -277,8 +281,8 @@ const ServiciosOfrecidosComponent = () => {
                   <strong>{servicio.tipoActividad}</strong>
                   <p>id: {servicio.idActividad}</p>
                   <p>Precio: {servicio.precio} 🪙</p>
-                  <p>Fecha Inicio: {servicio.fechaInicio}</p>
-                  <p>Fecha Final: {servicio.fechaFinal}</p>
+                  <p>Fecha Inicio: {formatDateForInput(servicio.fechaInicio)}</p>
+                  <p>Fecha Final: {formatDateForInput(servicio.fechaFinal)}</p>
                   <p>Animales admitidos: {servicio.animalesAdmitidos}</p>
                 </div>
                 <div>
