@@ -75,7 +75,7 @@ const Navbar: React.FC = () => {
                 <Link className="nav-link" to="/nosotros">Sobre Nosotros</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/acerca">Conviértete en Pettier</Link>
+                <Link className="nav-link" to="/blog">Blog</Link>
               </li>
             </ul>
 
