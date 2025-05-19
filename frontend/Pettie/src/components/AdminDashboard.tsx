@@ -1,4 +1,3 @@
-// src/components/AdminDashboard.tsx
 import React, { useEffect, useState } from 'react';
 
 type Usuario = {
@@ -47,10 +46,8 @@ const AdminDashboard: React.FC = () => {
 
       await fetch(url, {
         method,
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(form)
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
       });
 
       setForm({});
@@ -71,7 +68,7 @@ const AdminDashboard: React.FC = () => {
   const handleDelete = async (id: number) => {
     try {
       await fetch(`http://localhost:4000/api/usuario/${id}`, {
-        method: 'DELETE'
+        method: 'DELETE',
       });
       fetchUsuarios();
     } catch (err) {
@@ -80,65 +77,197 @@ const AdminDashboard: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>Admin Dashboard</h1>
+    <div
+      style={{
+        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+        backgroundColor: '#f5f5f5',
+        minHeight: '100vh',
+        margin: 0,
+        padding: '40px 20px',
+        display: 'flex',
+        justifyContent: 'center',
+      }}
+    >
+      <div
+        style={{
+          maxWidth: 800,
+          width: '100%',
+          backgroundColor: 'white',
+          borderRadius: 10,
+          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+          padding: 20,
+        }}
+      >
+        <h1 style={{ textAlign: 'center', color: '#333' }}>Admin Dashboard</h1>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          name="nombreUsuario"
-          placeholder="Nombre"
-          value={form.nombreUsuario || ''}
-          onChange={handleInputChange}
-          required
-        />
-        <input
-          name="emailUsuario"
-          placeholder="Email"
-          type="email"
-          value={form.emailUsuario || ''}
-          onChange={handleInputChange}
-          required
-        />
-        <input
-          name="contrasenaUsuario"
-          placeholder="Contraseña"
-          type="password"
-          value={form.contrasenaUsuario || ''}
-          onChange={handleInputChange}
-        />
-        <input
-          name="cantidadPettieCoins"
-          placeholder="PettieCoins"
-          type="number"
-          value={form.cantidadPettieCoins || 0}
-          onChange={handleInputChange}
-        />
-        <select
-          name="role"
-          value={form.role || ''}
-          onChange={handleInputChange}
-          required
+        <form
+          onSubmit={handleSubmit}
+          style={{
+            display: 'grid',
+            gap: 15,
+            marginBottom: 30,
+          }}
         >
-          <option value="">Selecciona rol</option>
-          <option value="admin">Admin</option>
-          <option value="owner">Owner</option>
-          <option value="pettier">Pettier</option>
-        </select>
-        <button type="submit">{isEditing ? 'Actualizar' : 'Crear'} Usuario</button>
-      </form>
+          <input
+            name="nombreUsuario"
+            placeholder="Nombre"
+            value={form.nombreUsuario || ''}
+            onChange={handleInputChange}
+            required
+            style={{
+              padding: 10,
+              borderRadius: 6,
+              border: '1px solid #ccc',
+              fontSize: '1rem',
+              width: '100%',
+            }}
+          />
+          <input
+            name="emailUsuario"
+            placeholder="Email"
+            type="email"
+            value={form.emailUsuario || ''}
+            onChange={handleInputChange}
+            required
+            style={{
+              padding: 10,
+              borderRadius: 6,
+              border: '1px solid #ccc',
+              fontSize: '1rem',
+              width: '100%',
+            }}
+          />
+          <input
+            name="contrasenaUsuario"
+            placeholder="Contraseña"
+            type="password"
+            value={form.contrasenaUsuario || ''}
+            onChange={handleInputChange}
+            style={{
+              padding: 10,
+              borderRadius: 6,
+              border: '1px solid #ccc',
+              fontSize: '1rem',
+              width: '100%',
+            }}
+          />
+          <input
+            name="cantidadPettieCoins"
+            placeholder="PettieCoins"
+            type="number"
+            value={form.cantidadPettieCoins || 0}
+            onChange={handleInputChange}
+            style={{
+              padding: 10,
+              borderRadius: 6,
+              border: '1px solid #ccc',
+              fontSize: '1rem',
+              width: '100%',
+            }}
+          />
+          <select
+            name="role"
+            value={form.role || ''}
+            onChange={handleInputChange}
+            required
+            style={{
+              padding: 10,
+              borderRadius: 6,
+              border: '1px solid #ccc',
+              fontSize: '1rem',
+              width: '100%',
+              backgroundColor: 'white',
+            }}
+          >
+            <option value="">Selecciona rol</option>
+            <option value="admin">Admin</option>
+            <option value="owner">Owner</option>
+            <option value="pettier">Pettier</option>
+          </select>
 
-      <hr />
+          <button
+            type="submit"
+            style={{
+              backgroundColor: '#007bff',
+              color: 'white',
+              padding: 10,
+              border: 'none',
+              borderRadius: 6,
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              transition: 'background-color 0.3s',
+            }}
+            onMouseOver={e => (e.currentTarget.style.backgroundColor = '#0056b3')}
+            onMouseOut={e => (e.currentTarget.style.backgroundColor = '#007bff')}
+          >
+            {isEditing ? 'Actualizar Usuario' : 'Crear Usuario'}
+          </button>
+        </form>
 
-      <h2>Lista de Usuarios</h2>
-      <ul>
-        {usuarios.map((usuario) => (
-          <li key={usuario.idUsuario}>
-            <strong>{usuario.nombreUsuario}</strong> | {usuario.emailUsuario} | {usuario.role} | {usuario.cantidadPettieCoins} coins
-            <button onClick={() => handleEdit(usuario)}>Editar</button>
-            <button onClick={() => handleDelete(usuario.idUsuario)}>Eliminar</button>
-          </li>
-        ))}
-      </ul>
+        <h2 style={{ textAlign: 'center', color: '#333' }}>Lista de Usuarios</h2>
+        <ul style={{ listStyle: 'none', padding: 0 }}>
+          {usuarios.map((usuario) => (
+            <li
+              key={usuario.idUsuario}
+              style={{
+                backgroundColor: '#fafafa',
+                border: '1px solid #ddd',
+                borderRadius: 6,
+                padding: 15,
+                marginBottom: 10,
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <div>
+                <p style={{ margin: '4px 0', fontWeight: 'bold' }}>
+                  {usuario.nombreUsuario} · {usuario.role}
+                </p>
+                <p style={{ margin: '4px 0' }}>{usuario.emailUsuario}</p>
+                <p style={{ margin: '4px 0' }}>{usuario.cantidadPettieCoins} PettieCoins</p>
+              </div>
+              <div>
+                <button
+                  onClick={() => handleEdit(usuario)}
+                  style={{
+                    backgroundColor: '#ffc107',
+                    color: 'black',
+                    border: 'none',
+                    borderRadius: 6,
+                    padding: '8px 12px',
+                    cursor: 'pointer',
+                    marginRight: 10,
+                    fontWeight: 'bold',
+                    transition: 'background-color 0.3s',
+                  }}
+                  onMouseOver={e => (e.currentTarget.style.backgroundColor = '#e0a800')}
+                  onMouseOut={e => (e.currentTarget.style.backgroundColor = '#ffc107')}
+                >
+                  Editar
+                </button>
+                <button
+                  onClick={() => handleDelete(usuario.idUsuario)}
+                  style={{
+                    backgroundColor: '#dc3545',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: 6,
+                    padding: '8px 12px',
+                    cursor: 'pointer',
+                    fontWeight: 'bold',
+                    transition: 'background-color 0.3s',
+                  }}
+                  onMouseOver={e => (e.currentTarget.style.backgroundColor = '#c82333')}
+                  onMouseOut={e => (e.currentTarget.style.backgroundColor = '#dc3545')}
+                >
+                  Eliminar
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
