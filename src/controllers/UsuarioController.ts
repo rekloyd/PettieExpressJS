@@ -511,3 +511,41 @@ export const sumarPettieCoins = async (req: Request, res: Response): Promise<voi
     res.status(500).json({ error: "Error al actualizar PettieCoins" });
   }
 };
+
+
+// Obtener solo el rol de un usuario por su ID
+export const getRolUsuarioPorID = async (req: Request, res: Response): Promise<void> => {
+  const idUsuario = req.params.idUsuario;
+
+  if (!idUsuario) {
+    res.status(400).json({ error: 'Falta el idUsuario en parámetros' });
+    return;
+  }
+
+  try {
+    const db = await connectDB();
+    const [rows]: any = await db.query(
+      `SELECT role FROM Usuario WHERE idUsuario = ?`,
+      [idUsuario]
+    );
+
+    if (!rows || rows.length === 0) {
+      res.status(404).json({ error: 'Usuario no encontrado' });
+      return;
+    }
+
+    const role = rows[0].role;
+
+    // Validar que el role esté dentro de los permitidos en TipoUsuario (según enum)
+    if (!(role.toUpperCase() in TipoUsuario)) {
+      res.status(400).json({ error: 'Role de usuario no válido' });
+      return;
+    }
+
+    // Enviar el rol en minúsculas (como en frontend)
+    res.json({ role: role.toLowerCase() });
+  } catch (err) {
+    console.error('Error al obtener rol de usuario:', err);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
