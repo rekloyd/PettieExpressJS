@@ -1,7 +1,7 @@
 import React from 'react';
 import ServicioCard from './ServicioCard';
 import type { Servicio } from '../interfaces/interfaces';
-import '../styles/resultcomponent.css'; // Importa el CSS externo
+import '../styles/resultcomponent.css';
 
 interface ResultComponentProps {
   resultados: Servicio[];
