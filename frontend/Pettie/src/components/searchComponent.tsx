@@ -74,9 +74,9 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ onSearch }) => {
               <option value="" disabled>
                 Elige el precio de la actividad
               </option>
-              <option value="10">10€</option>
-              <option value="15">15€</option>
-              <option value="20">20€</option>
+              <option value="10">10PC</option>
+              <option value="15">15PC</option>
+              <option value="20">20PC</option>
             </select>
           </div>
         </fieldset>
