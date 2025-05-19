@@ -156,47 +156,49 @@ const DashboardCompleto = () => {
     );
   }
 
-  const contratarServicio = async (servicio: ServicioOfrecido,idMascota: string,idOwner: string) => {
-
-    //Que al tener exito la reserva reste los pettieCoins
-
-    const url = 'http://localhost:4000/api/servicio/';
-
+  const contratarServicio = async (
+    servicio: ServicioOfrecido,
+    idMascota: string
+  ) => {
+    const idOwner = sessionStorage.getItem('idUsuario');
+    if (!idOwner) {
+      alert('No se ha encontrado sesión de usuario.');
+      return;
+    }
+  
+    const url = 'http://localhost:4000/api/servicio/contratar';
     const fechaInicio = formatearFechaToSQL(servicio.fechaInicio);
-    const fechaFinal = formatearFechaToSQL(servicio.fechaFinal);
-
-    console.log("Inicio:", fechaInicio);
-    console.log("Final:", fechaFinal);
-    console.log("idOwner:" + idOwner);
-    console.log("idMascota:" + idMascota);
+    const fechaFinal  = formatearFechaToSQL(servicio.fechaFinal);
+  
     try {
       const body = {
-        idOwner:idOwner,
-        idPettier:servicio.idPettier,
-        idMascota:idMascota,
+        idOwner,
+        idPettier: servicio.idPettier,
+        idMascota,
         tipoActividad: servicio.tipoActividad,
-        fechaInicio:fechaInicio,
-        fechaFinal:fechaFinal,
-        precio:servicio.precio,
-        finalizado:0
+        fechaInicio,
+        fechaFinal,
+        precio: servicio.precio
       };
-
+  
       const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
       });
-
-      if (!response.ok) throw new Error("Error al contratar el servicio");
-
-      alert("Servicio contratado con éxito");
-
-      //restarPettieCoins();
-
-    } catch (error) {
-      console.error("Error en contratarServicio:", error);
+  
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Error al contratar el servicio');
+      }
+  
+      alert('Servicio contratado y pettieCoins descontados con éxito');
+    } catch (error: unknown) {
+      console.error(error);
+      alert(error);
     }
   };
+  
 
   useEffect(() => {
     const link = document.createElement("link");

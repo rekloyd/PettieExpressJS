@@ -11,6 +11,7 @@ const router = Router();
 
 // Ruta para devolver imagen según rol || Se podra aprovechar para dashboard posteriormente
 router.get("/usuarios/filter", getUsuariosFiltrados);
+
 router.get('/usuario/:id',getUsuarioPorID);
     
 router.post('/usuario/', insertUsuario)

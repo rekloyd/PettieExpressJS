@@ -13,6 +13,7 @@ import Dashboard from "./components/Dashboard";
 import Checkout from "./components/Checkout";
 import DashboardPorId from "./components/DashboardCompleto";
 import Blog from "./components/Blog";
+import AdminDashboard from "./components/AdminDashboard";
 
 function App() {
   const [refreshNavbarKey, setRefreshNavbarKey] = useState(0);
@@ -35,6 +36,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/pasarelaDePago" element={<Checkout />} />
         <Route path="/blog" element={<Blog />} />
+        <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/dashboard/:id" element={<DashboardPorId />} />
       </Routes>
       <Footer />
