@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { loginController } from './controllers/loginController';
 import connectDB from './db/connection';
-import { crearUsuariosPorDefecto } from './utils/crearUsuariosPorDefecto';
+import { crearUsuariosPorDefecto, crearTresPettierPorDefecto } from './utils/crearUsuariosPorDefecto';
 import usuarioRoutes from './routes/usuarioRoutes';
 import mascotaRoutes from './routes/mascotaRoutes';
 import servicioRoutes from './routes/servicioRoutes'; 
@@ -53,4 +53,5 @@ app.listen(PORT, async () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
   const db = await connectDB();
   await crearUsuariosPorDefecto(db);
+  await crearTresPettierPorDefecto(db);
 });

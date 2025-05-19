@@ -1,4 +1,3 @@
-// src/controllers/loginController.ts
 import { Router, Request, Response, NextFunction } from "express";
 import path from "path";
 import login from "../services/loginService";
