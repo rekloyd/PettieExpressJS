@@ -1,88 +1,212 @@
+/* Reset box-sizing, margin, padding */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Navbar general */
+.pettie-navbar {
+  border-bottom: 1px solid #d3d3d3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Contenedor general dentro del collapse para distribuir espacio */
+.pettie-navbar > .container-fluid > .collapse > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 15px;
+}
+
+/* Logo + título */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
 .pettie-navbar .pettie-title {
-    font-family: 'Madimi One', cursive;
-    font-size: 35px;
-    color: black;
-  }
-  
-  .pettie-navbar .nav-link {
-    font-family: 'Inter', sans-serif;
-    font-size: 20px;
-    color: black;
-  }
-  
-  *{
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  font-family: 'Madimi One', cursive;
+  font-size: 35px;
+  color: black;
+  white-space: nowrap;
+}
+
+/* Nav links container */
+.navbar-nav {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  justify-content: center;
+  flex-grow: 1;
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.navbar-nav .nav-item {
+  flex-shrink: 0;
+}
+
+/* Nav links */
+.pettie-navbar .nav-link {
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  color: black;
+  text-decoration: none;
+  position: relative;
+  padding: 5px 0;
+  transition: color 0.3s;
+}
+
+.pettie-navbar .nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 5px;
+  width: 0;
+  height: 2px;
+  background-color: black;
+  transition: width 0.3s ease;
+}
+
+.pettie-navbar .nav-link:hover::after {
+  width: 100%;
+}
+
+/* Botones login/register o dashboard/logout */
+.d-flex.gap-3.align-items-center {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* Botón */
+.btnR {
+  color: black;
+  text-decoration: none;
+  border: 1px solid black;
+  padding: 12px 25px;
+  font-family: 'Inter', sans-serif;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.7s ease;
+  overflow: hidden;
+  border-radius: 5px;
+  font-size: 18px;
+  white-space: nowrap;
+}
+
+.btnR::before {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 0;
+  top: 0;
+  left: -40px;
+  transform: skewX(45deg);
+  background-color: #614117;
+  z-index: -1;
+  transition: width 0.7s ease;
+}
+
+.btnR:hover::before {
+  width: 160%;
+}
+
+/* Login link extra margin */
+.margin-login {
+  margin-left: 10px !important;
+  white-space: nowrap;
+}
+
+/* Botón hamburguesa - oculto en desktop */
+.navbar-toggler {
+  display: none;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 8px;
+  font-size: 24px;
+}
+
+/* Mostrar botón hamburguesa en móvil (menor a 992px) */
+@media (max-width: 991px) {
+  .navbar-toggler {
+    display: block;
   }
 
-  .pettie-navbar {
-    border-bottom: 1px solid #d3d3d3;
+  /* Colapsar menú en vertical y ocupar ancho completo */
+  #pettieNavbar.collapse {
+    display: flex !important;
+    flex-direction: column;
+    width: 100%;
+    gap: 15px;
   }
-  
-  
-  .btnR {
-    color: black;
-    text-decoration: none;
-    border: 1px solid black;
-    padding: 15px 30px;
-    font-size: 17px;
-    cursor: pointer;
-    font-family: 'Inter';
-    background: transparent;
-    position: relative;
-    transition: all 1s;
-    overflow: hidden;
-    border-radius: 5px;
-    font-size: 20px;
-    margin-right: 15px;
-  }
-  
-  
-  .btnR::before {
-    content: "";
-    position: absolute;
-    height: 100%;
-    width: 0%;
-    top: 0;
-    left: -40px;
-    transform: skewX(45deg);
-    background-color: #614117;
-    z-index: -1;
-    transition: all 1s;
-  }
-  
-  .btnR:hover::before {
-    width: 160%;
-  }
-  
 
-  .nav-link {
-    position: relative;
-    display: inline-block;
-    font-family: 'Inter', sans-serif;
-    font-size: 20px;
-    color: black;
-    text-decoration: none;
-    transition: color 0.3s;
-  }
-  
-  .nav-link::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 5px;
-    width: 0%;
-    height: 2px;
-    background-color: black;
-    transition: width 0.3s ease;
-  }
-  
-  .nav-link:hover::after {
+  /* Logo y título centrados */
+  .navbar-brand {
+    justify-content: center;
     width: 100%;
   }
-  
 
-  .margin-login{
-    margin-right: 70px !important;
+  .pettie-navbar .pettie-title {
+    font-size: 28px;
   }
+
+  /* Nav links verticales y centrados */
+  .navbar-nav {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    align-items: center;
+  }
+
+  /* Botones centrados con espacio */
+  .d-flex.gap-3.align-items-center {
+    justify-content: center;
+    width: 100%;
+  }
+
+  /* Botones más pequeños y sin márgenes extra */
+  .btnR {
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+
+  .nav-link {
+    font-size: 18px;
+  }
+
+  .margin-login {
+    margin-left: 0 !important;
+  }
+}
+
+/* Pantallas muy pequeñas */
+@media (max-width: 480px) {
+  .pettie-navbar .pettie-title {
+    font-size: 24px;
+  }
+
+  .btnR {
+    padding: 8px 15px;
+    font-size: 14px;
+  }
+
+  .nav-link {
+    font-size: 16px;
+  }
+}
