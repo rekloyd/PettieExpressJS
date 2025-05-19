@@ -38,8 +38,8 @@ const Navbar: React.FC = () => {
       window.location.reload();
       setTimeout(() => {
         window.location.reload();
-      }, 200); // segunda recarga tras 200ms
-    }, 200); // primera recarga tras navegar
+      }, 50); // segunda recarga tras 200ms
+    }, 25); // primera recarga tras navegar
   };
 
   return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/bestpettier.css'; // reutilizamos estilos
 import type { Servicio } from '../interfaces/interfaces';
-import fotoUsuario from "../assets/face1.jpg";
+
 import { useNavigate } from 'react-router-dom'; // Importar el hook
 
 interface ServicioCardProps {
@@ -24,11 +24,6 @@ const ServicioCard: React.FC<ServicioCardProps> = ({ servicio }) => {
 
   return (
     <div className="pettier-card" style={{ marginRight: '5px;' }}>
-      <img
-        src={fotoUsuario} // Imagen por defecto o podrías usar una propiedad del backend
-        alt={servicio.tipoActividad}
-        className="pettier-img"
-      />
       <div className="pettier-info">
         <h2 style={{ fontSize: '30px', fontFamily: 'Madimi One' }}>{nombreUsuario}</h2>
         <h3 style={{ fontSize: '20px' }}>{servicio.tipoActividad}</h3>
