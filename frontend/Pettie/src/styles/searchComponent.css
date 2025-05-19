@@ -1,0 +1,60 @@
+.search-card__form {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #fff;
+  }
+  
+  .search-title {
+    font-family: 'Madimi One', cursive;
+    text-align: left;
+    margin-bottom: 1rem;
+    font-size: 2rem;
+  }
+  
+  .sizes-options {
+    gap: 1rem;
+  }
+  
+  .sizes__option {
+    transition: all 0.2s ease-in-out;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+  }
+  
+  .sizes__option.selected {
+    border-color: #8B4513;
+    box-shadow: 0 4px 8px rgba(139, 69, 19, 0.4);
+    background-color: #fefaf6;
+  }
+  
+  .precio-label {
+    text-align: left;
+    margin-top: 7px;
+    font-size: 20px;
+    display: block;
+  }
+  
+  .precio-select {
+    width: 100%;
+    max-width: 450px;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .precio-select {
+      max-width: 100%;
+    }
+  
+    .mb-3.d-flex {
+      flex-direction: column;
+    }
+  
+    .btn.btn-warning {
+      width: 100%;
+      margin-left: 0 !important;
+    }
+  }
+      
