@@ -9,7 +9,6 @@ interface Servicio {
   animalesAdmitidos: string;
 }
 
-
 const ServiciosOfrecidosComponent = () => {
   const [servicios, setServicios] = useState<Servicio[]>([]);
   const [nuevoServicio, setNuevoServicio] = useState<Servicio>({
@@ -36,26 +35,38 @@ const ServiciosOfrecidosComponent = () => {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   };
 
-  // Función para extraer solo la parte de la fecha (sin la hora)
+  // Función corregida para extraer solo la parte de la fecha en formato 'YYYY-MM-DD' para input date
   const formatDateForInput = (date: string) => {
     const dateObj = new Date(date);
 
-    // Validar si la fecha es válida
     if (isNaN(dateObj.getTime())) {
-      return ""; // Devuelve un valor vacío si la fecha no es válida
+      return "";
     }
 
     const year = dateObj.getFullYear();
     const month = (dateObj.getMonth() + 1).toString().padStart(2, "0");
     const day = dateObj.getDate().toString().padStart(2, "0");
 
-    return `${day}/${month}/${year}`;
+    return `${year}-${month}-${day}`;
   };
 
 
+  // Función para mostrar fecha en formato día/mes/año para texto
+const formatDateForDisplay = (date: string) => {
+  const dateObj = new Date(date);
+
+  if (isNaN(dateObj.getTime())) {
+    return "";
+  }
+
+  const day = dateObj.getDate().toString().padStart(2, "0");
+  const month = (dateObj.getMonth() + 1).toString().padStart(2, "0");
+  const year = dateObj.getFullYear();
+
+  return `${day}/${month}/${year}`;
+};
 
 
-  
   const fetchServicios = async () => {
     try {
       const res = await fetch("http://localhost:4000/api/serviciosOfrecidos");
@@ -67,7 +78,7 @@ const ServiciosOfrecidosComponent = () => {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setNuevoServicio((prev) => ({
       ...prev,
@@ -86,7 +97,6 @@ const ServiciosOfrecidosComponent = () => {
     try {
       setLoading(true);
 
-      // Formateamos las fechas antes de enviarlas
       const formattedFechaInicio = formatDate(nuevoServicio.fechaInicio);
       const formattedFechaFinal = formatDate(nuevoServicio.fechaFinal);
 
@@ -124,12 +134,11 @@ const ServiciosOfrecidosComponent = () => {
     try {
       setLoading(true);
 
-      // Formateamos las fechas antes de enviarlas
       const formattedFechaInicio = formatDate(nuevoServicio.fechaInicio);
       const formattedFechaFinal = formatDate(nuevoServicio.fechaFinal);
 
       const res = await fetch(
-        `http://localhost:4000/api/servicioOfrecido/${nuevoServicio.idActividad}`, // Utilizamos nuevoServicio.idActividad para hacer el PUT
+        `http://localhost:4000/api/servicioOfrecido/${nuevoServicio.idActividad}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -229,16 +238,19 @@ const ServiciosOfrecidosComponent = () => {
           disabled={loading}
           style={{ padding: "0.5rem", width: "100%", marginBottom: "10px" }}
         />
-
         <label>Animales Admitidos</label>
-        <input
-          type="text"
+        <select
           name="animalesAdmitidos"
           value={nuevoServicio.animalesAdmitidos}
           onChange={handleChange}
           disabled={loading}
           style={{ padding: "0.5rem", width: "100%", marginBottom: "10px" }}
-        />
+        >
+          <option value="">Selecciona un tamaño</option>
+          <option value="pequeno">Pequeño</option>
+          <option value="mediano">Mediano</option>
+          <option value="grande">Grande</option>
+        </select>
 
         <button
           onClick={editando ? handleUpdate : handleCreate}
@@ -281,8 +293,8 @@ const ServiciosOfrecidosComponent = () => {
                   <strong>{servicio.tipoActividad}</strong>
                   <p>id: {servicio.idActividad}</p>
                   <p>Precio: {servicio.precio} 🪙</p>
-                  <p>Fecha Inicio: {formatDateForInput(servicio.fechaInicio)}</p>
-                  <p>Fecha Final: {formatDateForInput(servicio.fechaFinal)}</p>
+                  <p>Fecha Inicio: {formatDateForDisplay(servicio.fechaInicio)}</p>
+                  <p>Fecha Final: {formatDateForDisplay(servicio.fechaFinal)}</p>
                   <p>Animales admitidos: {servicio.animalesAdmitidos}</p>
                 </div>
                 <div>

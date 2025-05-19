@@ -461,7 +461,7 @@ const DashboardCompleto = () => {
                       {formatearFecha(servicio.fechaFinal)}
                     </p>
                     <p>
-                      <strong>Precio:</strong> {servicio.precio} €
+                      <strong>Precio:</strong> {servicio.precio} 🪙
                     </p>
                     <p>
                       <strong>Animales admitidos:</strong>{" "}
