@@ -1,0 +1,45 @@
+.result-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+  }
+  
+  .result-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  
+  .result-grid {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: 1fr;
+  }
+  
+  .result-col {
+    display: flex;
+    justify-content: center;
+  }
+  
+  /* Responsivo */
+  @media (min-width: 768px) {
+    .result-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (min-width: 992px) {
+    .result-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  .no-results {
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 22px;
+    color: #555;
+  }
+  
