@@ -30,6 +30,14 @@ const AdminDashboard: React.FC = () => {
     fetchUsuarios();
   }, []);
 
+    useEffect(() => {
+      const link = document.createElement("link");
+      link.href =
+        "https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Madimi+One&display=swap";
+      link.rel = "stylesheet";
+      document.head.appendChild(link);
+    }, []);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -79,7 +87,7 @@ const AdminDashboard: React.FC = () => {
   return (
     <div
       style={{
-        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+        fontFamily: "'Inter', Tahoma, Geneva, Verdana, sans-serif",
         backgroundColor: '#f5f5f5',
         minHeight: '100vh',
         margin: 0,
@@ -98,7 +106,7 @@ const AdminDashboard: React.FC = () => {
           padding: 20,
         }}
       >
-        <h1 style={{ textAlign: 'center', color: '#333' }}>Admin Dashboard</h1>
+        <h1 style={{ textAlign: 'center', color: '#333', fontFamily:'Madimi One' }}>Admin Dashboard</h1>
 
         <form
           onSubmit={handleSubmit}
@@ -204,7 +212,7 @@ const AdminDashboard: React.FC = () => {
           </button>
         </form>
 
-        <h2 style={{ textAlign: 'center', color: '#333' }}>Lista de Usuarios</h2>
+        <h2 style={{ textAlign: 'center', color: '#333', fontFamily:'Madimi One' }}>Lista de Usuarios</h2>
         <ul style={{ listStyle: 'none', padding: 0 }}>
           {usuarios.map((usuario) => (
             <li
