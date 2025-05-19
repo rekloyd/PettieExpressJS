@@ -5,12 +5,14 @@ import SearchComponent from './searchComponent';
 import type { Servicio } from '../interfaces/interfaces';
 import ResultComponent from './resultComponent';
 
+import '../styles/heroComponent.css';
+
 const HeroComponent: React.FC = () => {
   const [resultados, setResultados] = useState<Servicio[]>([]);
 
   const handleSearch = async (params: URLSearchParams) => {
     const url = `http://localhost:4000/api/servicios/filtered?${params.toString()}`;
-    console.log('URL de la petición:', url); // Agregado para hacer log de la URL
+    console.log('URL de la petición:', url);
 
     try {
       const response = await fetch(url);
@@ -24,37 +26,14 @@ const HeroComponent: React.FC = () => {
   };
 
   return (
-    <section style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', fontFamily: 'Inter, sans-serif' }}>
+    <section className="hero-wrapper" style={{ fontFamily: 'Inter, sans-serif', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       {/* Imagen de fondo */}
-      <div
-        style={{
-          display: 'grid',
-          width: '85%',
-          height: '70vh',
-          minHeight: '300px',
-          marginTop: '30px',
-          borderRadius: '15px',
-          overflow: 'hidden',
-          backgroundColor: 'black',
-        }}
-      >
-        <img src={heroimg} alt="Hero placeholder" style={{ gridArea: '1 / 1', width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', zIndex: 0 }} />
-        <div style={{ gridArea: '1 / 1', background: 'rgba(0, 0, 0, 0.4)', width: '100%', height: '100%', zIndex: 1 }} />
-        <div style={{
-          gridArea: '1 / 1',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'flex-start',
-          padding: '5% 5% 0',
-          color: '#fff',
-          zIndex: 2,
-          width: '100%',
-          boxSizing: 'border-box'
-        }}>
-          <h1 style={{ fontSize: '5rem', marginBottom: '0.5rem', width: '90%', fontFamily: 'Madimi One' }}>
-            Servicios de cuidado de Mascotas en tu ciudad
-          </h1>
-          <p style={{ fontSize: '2.5rem' }}>
+      <div className="hero-section">
+        <img src={heroimg} alt="Hero placeholder" className="hero-img" />
+        <div className="hero-overlay" />
+        <div className="hero-text">
+          <h1>Servicios de cuidado de Mascotas en tu ciudad</h1>
+          <p>
             Cuidadores de mascota en tu misma ciudad. Encuentra paseadores,
             pet sitters y otros servicios para tus animales.
           </p>
@@ -62,30 +41,19 @@ const HeroComponent: React.FC = () => {
       </div>
 
       {/* Tarjeta de búsqueda */}
-      <div style={{
-
-        width: '63%',
-        margin: '-10rem auto 2rem',
-        borderRadius: '8px',
-        padding: '1.5rem',
-        // Se ha eliminado el box-shadow aquí
-        zIndex: 10
-      }}>
-        <div style={{ width: '95%', marginLeft: '50px' }}>
+      <div className="search-container">
+        <div className="search-inner">
           <SearchComponent onSearch={handleSearch} />
         </div>
       </div>
 
       {/* Resultados de la búsqueda */}
-      <div style={{textAlign:'center'}}>
-      <ResultComponent resultados={resultados} />
+      <div className="resultados-container">
+        <ResultComponent resultados={resultados} />
       </div>
 
-
       {/* Mejores pet sitters */}
-
       <BestPettier />
-
     </section>
   );
 };
