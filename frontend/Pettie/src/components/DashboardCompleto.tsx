@@ -31,17 +31,17 @@ interface ServicioOfrecido {
   precio: number;
   animalesAdmitidos: "pequeno" | "mediano" | "grande";
 }
-interface Servicio {
-  idActividad: number;
-  idOwner:number;
-  idPettier: number;
-  idMascota:number;
-  tipoActividad: string;
-  fechaInicio: string;
-  fechaFinal: string;
-  precio: number;
-  animalesAdmitidos: "pequeno" | "mediano" | "grande";
-}
+// interface Servicio {
+//   idActividad: number;
+//   idOwner:number;
+//   idPettier: number;
+//   idMascota:number;
+//   tipoActividad: string;
+//   fechaInicio: string;
+//   fechaFinal: string;
+//   precio: number;
+//   animalesAdmitidos: "pequeno" | "mediano" | "grande";
+// }
 
 const buttonStyle = {
   border: "1px solid black",
@@ -156,49 +156,47 @@ const DashboardCompleto = () => {
     );
   }
 
-  const contratarServicio = async (
-    servicio: ServicioOfrecido,
-    idMascota: string
-  ) => {
-    const idOwner = sessionStorage.getItem('idUsuario');
-    if (!idOwner) {
-      alert('No se ha encontrado sesión de usuario.');
-      return;
-    }
-  
-    const url = 'http://localhost:4000/api/servicio/contratar';
+  const contratarServicio = async (servicio: ServicioOfrecido,idMascota: string,idOwner: string) => {
+
+    //Que al tener exito la reserva reste los pettieCoins
+
+    const url = 'http://localhost:4000/api/servicio/';
+
     const fechaInicio = formatearFechaToSQL(servicio.fechaInicio);
-    const fechaFinal  = formatearFechaToSQL(servicio.fechaFinal);
-  
+    const fechaFinal = formatearFechaToSQL(servicio.fechaFinal);
+
+    console.log("Inicio:", fechaInicio);
+    console.log("Final:", fechaFinal);
+    console.log("idOwner:" + idOwner);
+    console.log("idMascota:" + idMascota);
     try {
       const body = {
-        idOwner,
-        idPettier: servicio.idPettier,
-        idMascota,
+        idOwner:idOwner,
+        idPettier:servicio.idPettier,
+        idMascota:idMascota,
         tipoActividad: servicio.tipoActividad,
-        fechaInicio,
-        fechaFinal,
-        precio: servicio.precio
+        fechaInicio:fechaInicio,
+        fechaFinal:fechaFinal,
+        precio:servicio.precio,
+        finalizado:0
       };
-  
+
       const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
       });
-  
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Error al contratar el servicio');
-      }
-  
-      alert('Servicio contratado y pettieCoins descontados con éxito');
-    } catch (error: unknown) {
-      console.error(error);
-      alert(error);
+
+      if (!response.ok) throw new Error("Error al contratar el servicio");
+
+      alert("Servicio contratado con éxito");
+
+      //restarPettieCoins();
+
+    } catch (error) {
+      console.error("Error en contratarServicio:", error);
     }
   };
-  
 
   useEffect(() => {
     const link = document.createElement("link");
