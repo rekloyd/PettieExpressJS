@@ -1,13 +1,27 @@
+/**
+ * Componente Contacto que muestra información de contacto de Pettie
+ * y un formulario para que los usuarios puedan enviar mensajes.
+ * 
+ * Añade dinámicamente la fuente de Google Fonts necesaria para el diseño.
+ * 
+ * @author Pau
+ * @author Didac Morillas
+ * @version 0.5.1
+ * @date 2025-05-19
+ */
+
 import React, { useEffect } from "react";
 
 const Contacto: React.FC = () => {
-        useEffect(() => {
-          const link = document.createElement("link");
-          link.href =
-            "https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Madimi+One&display=swap";
-          link.rel = "stylesheet";
-          document.head.appendChild(link);
-        }, []);
+  // Añade la hoja de estilos de Google Fonts al head al montar el componente
+  useEffect(() => {
+    const link = document.createElement("link");
+    link.href =
+      "https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Madimi+One&display=swap";
+    link.rel = "stylesheet";
+    document.head.appendChild(link);
+  }, []);
+
   return (
     <div
       className="container mt-5 mb-5"
@@ -17,7 +31,10 @@ const Contacto: React.FC = () => {
         textAlign: "center",
       }}
     >
-      <h1 className="mb-4" style={{ fontSize: "2.5rem", fontWeight: "bold",fontFamily: "Madimi One, cursive" }}>
+      <h1
+        className="mb-4"
+        style={{ fontSize: "2.5rem", fontWeight: "bold", fontFamily: "Madimi One, cursive" }}
+      >
         Contáctanos
       </h1>
 
@@ -29,14 +46,14 @@ const Contacto: React.FC = () => {
       </p>
 
       <div className="mb-4">
-        <h2 style={{ fontSize: "1.5rem",fontFamily: "Madimi One, cursive" }}>Correo electrónico</h2>
+        <h2 style={{ fontSize: "1.5rem", fontFamily: "Madimi One, cursive" }}>Correo electrónico</h2>
         <p>
           📧 <a href="mailto:soporte@pettie.com">soporte@pettie.com</a>
         </p>
       </div>
 
       <div className="mb-4">
-        <h2 style={{ fontSize: "1.5rem",fontFamily: "Madimi One, cursive" }}>Teléfono</h2>
+        <h2 style={{ fontSize: "1.5rem", fontFamily: "Madimi One, cursive" }}>Teléfono</h2>
         <p>
           📞 +34 622 555 999 <br />
           Horario de atención: Lunes a Viernes de 9:00 a 18:00
@@ -44,7 +61,7 @@ const Contacto: React.FC = () => {
       </div>
 
       <div className="mb-4">
-        <h2 style={{ fontSize: "1.5rem",fontFamily: "Madimi One, cursive" }}>Redes sociales</h2>
+        <h2 style={{ fontSize: "1.5rem", fontFamily: "Madimi One, cursive" }}>Redes sociales</h2>
         <ul style={{ listStyle: "none", paddingLeft: 0 }}>
           <li>
             🐾 Instagram:{" "}
@@ -80,7 +97,13 @@ const Contacto: React.FC = () => {
       </div>
       <br /><br />
       <div className="mb-4 text-center">
-        <h2 style={{ fontSize: "1.5rem", marginBottom: "20px", fontFamily: "Madimi One, cursive" }}>
+        <h2
+          style={{
+            fontSize: "1.5rem",
+            marginBottom: "20px",
+            fontFamily: "Madimi One, cursive",
+          }}
+        >
           Formulario de contacto
         </h2>
 
@@ -107,7 +130,11 @@ const Contacto: React.FC = () => {
             <textarea className="form-control" id="mensaje" rows={5} required />
           </div>
           <div className="text-center">
-            <button type="submit" className="btnLogin" style={{width:'180px', height:'70px', fontSize:'16px'}}>
+            <button
+              type="submit"
+              className="btnLogin"
+              style={{ width: "180px", height: "70px", fontSize: "16px" }}
+            >
               Enviar mensaje
             </button>
           </div>

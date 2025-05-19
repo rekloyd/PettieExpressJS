@@ -1,3 +1,13 @@
+/**
+ * Componente Checkout para la compra de PettieCoins.
+ * Permite seleccionar una cantidad de monedas, introducir datos de pago y procesar la compra.
+ * 
+ * @author Pau
+ * @author Didac Morillas
+ * @version 0.5.1
+ * @date 2025-05-19
+ */
+
 import React, { useState } from "react";
 import "../styles/checkout.css";
 
@@ -12,6 +22,13 @@ const Checkout = () => {
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  /**
+   * Maneja el envío del formulario para procesar la compra de PettieCoins.
+   * Obtiene el ID del usuario desde sessionStorage y realiza una petición PUT al servidor.
+   * Muestra mensajes de éxito o error según el resultado.
+   * 
+   * @param e Evento del formulario
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSuccess(null);

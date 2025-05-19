@@ -1,9 +1,41 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+/**
+ * Interface que define la forma de los datos del formulario para crear una mascota.
+ */
+interface FormData {
+  nombreMascota: string;
+  tamanoMascota: string;
+  cuidadosEspeciales: string;
+  paseoManana: boolean;
+  paseoMedioDia: boolean;
+  paseoTarde: boolean;
+  razaPerro: string;
+  razaGato: string;
+}
+
+/**
+ * Componente React para crear una nueva mascota.
+ *
+ * Gestiona un formulario con campos para nombre, tamaño, cuidados especiales,
+ * horarios de paseo, y raza (perro o gato).
+ * Valida los datos antes de enviarlos a un endpoint para crear la mascota.
+ *
+ * @component
+ *
+ * @author Pau
+ * @author Didac Morillas
+ * @version 0.5.1
+ * @date 2025-05-19
+ */
 const CrearMascota = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
+
+  /**
+   * Estado que guarda los datos del formulario.
+   */
+  const [formData, setFormData] = useState<FormData>({
     nombreMascota: "",
     tamanoMascota: "",
     cuidadosEspeciales: "",
@@ -14,8 +46,17 @@ const CrearMascota = () => {
     razaGato: "",
   });
 
+  /**
+   * Maneja el cambio en los inputs del formulario.
+   * Detecta si es checkbox para manejar valores booleanos,
+   * y gestiona la exclusividad entre razaPerro y razaGato.
+   *
+   * @param e - Evento de cambio en input, textarea o select
+   */
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ): void => {
     const target = e.target;
     const name = target.name;
@@ -51,7 +92,14 @@ const CrearMascota = () => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  /**
+   * Maneja el envío del formulario.
+   * Valida los datos, obtiene el id del usuario desde sessionStorage,
+   * y envía la petición POST para crear la mascota.
+   *
+   * @param e - Evento submit del formulario
+   */
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const { nombreMascota, tamanoMascota, razaPerro, razaGato } = formData;
@@ -99,7 +147,7 @@ const CrearMascota = () => {
       alert("Mascota creada con ID: " + result.id);
       window.location.reload();
     } catch (err: unknown) {
-      alert(err || "Error inesperado");
+      alert(err instanceof Error ? err.message : "Error inesperado");
       console.error(err);
     }
   };
@@ -127,7 +175,9 @@ const CrearMascota = () => {
         Crear Nueva Mascota
       </h2>
       <form onSubmit={handleSubmit}>
-        <label style={{ display: "block", marginBottom: 12, fontWeight: "600" }}>
+        <label
+          style={{ display: "block", marginBottom: 12, fontWeight: "600" }}
+        >
           Nombre de la Mascota:
           <input
             type="text"
@@ -149,7 +199,9 @@ const CrearMascota = () => {
           />
         </label>
 
-        <label style={{ display: "block", marginBottom: 12, fontWeight: "600" }}>
+        <label
+          style={{ display: "block", marginBottom: 12, fontWeight: "600" }}
+        >
           Tamaño de la Mascota:
           <select
             name="tamanoMascota"
@@ -176,7 +228,9 @@ const CrearMascota = () => {
           </select>
         </label>
 
-        <label style={{ display: "block", marginBottom: 12, fontWeight: "600" }}>
+        <label
+          style={{ display: "block", marginBottom: 12, fontWeight: "600" }}
+        >
           Cuidados Especiales:
           <textarea
             name="cuidadosEspeciales"
@@ -206,8 +260,12 @@ const CrearMascota = () => {
             marginBottom: 20,
           }}
         >
-          <legend style={{ fontWeight: "700", fontSize: "1.1rem" }}>Paseos</legend>
-          <label style={{ display: "block", marginBottom: 6, cursor: "pointer" }}>
+          <legend style={{ fontWeight: "700", fontSize: "1.1rem" }}>
+            Paseos
+          </legend>
+          <label
+            style={{ display: "block", marginBottom: 6, cursor: "pointer" }}
+          >
             <input
               type="checkbox"
               name="paseoManana"
@@ -218,7 +276,9 @@ const CrearMascota = () => {
             Paseo Mañana
           </label>
 
-          <label style={{ display: "block", marginBottom: 6, cursor: "pointer" }}>
+          <label
+            style={{ display: "block", marginBottom: 6, cursor: "pointer" }}
+          >
             <input
               type="checkbox"
               name="paseoMedioDia"
@@ -229,7 +289,9 @@ const CrearMascota = () => {
             Paseo Mediodía
           </label>
 
-          <label style={{ display: "block", marginBottom: 6, cursor: "pointer" }}>
+          <label
+            style={{ display: "block", marginBottom: 6, cursor: "pointer" }}
+          >
             <input
               type="checkbox"
               name="paseoTarde"
@@ -241,9 +303,10 @@ const CrearMascota = () => {
           </label>
         </fieldset>
 
-        {/* Solo muestra uno de los dos inputs de raza */}
         {formData.razaGato.trim() === "" && (
-          <label style={{ display: "block", marginBottom: 12, fontWeight: "600" }}>
+          <label
+            style={{ display: "block", marginBottom: 12, fontWeight: "600" }}
+          >
             Raza Perro:
             <input
               type="text"
@@ -266,7 +329,9 @@ const CrearMascota = () => {
         )}
 
         {formData.razaPerro.trim() === "" && (
-          <label style={{ display: "block", marginBottom: 12, fontWeight: "600" }}>
+          <label
+            style={{ display: "block", marginBottom: 12, fontWeight: "600" }}
+          >
             Raza Gato:
             <input
               type="text"
@@ -290,21 +355,17 @@ const CrearMascota = () => {
 
         <button
           type="submit"
-          className="btnLogin"
           style={{
-            marginTop: 20,
-            padding: "0.75rem 1.5rem",
-            fontSize: "1.1rem",
+            backgroundColor: "#007bff",
+            color: "white",
+            fontWeight: "600",
+            padding: "10px 20px",
+            border: "none",
+            borderRadius: 8,
             cursor: "pointer",
             width: "100%",
-            fontWeight: "700",
+            fontSize: "1.1rem",
           }}
-          onMouseEnter={(e) =>
-            ((e.target as HTMLButtonElement).style.backgroundColor = "#0056b3")
-          }
-          onMouseLeave={(e) =>
-            ((e.target as HTMLButtonElement).style.backgroundColor = "#007bff")
-          }
         >
           Crear Mascota
         </button>
