@@ -1,9 +1,18 @@
-// src/components/RegisterForm.tsx
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import logo from "../assets/logo.png";
 import info from "../assets/info.png";
 import "../styles/login.css";
+
+export const validarEmail = (email: string): boolean => {
+  const regex = /^[^@]+@[^@]+$/;
+  return regex.test(email);
+};
+
+export const validarContrasena = (password: string): boolean => {
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/;
+  return regex.test(password);
+};
 
 const RegisterForm = () => {
   const [nombreUsuario, setNombreUsuario] = useState("");
@@ -12,6 +21,7 @@ const RegisterForm = () => {
   const [role, setRole] = useState("");
   const [error, setError] = useState("");
   const [isSelectOpen, setIsSelectOpen] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,41 +35,51 @@ const RegisterForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    if (!validarEmail(email)) {
+      setError("❗️ Por favor, introduce un email válido que contenga '@' y caracteres antes y después.");
+      return;
+    }
+
+    if (!validarContrasena(contrasenaUsuario)) {
+      setError(
+        "🔐 La contraseña debe tener mínimo 8 caracteres, incluir al menos una letra minúscula, una mayúscula y un carácter especial."
+      );
+      return;
+    }
+
     const payload = {
       nombreUsuario,
       emailUsuario: email,
       contrasenaUsuario,
       cantidadPettieCoins: 0,
       role,
-      fechaAltaPlataforma: new Date().toISOString().split("T")[0]
+      fechaAltaPlataforma: new Date().toISOString().split("T")[0],
     };
 
-try {
-  const response = await fetch("http://localhost:4000/api/usuario/", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
+    try {
+      const response = await fetch("http://localhost:4000/api/usuario/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-  const result = await response.json();
+      const result = await response.json();
 
-  if (response.ok) {
-    navigate("/login");
-  } else {
-    // Mostrar más detalles del error devuelto por el servidor
-    console.error("🔴 Error del servidor:", {
-      status: response.status,
-      statusText: response.statusText,
-      body: result
-    });
-
-    setError(result.error || `Error ${response.status}: ${response.statusText}`);
-  }
-} catch (err: unknown) {
-  console.error("❌ Error de red o runtime:", err);
-  setError(err instanceof Error ? err.message : "Error inesperado.");
-}
-
+      if (response.ok) {
+        navigate("/login");
+      } else {
+        console.error("🔴 Error del servidor:", {
+          status: response.status,
+          statusText: response.statusText,
+          body: result,
+        });
+        setError(result.error || `⚠️ Error ${response.status}: ${response.statusText}`);
+      }
+    } catch (err: unknown) {
+      console.error("❌ Error de red o runtime:", err);
+      setError(err instanceof Error ? `❌ ${err.message}` : "❌ Error inesperado.");
+    }
   };
 
   return (
@@ -101,7 +121,7 @@ try {
             textAlign: "center",
           }}
         >
-          Crea tu cuenta
+          🚀 Crea tu cuenta
         </h2>
       </div>
 
@@ -111,7 +131,7 @@ try {
             htmlFor="nombreUsuario"
             style={{ display: "block", marginBottom: ".5rem" }}
           >
-            Nombre de usuario
+            👤 Nombre de usuario
           </label>
           <input
             type="text"
@@ -134,7 +154,7 @@ try {
             htmlFor="email"
             style={{ display: "block", marginBottom: ".5rem" }}
           >
-            Email
+            📧 Email
           </label>
           <input
             type="email"
@@ -152,27 +172,43 @@ try {
           />
         </div>
 
-        <div style={{ marginBottom: "1rem" }}>
+        <div style={{ marginBottom: "1rem", position: "relative" }}>
           <label
             htmlFor="contrasenaUsuario"
             style={{ display: "block", marginBottom: ".5rem" }}
           >
-            Contraseña
+            🔒 Contraseña
           </label>
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             id="contrasenaUsuario"
             required
             value={contrasenaUsuario}
             onChange={(e) => setContrasenaUsuario(e.target.value)}
             style={{
               width: "100%",
-              padding: ".75rem",
+              padding: ".75rem 2.5rem .75rem .75rem",
               fontSize: "1rem",
               borderRadius: "5px",
               border: "1px solid black",
             }}
           />
+          <span
+            onClick={() => setShowPassword(!showPassword)}
+            style={{
+              position: "absolute",
+              right: "10px",
+              top: "70%",
+              transform: "translateY(-50%)",
+              cursor: "pointer",
+              userSelect: "none",
+              fontSize: "1.2rem",
+            }}
+            aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+            role="button"
+          >
+            {showPassword ? "🙈" : "👁️"}
+          </span>
         </div>
 
         <div style={{ marginBottom: "1rem" }}>
@@ -180,7 +216,7 @@ try {
             htmlFor="role"
             style={{ display: "block", marginBottom: ".5rem" }}
           >
-            Rol
+            🎭 Rol
           </label>
           <div style={{ display: "flex", alignItems: "center" }}>
             <select
@@ -220,7 +256,7 @@ try {
                 alt="info"
                 style={{ width: "28px", cursor: "pointer" }}
               />
-              <span className="tooltip-text">Elige el tipo de usuario</span>
+              <span className="tooltip-text">ℹ️ Elige el tipo de usuario</span>
             </div>
           </div>
         </div>
@@ -264,16 +300,16 @@ try {
               name="newsletter"
               style={{ width: "20px", height: "20px", accentColor: "#000" }}
             />
-            Deseo recibir promociones por correo electrónico
+            📬 Deseo recibir promociones por correo electrónico
           </label>
         </div>
 
         <div style={{ textAlign: "center" }}>
           <button type="submit" className="btnLogin">
-            Regístrate
+            📝 Regístrate
           </button>
           <p style={{ marginTop: "1rem" }}>
-            ¿Ya tienes una cuenta? <Link to="/login">Inicia sesión</Link>
+            ¿Ya tienes una cuenta? <Link to="/login">🔑 Inicia sesión</Link>
           </p>
         </div>
 

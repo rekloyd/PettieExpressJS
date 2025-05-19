@@ -1,10 +1,8 @@
-// src/components/LoginForm.tsx
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import logo from "../assets/logo.png";
 import "../styles/login.css";
 
-// Define el tipo de las props que recibe LoginForm
 interface LoginFormProps {
   onLoginSuccess: () => void;
 }
@@ -13,6 +11,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
   const [nombreUsuario, setNombreUsuario] = useState("");
   const [contrasenaUsuario, setContrasenaUsuario] = useState("");
   const [error, setError] = useState("");
+  const [mostrarContrasena, setMostrarContrasena] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,14 +35,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
       const result = await response.json();
 
       if (response.ok) {
-        // Guardamos el idUsuario en sessionStorage
         const { idUsuario } = result.usuario;
         sessionStorage.setItem("idUsuario", idUsuario.toString());
-
-        // Avisamos a App que login fue exitoso para refrescar Navbar
         onLoginSuccess();
-
-        // Navegamos al home
         navigate("/");
       } else {
         setError(result.message);
@@ -51,6 +45,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
     } catch {
       setError("Credenciales incorrectas, inténtalo de nuevo.");
     }
+  };
+
+  const toggleMostrarContrasena = () => {
+    setMostrarContrasena(prev => !prev);
   };
 
   return (
@@ -92,21 +90,21 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
             textAlign: "center",
           }}
         >
-          Inicia sesión en Pettie
+          🐾 Inicia sesión en Pettie
         </h2>
       </div>
 
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: "1rem" }}>
           <label htmlFor="nombreUsuario" style={{ display: "block", marginBottom: ".5rem" }}>
-            Nombre de usuario
+            👤 Nombre de usuario
           </label>
           <input
             type="text"
             id="nombreUsuario"
             required
             value={nombreUsuario}
-            onChange={(e) => setNombreUsuario(e.target.value)}
+            onChange={e => setNombreUsuario(e.target.value)}
             style={{
               width: "100%",
               padding: ".75rem",
@@ -117,32 +115,48 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
           />
         </div>
 
-        <div style={{ marginBottom: "1rem" }}>
+        <div style={{ marginBottom: "1rem", position: "relative" }}>
           <label htmlFor="contrasenaUsuario" style={{ display: "block", marginBottom: ".5rem" }}>
-            Contraseña
+            🔒 Contraseña
           </label>
           <input
-            type="password"
+            type={mostrarContrasena ? "text" : "password"}
             id="contrasenaUsuario"
             required
             value={contrasenaUsuario}
-            onChange={(e) => setContrasenaUsuario(e.target.value)}
+            onChange={e => setContrasenaUsuario(e.target.value)}
             style={{
               width: "100%",
-              padding: ".75rem",
+              padding: ".75rem 2.5rem .75rem .75rem",
               fontSize: "1rem",
               borderRadius: "5px",
               border: "1px solid black",
             }}
           />
+          <span
+            onClick={toggleMostrarContrasena}
+            style={{
+              position: "absolute",
+              right: "10px",
+              top: "55%",
+              cursor: "pointer",
+              opacity: 0.7,
+              userSelect: "none",
+              fontSize: "1.2rem",
+            }}
+            aria-label={mostrarContrasena ? "Ocultar contraseña" : "Mostrar contraseña"}
+            role="button"
+          >
+            {mostrarContrasena ? "🙈" : "👁️"}
+          </span>
         </div>
 
         <div style={{ textAlign: "center" }}>
           <button type="submit" className="btnLogin">
-            Iniciar sesión
+            🚪 Iniciar sesión
           </button>
           <p style={{ marginTop: "1rem" }}>
-            ¿Todavía no tienes cuenta? <Link to="/register">Regístrate aquí</Link>
+            ¿Todavía no tienes cuenta? <Link to="/register">📝 Regístrate aquí</Link>
           </p>
         </div>
 
