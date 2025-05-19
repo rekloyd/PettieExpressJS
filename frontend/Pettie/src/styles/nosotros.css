@@ -1,45 +1,62 @@
+/* Mantén tus estilos normales */
 .nosotros-container {
-    max-width: 1200px;
-    margin: 50px auto;
-    padding: 0 20px;
-  }
-  
-  h2{
-    font-family: 'Madimi One, cursive';
-  }
+  max-width: 1200px;
+  margin: 50px auto;
+  padding: 0 20px;
+}
 
-  .nosotros-section {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    margin-bottom: 80px;
-    gap: 40px;
-  }
-  
-  .nosotros-section.reverse {
-    flex-direction: row-reverse;
-  }
-  
-  .nosotros-img {
-    width: 100%;
-    max-width: 500px;
-    border-radius: 12px;
-    object-fit: cover;
-    flex: 1;
-  }
-  
-  .nosotros-text {
-    flex: 1;
-    font-family: 'Inter', sans-serif;
-  }
-  
-  .nosotros-text h2 {
-    font-size: 32px;
-    margin-bottom: 15px;
-  }
-  
-  .nosotros-text p {
-    font-size: 18px;
-    line-height: 1.6;
-  }
-  
+h2{
+font-family: 'Madimi One, cursive';
+}
+
+.nosotros-section {
+display: flex;
+flex-wrap: wrap;
+align-items: center;
+margin-bottom: 80px;
+gap: 40px;
+}
+
+.nosotros-section.reverse {
+flex-direction: row-reverse;
+}
+
+.nosotros-img {
+width: 100%;
+max-width: 500px;
+border-radius: 12px;
+object-fit: cover;
+flex: 1;
+}
+
+.nosotros-text {
+flex: 1;
+font-family: 'Inter', sans-serif;
+}
+
+.nosotros-text h2 {
+font-size: 32px;
+margin-bottom: 15px;
+}
+
+.nosotros-text p {
+font-size: 18px;
+line-height: 1.6;
+}
+
+/* Estilo para la imagen banner */
+.banner-img {
+width: 100%;
+max-width: 800px; /* lo que tengas por defecto para escritorio */
+border-radius: 12px;
+object-fit: cover;
+}
+
+/* Media query para móviles */
+@media (max-width: 768px) {
+.banner-img {
+  max-width: 500px; /* Igual que las otras imágenes */
+  margin: 0 auto; /* para centrar */
+  display: block; /* para que respete el margin auto */
+}
+}
