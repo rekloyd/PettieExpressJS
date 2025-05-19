@@ -1,4 +1,3 @@
-// src/components/Navbar.tsx
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
@@ -6,12 +5,10 @@ import "../styles/navbar.css";
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
-  // Estado para forzar re-render cuando cambie sessionStorage
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
     Boolean(sessionStorage.getItem("idUsuario"))
   );
 
-  // Carga de la fuente
   useEffect(() => {
     const link = document.createElement("link");
     link.href =
@@ -20,7 +17,6 @@ const Navbar: React.FC = () => {
     document.head.appendChild(link);
   }, []);
 
-  // Escuchar cambios en sessionStorage (ej. desde otras pestañas)
   useEffect(() => {
     const onStorage = () => {
       setIsLoggedIn(Boolean(sessionStorage.getItem("idUsuario")));
@@ -29,17 +25,26 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener("storage", onStorage);
   }, []);
 
-  // Función de logout
   const handleLogout = () => {
     sessionStorage.removeItem("idUsuario");
     setIsLoggedIn(false);
-    navigate("/"); // redirigir a inicio tras cerrar sesión
+    navigate("/");
+  };
+
+  const handleDashboardClick = async () => {
+    navigate("/dashboard");
+    // Esperar un poco antes de recargar (para asegurar que la navegación ocurre)
+    setTimeout(() => {
+      window.location.reload();
+      setTimeout(() => {
+        window.location.reload();
+      }, 200); // segunda recarga tras 200ms
+    }, 200); // primera recarga tras navegar
   };
 
   return (
     <nav className="navbar navbar-expand-lg navbar-white bg-white pettie-navbar">
       <div className="container-fluid">
-        {/* HAMBURGER */}
         <button
           className="navbar-toggler"
           type="button"
@@ -82,18 +87,20 @@ const Navbar: React.FC = () => {
             {/* DERECHA */}
             {!isLoggedIn ? (
               <div className="d-flex gap-3 align-items-center">
-                <Link to="/register" className="btnR">
-                  Registrarse
-                </Link>
+                <Link to="/register" className="btnR">Registrarse</Link>
                 <Link to="/login" className="login-link nav-link margin-login">
                   Iniciar sesión
                 </Link>
               </div>
             ) : (
               <div className="d-flex gap-3 align-items-center">
-                <Link to="/dashboard" className="btn btn-outline-primary">
+                <button
+                  onClick={handleDashboardClick}
+                  className="btn btn-outline-primary"
+                  type="button"
+                >
                   Mi Cuenta
-                </Link>
+                </button>
                 <button
                   onClick={handleLogout}
                   className="btn"
