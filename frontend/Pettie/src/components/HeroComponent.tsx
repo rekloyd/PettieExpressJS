@@ -1,3 +1,14 @@
+/**
+ * Componente HeroComponent que, muestra una imagen en formato Banner con un texto de bienvenida,
+ * con un Prop que se le pasa a searchComponent posteriormente.
+ *
+ * @author Pau
+ * @author Didac Morillas
+ * @version 0.5.1
+ * @date 2025-05-19
+ */
+
+
 import React, { useState } from 'react';
 import heroimg from '../assets/bg-hero.jpg';
 import BestPettier from '../components/BestPettier';

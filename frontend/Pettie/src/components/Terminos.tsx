@@ -1,3 +1,12 @@
+/**
+ * Terminos generales de la empresa, ficticios hasta el momento.
+ *
+ * @author Pau
+ * @author Didac Morillas
+ * @version 0.5.1
+ * @date 2025-05-19
+ */
+
 import React from "react";
 import { Link } from "react-router-dom";
 

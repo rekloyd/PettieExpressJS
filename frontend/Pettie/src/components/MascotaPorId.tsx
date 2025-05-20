@@ -1,3 +1,14 @@
+/**
+ * Componente MascotaPorId que, permite obtener todos los resultados de las mascotas en caso de que el role del usuario
+ * sea Owner, de lo contrario, no mostrará nada. Se aplica css en HTML INLINE.
+ *
+ * @author Pau
+ * @author Didac Morillas
+ * @version 0.5.1
+ * @date 2025-05-19
+ */
+
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 

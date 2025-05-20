@@ -1,3 +1,14 @@
+/**
+ * Componente searchComponent que permite mostrar el resultado del filtrado en el buscador de resultComponent a
+ * partir de Props que le serán enviados al componente anterior. Se usa CSS Inline combinado con un archivo
+ * CSS externo
+ *
+ * @author Pau
+ * @author Didac Morillas
+ * @version 0.5.1
+ * @date 2025-05-19
+ */
+
 import React, { useState } from 'react';
 import '../styles/searchComponent.css'
 

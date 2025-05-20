@@ -1,7 +1,15 @@
-// src/components/Servicio.tsx
+/**
+ * Componente Servicio que muestra todos los servicios filtrados por params a partir de un fetch.
+ *
+ * @author Pau
+ * @author Didac Morillas
+ * @version 0.5.1
+ * @date 2025-05-19
+ */
+
 import { useState } from "react";
-import SearchComponent from './searchComponent';  // Asegúrate de que el path sea correcto
-import ResultComponent from './resultComponent';  // Asegúrate de que el path sea correcto
+import SearchComponent from './searchComponent';  
+import ResultComponent from './resultComponent';  
 
 const Servicio = () => {
   const [resultados, setResultados] = useState<any[]>([]);  // Almacena los resultados de la búsqueda

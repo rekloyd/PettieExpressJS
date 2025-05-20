@@ -1,3 +1,12 @@
+/**
+ * Componente resultComponent que permite mostrar el resultado del filtrado en el buscador de searchComponent
+ *
+ * @author Pau
+ * @author Didac Morillas
+ * @version 0.5.1
+ * @date 2025-05-19
+ */
+
 import React from 'react';
 import ServicioCard from './ServicioCard';
 import type { Servicio } from '../interfaces/interfaces';

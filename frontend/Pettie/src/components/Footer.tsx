@@ -1,3 +1,12 @@
+/**
+ * Componente Footer estático que contiene el mapa de la web y accesos rápidos a otras partes de la web
+ *
+ * @author Pau
+ * @author Didac Morillas
+ * @version 0.5.1
+ * @date 2025-05-19
+ */
+
 import React, { useEffect } from 'react';
 
 

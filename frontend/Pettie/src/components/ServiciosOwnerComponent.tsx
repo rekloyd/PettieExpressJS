@@ -1,3 +1,12 @@
+/**
+ * Componente Servicio que muestra todos los servicios filtrados por params a partir de un fetch al Owner sobre su mascota.
+ *
+ * @author Pau
+ * @author Didac Morillas
+ * @version 0.5.1
+ * @date 2025-05-19
+ */
+
 import React, { useEffect, useState } from "react";
 
 interface Servicio {

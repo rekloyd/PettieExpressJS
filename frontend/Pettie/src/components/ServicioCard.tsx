@@ -1,8 +1,17 @@
+/**
+ * Componente ServicioCard que formatea en forma de carta los resultado de servicios obtenidos previamente.
+ *
+ * @author Pau
+ * @author Didac Morillas
+ * @version 0.5.1
+ * @date 2025-05-19
+ */
+
 import React from 'react';
-import '../styles/bestpettier.css'; // reutilizamos estilos
+import '../styles/bestpettier.css';
 import type { Servicio } from '../interfaces/interfaces';
 
-import { useNavigate } from 'react-router-dom'; // Importar el hook
+import { useNavigate } from 'react-router-dom'; 
 
 interface ServicioCardProps {
   servicio: Servicio;

@@ -1,3 +1,16 @@
+/**
+ * El componente RegisterForm permite el INSERT del usuario a crear a partir de un formulario, donde debe rellenar
+ * datos esenciales: nombre,passwd,tipo de role, email, IBAN (por defecto es NULL si no se rellena) y aceptar terminos y condiciones.
+ * A partir de un fetch, se logra conectar con la API, la cual dará una respuesta válida si se ha rellenado todo correctamente.
+ * Además, cuenta con dos RegEx que permiten la insercción bajo unos requisitos mínimos.
+ *
+ * @author Pau
+ * @author Didac Morillas
+ * @version 0.5.1
+ * @date 2025-05-19
+ */
+
+
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import logo from "../assets/logo.png";

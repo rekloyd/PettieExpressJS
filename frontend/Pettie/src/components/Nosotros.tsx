@@ -1,3 +1,14 @@
+/**
+ * Componente estático Nosotros, los cuales permiten ver brevemente los valores y misión de la empresa. Se usa css inline además
+ * de importar un archivo externo css.
+ *
+ * @author Pau
+ * @author Didac Morillas
+ * @version 0.5.1
+ * @date 2025-05-19
+ */
+
+
 import React, { useEffect } from "react";
 import "../styles/nosotros.css";
 import banner from "../assets/banner-us.jpeg";

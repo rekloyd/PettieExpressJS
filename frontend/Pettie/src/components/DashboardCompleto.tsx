@@ -1,3 +1,15 @@
+/**
+ * Componente DashboardCompleto que gestiona y muestra la información del usuario a partir de una ID,
+ * mostrando datos del usuario con idUsuario correspondiente, según role, se mostrarán datos de 
+ * mascota si es Owner y datos de servicios si es Pettier, el admin solo cuenta con datos básicos.
+ *
+ * @author Pau
+ * @author Didac Morillas
+ * @version 0.5.1
+ * @date 2025-05-19
+ */
+
+
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 

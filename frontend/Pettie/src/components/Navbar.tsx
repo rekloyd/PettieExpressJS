@@ -1,3 +1,15 @@
+/**
+ * Componente Navbar que muestra el nombre y usa React Router Dom para permitir accesibilidad simple. Los botones de login y regiser
+ * son dinámicos, una vez logged correctamente, cambian a otros botones, Cuenta y Cerrar sesion, los cuales permiten acceder al
+ * dashboard y cerrar sesion, borrando el idUsuario de sessionStorage
+ *
+ * @author Pau
+ * @author Didac Morillas
+ * @version 0.5.1
+ * @date 2025-05-19
+ */
+
+
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";

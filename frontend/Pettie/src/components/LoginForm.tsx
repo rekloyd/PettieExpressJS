@@ -1,3 +1,14 @@
+/**
+ * Componente LoginForm que, permite el acceso como middleware a la página, guarda el idUsuario en sessionStorage para gestionar
+ * las llamadas a la API del backend. Diversas llamadas y procesos con uso de fetch permite comprobar si es un usuario válido.
+ *
+ * @author Pau
+ * @author Didac Morillas
+ * @version 0.5.1
+ * @date 2025-05-19
+ */
+
+
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import logo from "../assets/logo.png";

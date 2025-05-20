@@ -1,3 +1,14 @@
+/**
+ * Componente Dashboard que gestiona y muestra la información del usuario actual,
+ * permitiendo editar campos como nombre, email, rol y contraseña, con validación
+ * y actualización al backend. Además, muestra secciones específicas según el rol del usuario.
+ *
+ * @author Pau
+ * @author Didac Morillas
+ * @version 0.5.1
+ * @date 2025-05-19
+ */
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { validarContrasena } from "../utils/validarContrasena";
@@ -37,6 +48,7 @@ const Dashboard = () => {
 
   const navigate = useNavigate();
 
+  // Formatea la fecha a formato legible español
   const formatearFecha = (fechaISO: string) =>
     new Date(fechaISO).toLocaleDateString("es-ES", {
       year: "numeric",
@@ -44,6 +56,7 @@ const Dashboard = () => {
       day: "numeric",
     });
 
+  // Carga la fuente al montar el componente
   useEffect(() => {
     const link = document.createElement("link");
     link.href = "https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Madimi+One&display=swap";
@@ -51,6 +64,7 @@ const Dashboard = () => {
     document.head.appendChild(link);
   }, []);
 
+  // Carga usuario según id guardado en sessionStorage
   useEffect(() => {
     const idUsuario = sessionStorage.getItem("idUsuario");
     if (!idUsuario) {
@@ -81,6 +95,7 @@ const Dashboard = () => {
     })();
   }, [navigate]);
 
+  // Maneja cambios en inputs editables
   const handleChange = (campo: CamposEditables, valor: string) => {
     if (!usuario) return;
     setUsuario({ ...usuario, [campo]: valor });
@@ -89,6 +104,7 @@ const Dashboard = () => {
     }
   };
 
+  // Guarda campo editado en backend, validando si es contraseña
   const guardarCampo = async (campo: CamposEditables) => {
     if (!usuario) return;
 
@@ -122,6 +138,9 @@ const Dashboard = () => {
       }
       alert("Campo actualizado correctamente");
       setEditando((prev) => ({ ...prev, [campo]: false }));
+      if (campo === "contrasenaUsuario") {
+        setUsuario((u) => (u ? { ...u, contrasenaUsuario: "" } : u));
+      }
     } catch (e: unknown) {
       alert("Error al actualizar: " + e);
     } finally {
@@ -129,6 +148,7 @@ const Dashboard = () => {
     }
   };
 
+  // Cambia modo editar o guarda según estado actual
   const toggleEditar = (campo: CamposEditables) => {
     if (editando[campo]) {
       guardarCampo(campo);
@@ -137,6 +157,7 @@ const Dashboard = () => {
     }
   };
 
+  // Redirige a página para obtener más PettieCoins
   const conseguirMas = () => {
     navigate("/pasarelaDePago");
   };
@@ -292,57 +313,55 @@ const Dashboard = () => {
               ? "Guardar"
               : "Editar"}
           </button>
-
-          {/* PettieCoins */}
-          <strong>PettieCoins:</strong>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
-            }}
-          >
-            <span>{usuario.cantidadPettieCoins} 🪙</span>
-            <button
-              onClick={conseguirMas}
-              style={{
-                cursor: "pointer",
-                padding: "0.4rem 0.8rem",
-                fontSize: 14,
-                borderRadius: 6,
-                border: "none",
-                backgroundColor: "#007bff",
-                color: "#fff",
-                fontWeight: 500,
-                transition: "background-color 0.3s",
-              }}
-              onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#0056b3")}
-              onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#007bff")}
-            >
-              Conseguir más PettieCoins
-            </button>
-          </div>
-          <span />
-
-          {/* Fecha de alta */}
-          <strong>Miembro desde:</strong>
-          <span>{formatearFecha(usuario.fechaAltaPlataforma)}</span>
-          <span />
         </div>
 
-        {usuario.role === "pettier" && <ServiciosOfrecidosComponent />}
+        <div style={{ marginTop: 30, fontSize: 18 }}>
+          <p>
+            <strong>PettieCoins:</strong> {usuario.cantidadPettieCoins}
+            <button
+              onClick={conseguirMas}
+              style={{ marginLeft: 10, padding: "0.3rem 0.6rem" }}
+              className="btn"
+            >
+              Conseguir más
+            </button>
+          </p>
+          <p>
+            <strong>Fecha de alta:</strong> {formatearFecha(usuario.fechaAltaPlataforma)}
+          </p>
+        </div>
 
-        {usuario.role === "owner" && (
-          <div>
-            <MascotaPorId />
-            <CrearMascota />
-          </div>
-        )}
+        <div style={{ marginTop: 50 }}>
+          {/* Secciones según rol */}
+          {usuario.role === "pettier" && (
+            <>
+              <h2 style={{ fontFamily: "Madimi One, cursive", fontSize: 30, marginBottom: 20 }}>
+                Servicios que ofrezco
+              </h2>
+              <ServiciosOfrecidosComponent />
+            </>
+          )}
+
+          {usuario.role === "owner" && (
+            <>
+              <h2 style={{ fontFamily: "Madimi One, cursive", fontSize: 30, marginBottom: 20 }}>
+                Mis mascotas
+              </h2>
+              <CrearMascota />
+              <MascotaPorId />
+              <ServiciosOwnerComponent />
+            </>
+          )}
+
+          {usuario.role === "admin" && (
+            <h3 style={{ fontFamily: "Madimi One, cursive" }}>
+              Panel de administración (a implementar)
+            </h3>
+          )}
+        </div>
       </div>
-
-      {usuario.role === "owner" && <ServiciosOwnerComponent />}
     </>
-  );
+);
 };
 
 export default Dashboard;
