@@ -354,8 +354,8 @@ const Dashboard = () => {
           )}
 
           {usuario.role === "admin" && (
-            <h3 style={{ fontFamily: "Madimi One, cursive" }}>
-              Panel de administración (a implementar)
+            <h3 style={{ fontFamily: "Madimi One, cursive", textAlign:'center' }}>
+              <a href="/admin">Acceder al CRUD de admin </a>
             </h3>
           )}
         </div>
