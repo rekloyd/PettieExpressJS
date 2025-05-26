@@ -1,0 +1,76 @@
+
+import connectDB from '../db/connection';
+import { ResultSetHeader } from 'mysql2';
+
+// GET de todas las mascotas con paginación
+// export const getMascotas = async (req: Request, res: Response): Promise<void> => {
+//   const page   = parseInt(req.query.page  as string) || 1;
+//   const limit  = parseInt(req.query.limit as string) || 50;
+//   const offset = (page - 1) * limit;
+
+
+//GET de todas las mascotas con paginación
+ 
+export class mascotaRepository {
+    static async getMascotas(page:number,limit:number){
+        const offset = (page-1) * limit;
+        const db = await connectDB();
+        const [rows] = await db.query(`
+        SELECT * 
+        FROM Mascota 
+        LIMIT ? OFFSET ?
+        `, [limit, offset]);
+        return rows;
+
+    }
+
+static async getMascotasPorId(idMascota:number){
+    const db = await connectDB();
+    const [rows] = await db.query('SELECT * FROM Mascota WHERE idMascota = ? ', [idMascota]);
+    return rows;
+}
+
+static async getMascotrasPorIdOwner(idOwner:number){
+    const db = await connectDB();
+    const [rows] = await db.query('SELECT * FROM Mascota WHERE idOwner = ? ', [idOwner]);
+    console.log(`SELECT * FROM Mascota WHERE idOwner = ${idOwner}`);
+    return rows;
+
+}
+
+static async actualizarMascota(idMascota:number,nombreMascota:string, tamanoMascota:string,cuidadosEspeciales:string,paseoManana:string,paseoMedioDia:string,paseoTarde:string,razaPerro:string,razaGato:string){
+    const db = await connectDB();
+    const [result] = await db.query(`
+        UPDATE Mascota
+        SET nombreMascota       = ?,
+            tamanoMascota       = ?,
+            cuidadosEspeciales  = ?,
+            paseoManana         = ?,
+            paseoMedioDia       = ?,
+            paseoTarde          = ?,
+            razaPerro           = ?,
+            razaGato            = ?
+        WHERE idMascota = ?
+        `, [
+        nombreMascota,
+        tamanoMascota,
+        cuidadosEspeciales,
+        paseoManana,
+        paseoMedioDia,
+        paseoTarde,
+        razaPerro,
+        razaGato,
+        idMascota
+        ]);
+
+        if((result as ResultSetHeader).affectedRows ===0){
+            return  0;
+
+        }else{
+            return 1;
+        }
+}
+
+
+
+}
