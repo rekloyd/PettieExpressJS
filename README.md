@@ -22,7 +22,7 @@
 - MariaDB
 - MVC architecture + microservices
 
-### Frontend (otro repositorio)
+### Frontend (en la carpeta frontend/pettie)
 - React
 - TypeScript
 - React Router
