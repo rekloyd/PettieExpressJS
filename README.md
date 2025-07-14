@@ -18,7 +18,6 @@
 - Node.js
 - ExpressJS
 - TypeScript
-- JWT para autenticación
 - MariaDB
 - MVC architecture + microservices
 
